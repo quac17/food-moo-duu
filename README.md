@@ -71,6 +71,27 @@ food-moo-duu/
 - Layer1 da migrate sang load theo `datasets.json` + thu muc epoch `dataset_v001`.
 - Layer2/Layer3 hien van giu mot so file legacy o root de tuong thich code hien tai.
 
+## Layer1 chat flow (export tag only)
+
+- Flow rieng de chat va dung o Layer1:
+  1) User chat
+  2) IntentTracker predict tags
+  3) DialogStateTracker update context
+  4) Export tags ra man hinh + ghi `data/layer1/tag_exports.jsonl`
+- Khong goi Layer2/Layer3 trong flow nay.
+
+Lenh nhanh:
+
+```bash
+make layer1-chat
+```
+
+1 luot (khong interactive):
+
+```bash
+make layer1-export
+```
+
 ## Kien truc va luong xu ly
 
 ```mermaid
