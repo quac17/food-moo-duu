@@ -1,0 +1,10 @@
+{
+  "schema_version": "common_v1",
+  "hyperparameters": {
+    "learning_rate": 0.1,
+    "punishment_rate": -0.02,
+    "context_decay": 0.6,
+    "epsilon": 0.2,
+    "fitness_decay": 0.95
+  }
+}

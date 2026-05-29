@@ -30,10 +30,20 @@ class DialogStateTracker:
         self.accumulation_alpha = accumulation_alpha
         self.conflict_beta = conflict_beta
         self.data_dir = data_dir or LAYER1_DATA_DIR
+        self.tags_file = self.data_dir / "tags.json"
         self.state_file = self.data_dir / "session_state.json"
         self.conflict_file = self.data_dir / "conflict_pairs.json"
+        self.available_tags = self._load_tags()
         self.conflict_pairs = self._load_conflict_pairs()
         self.state = self.load_state()
+
+    def _load_tags(self) -> List[str]:
+        if not self.tags_file.exists():
+            return list(ALL_TAGS)
+        payload = json.loads(self.tags_file.read_text(encoding="utf-8"))
+        if "tag_ids" in payload and isinstance(payload["tag_ids"], list):
+            return payload["tag_ids"]
+        return payload.get("tags", list(ALL_TAGS))
 
     def _load_conflict_pairs(self) -> List[Tuple[str, str]]:
         payload = json.loads(self.conflict_file.read_text(encoding="utf-8"))
@@ -45,10 +55,16 @@ class DialogStateTracker:
 
     def load_state(self) -> SessionState:
         if not self.state_file.exists():
-            return SessionState()
-        payload = json.loads(self.state_file.read_text(encoding="utf-8"))
+            return SessionState(tag_scores={tag: 0.0 for tag in self.available_tags})
+        try:
+            payload = json.loads(self.state_file.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return SessionState(tag_scores={tag: 0.0 for tag in self.available_tags})
+        tag_scores = payload.get("tag_scores", {})
+        for tag in self.available_tags:
+            tag_scores.setdefault(tag, 0.0)
         return SessionState(
-            tag_scores=payload.get("tag_scores", {tag: 0.0 for tag in ALL_TAGS}),
+            tag_scores=tag_scores,
             turn_index=payload.get("turn_index", 0),
         )
 
@@ -79,6 +95,7 @@ class DialogStateTracker:
 
             stronger = left if left_score > right_score else right
             weaker = right if stronger == left else left
+            self.state.tag_scores.setdefault(weaker, 0.0)
             # Quy luat 3 - Conflict Resolution:
             # Khi 2 tag doi nghich cung cao, giam ben yeu theo khoang cach.
             gap = abs(left_score - right_score)

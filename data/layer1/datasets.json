@@ -1,0 +1,5 @@
+{
+  "active_dataset": "dataset_v001",
+  "available_datasets": ["dataset_v001"],
+  "max_dataset_size": 100
+}

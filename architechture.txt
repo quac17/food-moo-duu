@@ -1,25 +1,72 @@
-food_recommender_project/
+food-moo-duu/
 │
-├── main.py                          # File chạy chính phối hợp luồng dữ liệu giữa 3 layer
+├── main.py                                  # Entry point workflow end-to-end (2 turn chat + feedback)
+├── README.md
+├── Dockerfile
+├── Makefile
+├── requirements.txt
 │
-├── layer1_intent/                   # --- LAYER 1: ĐỌC Ý ĐỊNH & NGỮ CẢNH ---
-│   ├── __init__.py
-│   ├── intent_classifier.py         # Code xử lý TF-IDF và Trạng thái hội thoại (DST)
-│   └── data/                        # Folder data riêng của Layer 1
-│       ├── intent_train_data.csv    # Dữ liệu câu mồi để train Intent
-│       └── conflict_tags.json       # Định nghĩa các cặp tag đối nghịch
+├── src/
+│   ├── core/
+│   │   ├── constants.py
+│   │   └── pipeline.py
+│   │
+│   ├── layer1_intent_context/               # --- LAYER 1: INTENT & CONTEXT TRACKING ---
+│   │   ├── intent_tracker.py
+│   │   ├── dialog_state.py
+│   │   └── run_layer1.py
+│   │
+│   ├── layer2_adaptive_recommendation/      # --- LAYER 2: ADAPTIVE RECOMMENDATION ENGINE ---
+│   │   ├── recommendation_engine.py
+│   │   ├── online_learning.py
+│   │   └── run_layer2.py
+│   │
+│   └── layer3_genetic_response/             # --- LAYER 3: GENETIC RESPONSE GENERATOR ---
+│       ├── genetic_generator.py
+│       ├── fitness_manager.py
+│       └── run_layer3.py
 │
-├── layer2_recommender/              # --- LAYER 2: MA TRẬN GỢI Ý TỰ HỌC ---
-│   ├── __init__.py
-│   ├── matrix_recommender.py        # Code tính điểm món ăn và cập nhật Hebbian Learning
-│   └── data/                        # Folder data riêng của Layer 2
-│       └── food_weight_matrix.json  # Database 100 món kèm ma trận trọng số tag
+├── data/
+│   ├── common_config.json                   # Hyperparameters chuẩn theo common.txt
+│   │
+│   ├── layer1/
+│   │   ├── tags.json                        # Fixed: tag-space chuẩn common_v1 (id + label + group)
+│   │   ├── conflict_pairs.json              # Fixed: quy tắc xung đột ngữ cảnh
+│   │   ├── datasets.json                    # Danh sách dataset input theo version
+│   │   ├── dataset_v001/                    # Input epoch version 001
+│   │   │   ├── intent_samples.csv
+│   │   │   └── intent_train_data.json
+│   │   └── session_state.json               # Runtime artifact DST
+│   │
+│   ├── layer2/
+│   │   ├── datasets.json                    # Danh sách dataset input theo version
+│   │   ├── dataset_v001/
+│   │   │   ├── food_weight_matrix.json      # Canonical input schema common_v1
+│   │   │   └── dataset_manifest.json        # Mapping canonical/legacy input
+│   │   ├── food_weight_matrix.json          # Legacy root copy (compat)
+│   │   └── dishes_100.json                  # Legacy matrix dùng bởi code hiện tại
+│   │
+│   └── layer3/
+│       ├── datasets.json                    # Danh sách dataset input theo version
+│       ├── dataset_v001/
+│       │   ├── gene_pool.json               # Input genes cho generator
+│       │   └── fitness_history.json         # Input fitness cho generator
+│       ├── gene_pool.json                   # Legacy root copy (compat)
+│       ├── fitness_history.json             # Legacy root copy (compat)
+│       ├── language_genes.json              # Alias schema -> gene_pool
+│       └── chromosome_fitness.json          # Alias schema -> fitness_history
 │
-└── layer3_generator/                # --- LAYER 3: SINH CÂU THOẠI TIẾN HÓA ---
-    ├── __init__.py
-    ├── genetic_generator.py         # Code thuật toán di truyền, Epsilon-Greedy, Roulette Wheel
-    └── data/                        # Folder data riêng của Layer 3
-        ├── language_genes.json      # Kho từ vựng (Opening, Action, Closing)
-        └── chromosome_fitness.json  # Bộ nhớ điểm Fitness của các cấu trúc câu
+└── docker/
+    ├── layer1/docker-compose.yml
+    ├── layer2/docker-compose.yml
+    └── layer3/docker-compose.yml
+
+Ghi chú:
+- Bộ chuẩn dữ liệu đang theo common_v1 (tham chiếu từ common.txt).
+- Quy ước epoch input: dataset_v001, dataset_v002, ...
+- Fixed components (tag/conflict/common config) giữ ở root layer, không chia theo epoch.
+- Runtime artifacts (ví dụ session state) tách riêng với input dataset.
+- Layer1 đã migrate loader sang dữ liệu epoch.
+- Layer2/Layer3 vẫn giữ một số file legacy ở root layer để tương thích code hiện tại.
 
 

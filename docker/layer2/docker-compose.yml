@@ -1,8 +1,11 @@
 services:
   layer2-adaptive-recommendation:
+    container_name: food-moo-duu-layer2
     build:
       context: ../..
       dockerfile: Dockerfile
     command: python -m src.layer2_adaptive_recommendation.run_layer2
+    environment:
+      - PYTHONUNBUFFERED=1
     volumes:
       - ../../data:/app/data

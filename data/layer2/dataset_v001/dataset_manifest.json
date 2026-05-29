@@ -1,0 +1,11 @@
+{
+  "dataset_id": "dataset_v001",
+  "inputs": {
+    "canonical_matrix": "food_weight_matrix.json",
+    "legacy_matrix": "../dishes_100.json"
+  },
+  "notes": [
+    "Dữ liệu legacy dishes_100.json đang được code hiện tại sử dụng trực tiếp.",
+    "food_weight_matrix.json là bản canonical theo common_v1 để chuẩn hóa dữ liệu."
+  ]
+}

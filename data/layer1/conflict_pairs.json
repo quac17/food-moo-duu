@@ -1,12 +1,19 @@
 {
+  "schema_version": "common_v1",
   "conflict_pairs": [
+    { "left": "time_morning", "right": "time_evening" },
+    { "left": "time_morning", "right": "time_night" },
+    { "left": "time_noon", "right": "time_night" },
     { "left": "weather_hot", "right": "weather_cold" },
-    { "left": "weather_rainy", "right": "weather_sunny" },
-    { "left": "time_busy", "right": "time_relaxed" },
-    { "left": "time_weekday", "right": "time_weekend" },
-    { "left": "mood_happy", "right": "mood_sad" },
-    { "left": "mood_tired", "right": "mood_energetic" },
-    { "left": "mood_adventurous", "right": "mood_comfort_seek" },
-    { "left": "mood_lazy", "right": "mood_energetic" }
+    { "left": "mood_happy", "right": "mood_stressed" },
+    { "left": "mood_happy", "right": "mood_sick" },
+    { "left": "pref_spicy", "right": "pref_bland" },
+    { "left": "pref_rich", "right": "pref_low_fat" },
+    { "left": "pref_soup", "right": "pref_dry" },
+    { "left": "pref_soup", "right": "pref_cold" },
+    { "left": "pref_warm_drink", "right": "pref_cold" },
+    { "left": "pref_caffeine", "right": "mood_sick" },
+    { "left": "pref_fizzy", "right": "mood_sick" },
+    { "left": "pref_caffeine", "right": "time_night" }
   ]
 }

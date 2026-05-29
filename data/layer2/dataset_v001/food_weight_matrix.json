@@ -1,0 +1,140 @@
+{
+  "schema_version": "common_v1",
+  "description": "Canonical matrix schema mirror. Full data is kept in dishes_100.json until code migration.",
+  "FOOD_001": {
+    "name": "Pho bo",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_morning": 0.4,
+      "time_evening": 0.3,
+      "weather_cold": 0.7,
+      "weather_normal": 0.2,
+      "mood_sluggish": 0.3,
+      "pref_soup": 0.9,
+      "pref_flavorful": 0.6,
+      "pref_warm_drink": 0.4
+    }
+  },
+  "FOOD_002": {
+    "name": "Bun bo Hue",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_noon": 0.4,
+      "weather_cold": 0.8,
+      "weather_normal": 0.2,
+      "mood_excited": 0.3,
+      "pref_soup": 0.8,
+      "pref_spicy": 0.9,
+      "pref_flavorful": 0.7
+    }
+  },
+  "FOOD_003": {
+    "name": "Com tam",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_noon": 0.8,
+      "weather_normal": 0.5,
+      "mood_starving": 0.6,
+      "pref_rice": 0.9,
+      "pref_flavorful": 0.7,
+      "pref_convenient": 0.4
+    }
+  },
+  "FOOD_004": {
+    "name": "Banh mi trung",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_morning": 0.9,
+      "time_snacks": 0.5,
+      "weather_normal": 0.4,
+      "mood_starving": 0.5,
+      "pref_instant": 0.9,
+      "pref_convenient": 0.8,
+      "pref_dry": 0.7
+    }
+  },
+  "FOOD_005": {
+    "name": "Lau thai",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_evening": 0.9,
+      "weather_rain": 0.8,
+      "weather_cold": 0.7,
+      "mood_gathering": 0.9,
+      "pref_bbq_hotpot": 1.0,
+      "pref_spicy": 0.8
+    }
+  },
+  "FOOD_006": {
+    "name": "Tra dao cam sa",
+    "is_drink": true,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_afternoon": 0.6,
+      "weather_hot": 0.8,
+      "mood_happy": 0.5,
+      "pref_fruity": 0.9,
+      "pref_tea_base": 0.8,
+      "pref_cold": 0.7
+    }
+  },
+  "FOOD_007": {
+    "name": "Ca phe sua da",
+    "is_drink": true,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_morning": 0.8,
+      "time_afternoon": 0.4,
+      "weather_hot": 0.6,
+      "mood_sluggish": 0.7,
+      "pref_caffeine": 1.0,
+      "pref_milky": 0.7,
+      "pref_cold": 0.6
+    }
+  },
+  "FOOD_008": {
+    "name": "Chao ga",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_night": 0.6,
+      "weather_cold": 0.7,
+      "mood_sick": 0.8,
+      "mood_exhausted": 0.6,
+      "pref_soup": 1.0,
+      "pref_soft": 0.9,
+      "pref_warm_drink": 0.5
+    }
+  },
+  "FOOD_009": {
+    "name": "Goi cuon",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_noon": 0.5,
+      "weather_hot": 0.8,
+      "mood_normal": 0.5,
+      "pref_cold": 0.6,
+      "pref_low_fat": 0.7,
+      "pref_convenient": 0.5
+    }
+  },
+  "FOOD_010": {
+    "name": "Bia hoi",
+    "is_drink": true,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_evening": 0.9,
+      "weather_hot": 0.8,
+      "mood_gathering": 0.9,
+      "pref_finger_food": 0.7,
+      "pref_fizzy": 1.0,
+      "pref_cold": 0.7
+    }
+  }
+}

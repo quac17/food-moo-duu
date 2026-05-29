@@ -11,16 +11,31 @@ He thong goi y mon an thong minh chay offline bang Python, thiet ke theo kien tr
 ```text
 food-moo-duu/
 ├── data/
+│   ├── common_config.json
 │   ├── layer1/
+│   │   ├── tags.json
 │   │   ├── conflict_pairs.json
-│   │   ├── intent_samples.csv
-│   │   ├── session_state.json         # tu tao khi chay
-│   │   └── tags.json
+│   │   ├── datasets.json
+│   │   ├── dataset_v001/
+│   │   │   ├── intent_samples.csv
+│   │   │   └── intent_train_data.json
+│   │   └── session_state.json         # runtime artifact
 │   ├── layer2/
-│   │   └── dishes_100.json
+│   │   ├── datasets.json
+│   │   ├── dataset_v001/
+│   │   │   ├── food_weight_matrix.json
+│   │   │   └── dataset_manifest.json
+│   │   ├── food_weight_matrix.json    # legacy root copy
+│   │   └── dishes_100.json            # legacy path
 │   └── layer3/
-│       ├── fitness_history.json
-│       └── gene_pool.json
+│       ├── datasets.json
+│       ├── dataset_v001/
+│       │   ├── gene_pool.json
+│       │   └── fitness_history.json
+│       ├── gene_pool.json             # legacy root copy
+│       ├── fitness_history.json       # legacy root copy
+│       ├── language_genes.json
+│       └── chromosome_fitness.json
 ├── docker/
 │   ├── layer1/docker-compose.yml
 │   ├── layer2/docker-compose.yml
@@ -47,6 +62,15 @@ food-moo-duu/
 └── requirements.txt
 ```
 
+## Quy uoc du lieu epoch
+
+- Moi layer quan ly bo input theo version qua thu muc `dataset_v001`, `dataset_v002`, ...
+- File `datasets.json` o root cua tung layer chi ra dataset dang active.
+- Thanh phan co dinh (vi du: `tags.json`, `conflict_pairs.json`, `common_config.json`) dat o root, khong tach theo epoch.
+- Runtime artifact (nhu `session_state.json`) khong xem la input epoch.
+- Layer1 da migrate sang load theo `datasets.json` + thu muc epoch `dataset_v001`.
+- Layer2/Layer3 hien van giu mot so file legacy o root de tuong thich code hien tai.
+
 ## Kien truc va luong xu ly
 
 ```mermaid
@@ -71,6 +95,7 @@ flowchart TD
   - Decay: hao mon diem theo turn.
   - Accumulation: cong don theo confidence moi.
   - Conflict Resolution: giam diem tag yeu trong cap doi nghich.
+- Input train theo epoch tai `data/layer1/dataset_v001/`.
 - Luu trang thai DST vao `data/layer1/session_state.json`.
 
 ### Layer 2 - Adaptive Recommendation Engine
@@ -79,7 +104,8 @@ flowchart TD
 - Khi user chon mon:
   - Tang trong so lien ket tag-kich-hoat (Hebbian positive).
   - Giam nhe trong so voi tag yeu de tranh drift (forgetting).
-- Luu cap nhat vao `data/layer2/dishes_100.json`.
+- Input canonical theo epoch tai `data/layer2/dataset_v001/food_weight_matrix.json`.
+- File `data/layer2/dishes_100.json` dang duoc giu de tuong thich code hien tai.
 
 ### Layer 3 - Genetic Response Generator
 - Sinh cau theo chromosome `(opening, action, closing)`.
@@ -90,7 +116,8 @@ flowchart TD
 - Implicit feedback:
   - User chon mon -> tang fitness.
   - User khong chon/thoat -> giam fitness.
-- Luu lich su vao `data/layer3/fitness_history.json`.
+- Input genes/fitness theo epoch tai `data/layer3/dataset_v001/`.
+- Root layer3 giu them alias/legacy de phuc vu chuyen doi schema.
 
 ## Chay local
 

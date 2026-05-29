@@ -1,0 +1,42 @@
+[
+  {
+    "text": "Sáng nay mình cần ăn nhanh để kịp họp",
+    "tags": ["time_morning", "pref_instant", "pref_convenient"]
+  },
+  {
+    "text": "Trưa nóng quá, muốn món mát dễ ăn",
+    "tags": ["time_noon", "weather_hot", "pref_cold", "pref_bland"]
+  },
+  {
+    "text": "Chiều mưa, muốn ăn gì nóng ấm bụng",
+    "tags": ["time_afternoon", "weather_rain", "pref_soup", "pref_warm_drink"]
+  },
+  {
+    "text": "Tối nay tụ tập bạn bè, muốn món lai rai",
+    "tags": ["time_evening", "mood_gathering", "pref_finger_food", "pref_flavorful"]
+  },
+  {
+    "text": "Đang bệnh và đau họng, muốn món mềm",
+    "tags": ["mood_sick", "pref_soft", "pref_soup", "pref_herbal"]
+  },
+  {
+    "text": "Mình đang stress vì deadline",
+    "tags": ["mood_stressed", "pref_flavorful", "pref_sweet"]
+  },
+  {
+    "text": "Mưa to, muốn đồ nóng và mềm",
+    "tags": ["weather_rain", "weather_storm", "pref_soft", "pref_soup"]
+  },
+  {
+    "text": "Lạnh và mệt, muốn đồ bổ dưỡng",
+    "tags": ["weather_cold", "mood_exhausted", "pref_warm_drink", "pref_high_protein"]
+  },
+  {
+    "text": "Tối xem phim cần đồ ăn vặt",
+    "tags": ["time_evening", "time_snacks", "mood_watching_movie", "pref_finger_food"]
+  },
+  {
+    "text": "Cuối tuần muốn ăn nướng lẩu",
+    "tags": ["mood_gathering", "pref_bbq_hotpot", "time_evening"]
+  }
+]

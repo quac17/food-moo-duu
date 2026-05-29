@@ -1,8 +1,11 @@
 services:
   layer1-intent-context:
+    container_name: food-moo-duu-layer1
     build:
       context: ../..
       dockerfile: Dockerfile
     command: python -m src.layer1_intent_context.run_layer1
+    environment:
+      - PYTHONUNBUFFERED=1
     volumes:
       - ../../data:/app/data
