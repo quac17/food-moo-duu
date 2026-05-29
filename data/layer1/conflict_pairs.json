@@ -1,0 +1,12 @@
+{
+  "conflict_pairs": [
+    { "left": "weather_hot", "right": "weather_cold" },
+    { "left": "weather_rainy", "right": "weather_sunny" },
+    { "left": "time_busy", "right": "time_relaxed" },
+    { "left": "time_weekday", "right": "time_weekend" },
+    { "left": "mood_happy", "right": "mood_sad" },
+    { "left": "mood_tired", "right": "mood_energetic" },
+    { "left": "mood_adventurous", "right": "mood_comfort_seek" },
+    { "left": "mood_lazy", "right": "mood_energetic" }
+  ]
+}

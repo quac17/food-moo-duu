@@ -1,0 +1,21 @@
+{
+  "opening": [
+    "Minh hieu tam trang cua ban.",
+    "Nghe ban ta, minh de xuat nhe.",
+    "De minh lo bua nay cho ban.",
+    "Tam trang nay an ngon se hop hon day."
+  ],
+  "action": [
+    "Mon nay co ve rat hop ngu canh hien tai.",
+    "Ban thu mon nay xem, kha can bang vi giac.",
+    "Minh nghi lua chon nay vua nhanh vua ngon.",
+    "Neu can doi vi, mon nay kha on ap."
+  ],
+  "closing": [
+    "Ban thay on thi chot nha.",
+    "Chon xong bao minh de minh hoc them.",
+    "Thu mot lan biet dau hop gu.",
+    "Neu khong ung, minh se doi de xuat."
+  ],
+  "slang_mutations": ["nhe", "nha", "okela", "chill phet", "quay xe duoc"]
+}

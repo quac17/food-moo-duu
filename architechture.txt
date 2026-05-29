@@ -1,0 +1,25 @@
+food_recommender_project/
+│
+├── main.py                          # File chạy chính phối hợp luồng dữ liệu giữa 3 layer
+│
+├── layer1_intent/                   # --- LAYER 1: ĐỌC Ý ĐỊNH & NGỮ CẢNH ---
+│   ├── __init__.py
+│   ├── intent_classifier.py         # Code xử lý TF-IDF và Trạng thái hội thoại (DST)
+│   └── data/                        # Folder data riêng của Layer 1
+│       ├── intent_train_data.csv    # Dữ liệu câu mồi để train Intent
+│       └── conflict_tags.json       # Định nghĩa các cặp tag đối nghịch
+│
+├── layer2_recommender/              # --- LAYER 2: MA TRẬN GỢI Ý TỰ HỌC ---
+│   ├── __init__.py
+│   ├── matrix_recommender.py        # Code tính điểm món ăn và cập nhật Hebbian Learning
+│   └── data/                        # Folder data riêng của Layer 2
+│       └── food_weight_matrix.json  # Database 100 món kèm ma trận trọng số tag
+│
+└── layer3_generator/                # --- LAYER 3: SINH CÂU THOẠI TIẾN HÓA ---
+    ├── __init__.py
+    ├── genetic_generator.py         # Code thuật toán di truyền, Epsilon-Greedy, Roulette Wheel
+    └── data/                        # Folder data riêng của Layer 3
+        ├── language_genes.json      # Kho từ vựng (Opening, Action, Closing)
+        └── chromosome_fitness.json  # Bộ nhớ điểm Fitness của các cấu trúc câu
+
+

@@ -1,0 +1,101 @@
+==============================================================================
+FILE ĐẶC TẢ Ý TƯỞNG THUẬT TOÁN (IDEA.TXT) - ĐỒ ÁN CHATBOT GỢI Ý MÓN ĂN AIOT
+==============================================================================
+
+[TỔNG QUAN KIẾN TRÚC 3 LỚP (3-LAYER ARCHITECTURE)]
+Hệ thống vận hành hoàn toàn OFFLINE theo mô hình đường ống dữ liệu (Pipeline):
+User Input -> [Layer 1: DST] -> Trạng thái Ngữ cảnh -> [Layer 2: Recommender] 
+-> Top 3 Món ăn -> [Layer 3: Genetic Generator] -> Bot Response (Lời thoại tiến hóa).
+
+------------------------------------------------------------------------------
+[LAYER 1] INTENT PROCESSING & DIALOG STATE TRACKING (DST)
+------------------------------------------------------------------------------
+1. Mục tiêu:
+   Chuyển đổi câu văn thô (Unstructured Text) thành một Vector trạng thái ngữ cảnh 
+   (Context State) chứa các tag có trọng số năng lượng (Activation Score từ 0.0 đến 1.0).
+
+2. Thuật toán phân loại (Intent Classification):
+   - Sử dụng mô hình Machine Learning truyền thống (TF-IDF + Naive Bayes/SVM) hoặc 
+     luật so khớp từ khóa (Keyword Matching với khoảng cách Levenshtein) để chạy tốt offline.
+   - Trích xuất các tag dựa trên tiền tố quy ước trong `common.txt` 
+     (Vị dụ: "thèm cồn" => pref_finger_food: 0.9, mood_gathering: 0.85).
+
+3. Thuật toán Quản lý trạng thái hội thoại (DST):
+   Khi người dùng chat thêm câu mới trong cùng một phiên, Vector trạng thái 
+   `current_state` sẽ tự động cập nhật theo 3 hàm toán học:
+   
+   a) Hàm Suy hao (Decay): 
+      Tất cả các tag cũ từ câu trước bị giảm năng lượng để nhường chỗ cho ý định mới.
+      Công thức: Score_cũ = Score_cũ * CONTEXT_DECAY (với CONTEXT_DECAY = 0.6)
+      
+   b) Hàm Tích lũy (Accumulation):
+      Nếu tag mới trùng với tag đang có trong bộ nhớ, điểm số sẽ được củng cố.
+      Công thức: Score_mới = Min(1.0, Score_cũ + Confidence_mới)
+      
+   c) Hàm Khử xung đột (Conflict Resolution):
+      Dựa trên vùng [CONFLICT_RULES] của file `common.txt`. Nếu xuất hiện tag mới 
+      đối lập với tag cũ (Ví dụ: pref_spicy vừa xuất hiện khi đang có pref_bland), 
+      lập tức đặt điểm tag cũ về 0.0 để xử lý pha "quay xe" của người dùng.
+
+------------------------------------------------------------------------------
+[LAYER 2] ADAPTIVE RECOMMENDATION ENGINE (MA TRẬN TỰ HỌC)
+------------------------------------------------------------------------------
+1. Mục tiêu:
+   Chấm điểm và xếp hạng 100 món ăn dựa trên Vector trạng thái từ Layer 1, đồng thời 
+   tự động tối ưu hóa cơ sở dữ liệu dựa trên phản hồi của người dùng.
+
+2. Thuật toán chấm điểm (Scoring Function):
+   - Mỗi món ăn trong Database được cấu trúc dưới dạng một Vector Trọng số Tag 
+     (Tag Weights Matrix).
+   - Điểm của một món ăn (Food_Score) là tổng tích vô hướng giữa trọng số ngữ cảnh 
+     và trọng số nội tại của món ăn đó.
+   - Công thức: Food_Score = Tổng_tất_cả_tag ( Context_Score[tag] * Food_Tag_Weight[tag] )
+   - Hệ thống sắp xếp và trích xuất Top 3 món có điểm cao nhất để gợi ý.
+
+3. Thuật toán Tự học trực tuyến (Online Machine Learning):
+   - Áp dụng Quy tắc học Hebbian (Hebbian Learning) từ nhóm Học tăng cường sơ khai.
+   - Hệ thống KHÔNG ép cứng (Hard-coded) nhãn món ăn mà để ma trận tự thích ứng.
+   - Khi người dùng bấm CHỌN một món X từ danh sách gợi ý (Phản hồi ngầm tích cực):
+     Hệ thống tự động tăng cường liên kết giữa món X và các tag đang kích hoạt:
+     Công thức: Weight(Món_X, Tag_i) = Weight(Món_X, Tag_i) + LEARNING_RATE (0.1)
+   - Nếu món được gợi ý nhưng bị NGÓ LƠ (Phản hồi tiêu cực):
+     Công thức: Weight(Món_Kèm, Tag_i) = Weight(Món_Kèm, Tag_i) + PUNISHMENT_RATE (-0.02)
+   - Kết quả: Hệ thống tự sửa sai các lỗi gắn nhãn cảm tính ban đầu của lập trình viên.
+
+------------------------------------------------------------------------------
+[LAYER 3] GENETIC RESPONSE GENERATOR (BỘ SINH TIẾN HÓA)
+------------------------------------------------------------------------------
+1. Mục tiêu:
+   Sinh câu trả lời tự nhiên, đồng cảm, có yếu tố AI cấu trúc nhưng kiểm soát được 
+   ngôn từ, tránh hiện tượng nói nhảm (Hallucination) khi chạy offline.
+
+2. Thuật toán Di truyền cấu trúc câu (Genetic Algorithm):
+   - Một câu thoại được coi là một Cá thể (Individual) cấu thành từ một chuỗi 
+     Nhiễm sắc thể gồm 3 Gen: [Gen_Mở_bài] + [Gen_Thân_bài] + [Gen_Kết_bài].
+   - Kho từ vựng được băm nhỏ thành các đoạn văn ngắn xếp theo các nhóm Gen này.
+   - Cơ chế Đột biến (Mutation): Xác suất 20% AI tự chèn thêm các từ lóng ngữ cảnh 
+     (ví dụ: "nè!", "chốt đơn!") vào cuối câu để tạo ra các dị bản phong phú.
+
+3. Cơ chế cân bằng Khai thác & Khám phá (Exploration vs Exploitation):
+   Để tránh việc AI chỉ lặp đi lặp lại một vài câu thoại ăn khách (Over-exploitation) 
+   gây nhàm chán, áp dụng đồng thời 2 giải thuật:
+   
+   a) Chiến lược Epsilon-Greedy:
+      - 80% số lần (1 - EPSILON): AI chọn cấu trúc câu có điểm thích nghi (Fitness) 
+        cao nhất trong lịch sử để đảm bảo an toàn.
+      - 20% số lần (EPSILON): AI kích hoạt chế độ "Khám phá", tự lắp ghép ngẫu nhiên 
+        các Gen và Đột biến để thử nghiệm phản ứng người dùng.
+        
+   b) Giải thuật Bánh xe Roulette (Roulette Wheel Selection):
+      Điểm thích nghi (Fitness Score) của các mẫu câu được quy đổi thành tỷ lệ phần trăm 
+      diện tích bánh xe. Câu điểm thấp vẫn có cơ hội nhỏ được quay trúng, đảm bảo tính 
+      đa dạng sinh học cho ngôn ngữ của Chatbot.
+
+4. Vòng lặp phản hồi ngầm (Implicit Feedback Loop):
+   - Người dùng bấm chọn món ăn => Câu thoại thành công => Fitness_Score += 5
+   - Người dùng lướt qua, tắt app => Câu thoại thất bại => Fitness_Score -= 2
+   - Định kỳ cuối epoch, áp dụng hàm ao mòn: Fitness = Fitness * FITNESS_DECAY (0.95) 
+     để thanh lọc các câu thoại lỗi thời.
+==============================================================================
+
+

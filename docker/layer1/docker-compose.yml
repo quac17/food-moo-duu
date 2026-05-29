@@ -1,0 +1,8 @@
+services:
+  layer1-intent-context:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    command: python -m src.layer1_intent_context.run_layer1
+    volumes:
+      - ../../data:/app/data

@@ -1,0 +1,215 @@
+# ==============================================================================
+# FILE CẤU HÌNH HỆ THỐNG (COMMON CONFIGURATION) - ĐỒ ÁN GỢI Ý MÓN ĂN
+# Định dạng quy ước: 
+# - Các phân vùng bắt đầu bằng [TEN_VUNG]
+# - Danh sách Tag: Tên_Tag | Hiển_Thị_Tiếng_Việt
+# - Mối quan hệ đối lập: Tag_A <=> Tag_B
+# ==============================================================================
+
+[SYSTEM_TAGS]
+# ------------------------------------------------------------------------------
+# 1. Nhóm Mốc thời gian (Slots - 6 tags)
+# ------------------------------------------------------------------------------
+time_morning | Sáng
+time_noon | Trưa
+time_afternoon | Chiều
+time_evening | Tối
+time_night | Đêm
+time_snacks | Ăn vặt
+
+# ------------------------------------------------------------------------------
+# 2. Nhóm Thời tiết (Weather - 5 tags)
+# ------------------------------------------------------------------------------
+weather_hot | Nóng
+weather_cold | Lạnh
+weather_rain | Mưa
+weather_storm | Bão
+weather_normal | Bình thường (Thời tiết)
+
+# ------------------------------------------------------------------------------
+# 3. Nhóm Tâm trạng & Ngữ cảnh (Moods - 14 tags)
+# ------------------------------------------------------------------------------
+mood_exhausted | Mệt mỏi
+mood_sluggish | Uể oải
+mood_normal | Bình thường (Tâm trạng)
+mood_happy | Vui vẻ
+mood_excited | Hào hứng
+mood_starving | Đói cồn cào
+mood_stressed | Stress
+mood_lonely | Cô đơn
+mood_sick | Ốm yếu
+mood_lazy | Lười biếng
+mood_gossip | Buôn chuyện
+mood_bored_taste | Nhạt mồm
+mood_watching_movie | Xem phim
+mood_gathering | Tụ tập
+
+# ------------------------------------------------------------------------------
+# 4. Nhóm Đặc trưng & Sở thích món ăn (Preferences - 20 tags)
+# ------------------------------------------------------------------------------
+pref_spicy | Cay
+pref_sweet | Ngọt
+pref_sour | Chua
+pref_flavorful | Đậm đà
+pref_bland | Thanh đạm
+pref_soup | Món nước
+pref_dry | Đồ khô
+pref_cold | Đồ lạnh
+pref_crunchy | Giòn rụm
+pref_soft | Mềm nhuyễn
+pref_bbq_hotpot | Đồ nướng lẩu
+pref_instant | Ăn liền
+pref_rice | Món cơm
+pref_raw | Tươi sống
+pref_rich | Béo ngậy
+pref_low_fat | Ít béo
+pref_high_protein | Nhiều đạm
+pref_vegetarian | Chay
+pref_convenient | Tiện lợi
+pref_finger_food | Lai rai
+pref_caffeine | Chứa caffein
+pref_milky | Vị béo sữa
+pref_fruity | Hương trái cây
+pref_tea_base | Cốt trà
+pref_fizzy | Có ga
+pref_warm_drink | Đồ uống ấm
+pref_herbal | Thảo mộc / Thanh nhiệt
+
+
+[CONFLICT_RULES]
+# ------------------------------------------------------------------------------
+# Quy tắc đối lập (Xung đột ngữ cảnh) - Dùng cho Layer 1 (DST) để khử tag trùng lập
+# ------------------------------------------------------------------------------
+time_morning <=> time_evening
+time_morning <=> time_night
+time_noon <=> time_night
+weather_hot <=> weather_cold
+mood_happy <=> mood_stressed
+mood_happy <=> mood_sick
+pref_spicy <=> pref_bland
+pref_rich <=> pref_low_fat
+pref_soup <=> pref_dry
+pref_soup <=> pref_cold
+pref_warm_drink <=> pref_cold
+pref_caffeine <=> mood_sick
+pref_fizzy <=> mood_sick
+pref_caffeine <=> time_night
+
+
+[RECOMMENDER_HYPERPARAMETERS]
+# ------------------------------------------------------------------------------
+# Các tham số cấu hình thuật toán (Hyperparameters) cho Layer 2 & Layer 3
+# ------------------------------------------------------------------------------
+# Tốc độ học trực tuyến cho ma trận trọng số món ăn (Hebbian Learning rate)
+LEARNING_RATE : 0.1
+PUNISHMENT_RATE : -0.02
+
+# Tỷ lệ suy hao ngữ cảnh hội thoại khi người dùng chat thêm câu mới
+CONTEXT_DECAY : 0.6
+
+# Tỷ lệ khám phá mẫu câu thoại mới (Epsilon-Greedy)
+EPSILON : 0.2
+
+# Hệ số hao mòn điểm số thích nghi lời thoại (Fitness Decay Rate) theo thời gian
+FITNESS_DECAY : 0.95
+
+
+
+[DATA_STRUCTURES]
+# ==============================================================================
+# ĐẶC TẢ CẤU TRÚC FILE DATA CHO CÁC LAYER (ĐỊNH DẠNG JSON)
+# Sử dụng để thiết kế Database và làm khuôn mẫu cấu trúc (Schema) cho mã nguồn
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# LAYER 1: intent_classifier.py -> data/intent_train_data.json
+# Cấu trúc dữ liệu huấn luyện phân loại ý định (Đa nhãn - Multi-label)
+# ------------------------------------------------------------------------------
+LAYER_1_INTENT_DATA_SCHEMA =>
+[
+  {
+    "text": "Tối nay nóng quá thèm cồn giải sầu",
+    "tags": ["time_evening", "weather_hot", "pref_finger_food", "mood_gathering"]
+  },
+  {
+    "text": "Người cứ gai gai sốt rát họng quá không nuốt được cơm",
+    "tags": ["mood_sick", "pref_soup", "pref_soft"]
+  }
+]
+
+# ------------------------------------------------------------------------------
+# LAYER 2: matrix_recommender.py -> data/food_weight_matrix.json
+# Cấu trúc Ma trận Trọng số tự học của 100 món ăn/thức uống
+# ------------------------------------------------------------------------------
+LAYER_2_RECOMMENDER_DATA_SCHEMA =>
+{
+  "FOOD_001": {
+    "name": "Bia hơi Hà Nội",
+    "is_drink": true,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "time_evening": 0.9,
+      "weather_hot": 1.0,
+      "pref_finger_food": 0.9,
+      "mood_gathering": 0.85,
+      "pref_fizzy": 0.8,
+      "time_morning": 0.0
+    }
+  },
+  "FOOD_002": {
+    "name": "Cháo gà ác hầm thuốc bắc",
+    "is_drink": false,
+    "popularity_score": 1.0,
+    "tag_weights": {
+      "mood_sick": 0.95,
+      "pref_soup": 1.0,
+      "pref_soft": 0.9,
+      "pref_warm_drink": 0.8,
+      "pref_spicy": 0.0
+    }
+  }
+}
+
+# ------------------------------------------------------------------------------
+# LAYER 3: genetic_generator.py -> data/language_genes.json
+# Cấu trúc kho gen ngôn ngữ phục vụ Thuật toán di truyền sinh lời thoại
+# ------------------------------------------------------------------------------
+LAYER_3_LANGUAGE_GENES_SCHEMA =>
+{
+  "mood_stressed": {
+    "Opening": [
+      {"id": "op_0", "text": "Biết bạn đang áp lực công việc,"},
+      {"id": "op_1", "text": "Ngày hôm nay có vẻ hơi nặng nề với bạn rồi,"}
+    ],
+    "Action": [
+      {"id": "ac_0", "text": "nạp chút năng lượng với {foods} nhé."},
+      {"id": "ac_1", "text": "mình nghĩ mấy món này sẽ xoa dịu tâm trạng bạn ngay: {foods}."}
+    ],
+    "Closing": [
+      {"id": "cl_0", "text": "Ăn xong nhớ nghỉ ngơi sớm nha!"},
+      {"id": "cl_1", "text": "Mong món này giúp bạn lấy lại tâm trạng."}
+    ],
+    "Mutation": [" nè!", " xem sao nha.", " chốt đơn!"]
+  }
+}
+
+# ------------------------------------------------------------------------------
+# LAYER 3: genetic_generator.py -> data/chromosome_fitness.json
+# Bộ nhớ lưu điểm thích nghi (Fitness Score) của các tổ hợp câu đã lai ghép
+# Mã định danh tổ hợp (Key) theo quy ước: tag_id + index_[op]_[ac]_[cl]
+# ------------------------------------------------------------------------------
+LAYER_3_CHROMOSOME_FITNESS_SCHEMA =>
+{
+  "mood_stressed_0_1_0": {
+    "text_format": "Biết bạn đang áp lực công việc, mình nghĩ mấy món này sẽ xoa dịu tâm trạng bạn ngay: {foods}. Ăn xong nhớ nghỉ ngơi sớm nha!",
+    "alpha_success": 12,
+    "beta_failure": 2,
+    "fitness_score": 25.4
+  },
+  "mood_stressed_1_0_1": {
+    "text_format": "Ngày hôm nay có vẻ hơi nặng nề với bạn rồi, nạp chút năng lượng với {foods} nhé. Mong món này giúp bạn lấy lại tâm trạng.",
+    "alpha_success": 4,
+    "beta_failure": 5,
+    "fitness_score": 9.8
+  }
+}

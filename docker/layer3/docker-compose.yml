@@ -1,0 +1,8 @@
+services:
+  layer3-genetic-response:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    command: python -m src.layer3_genetic_response.run_layer3
+    volumes:
+      - ../../data:/app/data

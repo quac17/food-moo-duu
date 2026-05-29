@@ -1,0 +1,14 @@
+{
+  "fitness": {
+    "Minh hieu tam trang cua ban. | Mon nay co ve rat hop ngu canh hien tai. | Ban thay on thi chot nha.": 1.0,
+    "Nghe ban ta, minh de xuat nhe. | Ban thu mon nay xem, kha can bang vi giac. | Thu mot lan biet dau hop gu.": 1.0,
+    "Tam trang nay an ngon se hop hon day. | Neu can doi vi, mon nay kha on ap. | Thu mot lan biet dau hop gu.": 1.25
+  },
+  "history": [
+    {
+      "chromosome_key": "Tam trang nay an ngon se hop hon day. | Neu can doi vi, mon nay kha on ap. | Thu mot lan biet dau hop gu.",
+      "success": true,
+      "fitness": 1.25
+    }
+  ]
+}

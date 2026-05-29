@@ -1,0 +1,8 @@
+services:
+  layer2-adaptive-recommendation:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    command: python -m src.layer2_adaptive_recommendation.run_layer2
+    volumes:
+      - ../../data:/app/data
