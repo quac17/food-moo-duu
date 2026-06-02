@@ -6,7 +6,7 @@ def main() -> None:
     context = {
         "time_noon": 0.8,
         "weather_hot": 0.7,
-        "time_quick_meal": 0.6,
+        "pref_convenient": 0.6,
         "mood_happy": 0.5,
     }
     recommendations = engine.recommend(context, top_k=5)

@@ -1,0 +1,1 @@
+{"timestamp": "2026-06-02T21:54:48", "dish_id": "dish_001", "dish_name": "Pho bo", "score_before": 0.9496, "score_after": 1.0369, "delta": 0.0873, "top_context": [{"tag": "pref_instant", "score": 0.3559}, {"tag": "time_evening", "score": 0.3485}, {"tag": "pref_warm_drink", "score": 0.3375}, {"tag": "pref_soup", "score": 0.332}, {"tag": "mood_gathering", "score": 0.3125}]}

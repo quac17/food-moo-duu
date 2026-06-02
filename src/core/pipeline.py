@@ -21,6 +21,15 @@ class TurnResult:
     chromosome_key: str
 
 
+@dataclass
+class FeedbackReport:
+    chosen_dish_id: str
+    chosen_dish_name: str
+    score_before: float
+    score_after: float
+    delta: float
+
+
 class FoodSuggestionPipeline:
     def __init__(self) -> None:
         learning_rate = HYPERPARAMS["learning_rate"]
@@ -74,13 +83,28 @@ class FoodSuggestionPipeline:
             chromosome_key=chromosome_key,
         )
 
-    def apply_feedback(self, chosen_dish_id: str, context_scores: Dict[str, float]) -> None:
+    def apply_feedback(self, chosen_dish_id: str, context_scores: Dict[str, float]) -> FeedbackReport:
+        dish = self.recommendation_engine.get_dish_by_id(chosen_dish_id)
+        score_before = self.recommendation_engine.score_dish(dish, context_scores)
+
         self.hebbian.update_after_choice(chosen_dish_id=chosen_dish_id, context_scores=context_scores)
+
+        updated_dish = self.recommendation_engine.get_dish_by_id(chosen_dish_id)
+        score_after = self.recommendation_engine.score_dish(updated_dish, context_scores)
+
         if self.last_chromosome_key and self.fitness_manager is not None:
             self.fitness_manager.update_from_implicit_feedback(
                 chromosome_key=self.last_chromosome_key,
                 user_chosen_dish=True,
             )
+
+        return FeedbackReport(
+            chosen_dish_id=chosen_dish_id,
+            chosen_dish_name=str(updated_dish.get("name", chosen_dish_id)),
+            score_before=round(score_before, 4),
+            score_after=round(score_after, 4),
+            delta=round(score_after - score_before, 4),
+        )
 
     def apply_abandon_feedback(self) -> None:
         if self.last_chromosome_key and self.fitness_manager is not None:
