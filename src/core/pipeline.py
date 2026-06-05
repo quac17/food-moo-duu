@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Dict, List
 
 from src.core.constants import HYPERPARAMS
+from src.core.constants import LAYER2_CONFIG
 from src.layer1_intent_context.dialog_state import DialogStateTracker
 from src.layer1_intent_context.intent_tracker import IntentTracker
 from src.layer2_adaptive_recommendation.online_learning import HebbianLearner
@@ -32,8 +33,8 @@ class FeedbackReport:
 
 class FoodSuggestionPipeline:
     def __init__(self) -> None:
-        learning_rate = HYPERPARAMS["learning_rate"]
-        punishment_rate = abs(HYPERPARAMS["punishment_rate"])
+        learning_rate = LAYER2_CONFIG["learning"]["positive"]
+        punishment_rate = abs(LAYER2_CONFIG["learning"]["negative"])
         context_decay = HYPERPARAMS["context_decay"]
         epsilon = HYPERPARAMS["epsilon"]
 
@@ -55,11 +56,13 @@ class FoodSuggestionPipeline:
             self.generator = None
             self.fitness_manager = None
         self.last_chromosome_key = ""
+        self.last_recommendations: List[Dict] = []
 
     def process_turn(self, user_text: str, top_k: int = 5) -> TurnResult:
         prediction = self.intent_tracker.predict_tags(user_text)
         context_scores = self.dst.update_context(prediction.tag_scores)
         recommendations = self.recommendation_engine.recommend(context_scores, top_k=top_k)
+        self.last_recommendations = recommendations
         if self.generator is not None:
             try:
                 generated = self.generator.generate()
@@ -88,6 +91,24 @@ class FoodSuggestionPipeline:
         score_before = self.recommendation_engine.score_dish(dish, context_scores)
 
         self.hebbian.update_after_choice(chosen_dish_id=chosen_dish_id, context_scores=context_scores)
+
+        for recommended in self.last_recommendations:
+            recommended_id = str(recommended.get("id", ""))
+            if not recommended_id or recommended_id == chosen_dish_id:
+                continue
+
+            try:
+                non_selected_dish = self.recommendation_engine.get_dish_by_id(recommended_id)
+            except ValueError:
+                continue
+
+            self.recommendation_engine.apply_negative_feedback_to_dish(
+                non_selected_dish,
+                context_scores=context_scores,
+                penalty_rate=self.hebbian.lr_negative,
+            )
+
+        self.recommendation_engine.save()
 
         updated_dish = self.recommendation_engine.get_dish_by_id(chosen_dish_id)
         score_after = self.recommendation_engine.score_dish(updated_dish, context_scores)

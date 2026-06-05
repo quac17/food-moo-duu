@@ -22,23 +22,24 @@ File: `src/layer2_adaptive_recommendation/recommendation_engine.py`
   - runtime: `data/layer2/runtime/dataset_v001_dishes_runtime.json`
   - canonical: `data/layer2/dataset_v001/food_weight_matrix.json`
   - legacy: `data/layer2/dishes_100.json`
-- Thu tu uu tien hien tai:
-  - runtime neu da co hoc online
-  - canonical neu runtime chua ton tai
-  - legacy neu canonical khong san sang
+- Chon nguon theo do moi cua file:
+  - runtime neu runtime la ban moi nhat
+  - canonical neu canonical moi hon legacy
+  - legacy neu legacy la ban moi hon
 
-### 2. Dong bo taxonomy tag giua Layer 1 va Layer 2
+### 2. Mo rong tag Layer 1 sang tag Layer 2 gan nghia
 
 File: `src/layer2_adaptive_recommendation/recommendation_engine.py`
 
-- Them bang `LEGACY_TAG_ALIASES` de map cac tag cu ve bo tag chuan cua Layer 1
-- Chuan hoa `tag_weights` ve dung bo `ALL_TAGS`
-- Loai bo cac tag la khong thuoc taxonomy chuan
+- Giu nguyen toan bo tag co trong Layer 2, ke ca tag khong co trong Layer 1
+- Them bang `SIMILAR_LAYER2_TAGS` de mo rong context tu tag Layer 1 sang tag Layer 2 gan nghia
+- Khi scoring va update, Layer 1 tag exact van duoc tinh truoc, sau do lan sang cac tag gan nghia voi trong so nho hon
 - Clamp weight trong khoang `[-1.0, 1.0]`
 
 Ket qua:
 
-- `unknown_tag_count` cua `data/layer2/dishes_100.json` da ve `0`
+- Tag Layer 2 khong con bi discard khi load
+- Similar tag co the duoc update truc tiep sau feedback
 
 ### 3. Migrate Layer 2 sang canonical dataset
 
@@ -73,7 +74,8 @@ File moi: `src/layer2_adaptive_recommendation/check_schema_drift.py`
 - Kiem tra so luong mon
 - Kiem tra id rong
 - Kiem tra dish co thieu truong bat buoc hay khong
-- Kiem tra co tag nao nam ngoai `ALL_TAGS` hay khong
+- Kiem tra tong the schema co hop le khong
+- Tag Layer 2 duoc xem la hop le neu nam trong dataset dang tai
 
 Trang thai hien tai:
 
@@ -137,6 +139,27 @@ Thay doi:
   - diem sau update
   - do lech delta
 
+  ### 10b. Negative feedback cho mon khong duoc chon
+
+  Files:
+
+  - `src/core/pipeline.py`
+  - `src/layer2_adaptive_recommendation/recommendation_engine.py`
+  - `tests/test_layer2_integration.py`
+
+  Thay doi:
+
+  - Luu danh sach mon da goi y o luot truoc trong pipeline
+  - Khi user chon 1 mon, cac mon con lai trong top-k se bi phat nhe theo context hien tai
+  - Phat chi ap dung cho cac mon da duoc goi y, khong tac dong den cac mon ngoai top-k
+  - Runtime cua Layer 2 se thay doi, canonical giu nguyen
+
+  Muc dich:
+
+  - day nhanh viec tu sua ranking
+  - tranh lap lai mot nhom mon khong hop context
+  - giu phan phat nhe de khong lam model quen qua nhanh
+
 ### 11. Them feedback log dang JSONL
 
 File log moi:
@@ -169,6 +192,25 @@ Them cac target moi:
 - `layer2-check`
 - `layer2-test`
 - `layer2-reset-runtime`
+
+### 13. Tach config Layer 2 ra file rieng
+
+Files:
+
+- `data/layer2/layer2_config.json`
+- `src/core/constants.py`
+- `src/core/pipeline.py`
+- `src/layer2_adaptive_recommendation/recommendation_engine.py`
+
+Noi dung tach ra config:
+
+- he so hoc: positive, negative, feedback_penalty, active_threshold
+- bang similarity: map tu tag Layer 1 sang cac tag Layer 2 gan nghia
+
+Muc dich:
+
+- chi can sua JSON la co the chinh he so va similarity
+- tranh hardcode trong code
 
 ## Validation da chay
 

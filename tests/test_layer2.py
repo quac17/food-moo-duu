@@ -56,18 +56,17 @@ class Layer2TestCase(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def test_normalizes_legacy_alias_tags(self) -> None:
-        self._write_canonical([])
+    def test_expands_layer1_context_to_similar_layer2_tags(self) -> None:
         self._write_legacy(
             [
                 {
                     "id": "dish_001",
                     "name": "Dish 1",
                     "tag_weights": {
-                        "time_noon": 0.5,
-                        "time_quick_meal": 0.3,
-                        "mood_social": 0.2,
-                        "unknown_x": 0.9,
+                        "time_quick_meal": 0.9,
+                        "pref_convenient": 0.7,
+                        "time_busy": 0.4,
+                        "time_noon": 0.2,
                     },
                 }
             ]
@@ -77,21 +76,23 @@ class Layer2TestCase(unittest.TestCase):
         self.assertEqual(engine.source_kind, "legacy")
         dish = engine.get_dish_by_id("dish_001")
 
-        self.assertAlmostEqual(dish["tag_weights"]["time_noon"], 0.5)
-        self.assertAlmostEqual(dish["tag_weights"]["pref_instant"], 0.3)
-        self.assertAlmostEqual(dish["tag_weights"]["mood_gathering"], 0.2)
-        self.assertNotIn("unknown_x", dish["tag_weights"])
+        score = engine.score_dish(dish, {"pref_instant": 1.0})
+
+        self.assertEqual(dish["tag_weights"]["time_quick_meal"], 0.9)
+        self.assertEqual(dish["tag_weights"]["pref_convenient"], 0.7)
+        self.assertEqual(dish["tag_weights"]["time_busy"], 0.4)
+        self.assertGreater(score, 1.0)
 
     def test_prefers_canonical_when_available(self) -> None:
-        self._write_canonical(
-            [
-                {"id": "dish_001", "name": "Canonical 1", "tag_weights": {}},
-            ]
-        )
         self._write_legacy(
             [
                 {"id": "dish_001", "name": "Legacy 1", "tag_weights": {}},
                 {"id": "dish_002", "name": "Legacy 2", "tag_weights": {}},
+            ]
+        )
+        self._write_canonical(
+            [
+                {"id": "dish_001", "name": "Canonical 1", "tag_weights": {}},
             ]
         )
 
@@ -122,15 +123,18 @@ class Layer2TestCase(unittest.TestCase):
         self.assertEqual([item["id"] for item in out], ["dish_002", "dish_001"])
 
     def test_hebbian_update_persists(self) -> None:
-        weights = {tag: 0.0 for tag in ALL_TAGS}
-        weights["pref_instant"] = 0.95
         self._write_canonical([])
         self._write_legacy(
             [
                 {
                     "id": "dish_001",
                     "name": "Dish 1",
-                    "tag_weights": weights,
+                    "tag_weights": {
+                        "time_quick_meal": 0.95,
+                        "pref_convenient": 0.7,
+                        "time_busy": 0.4,
+                        "time_noon": 0.2,
+                    },
                 }
             ]
         )
@@ -143,9 +147,9 @@ class Layer2TestCase(unittest.TestCase):
         runtime_file = self.layer2 / "runtime" / "dataset_v001_dishes_runtime.json"
         payload = json.loads(runtime_file.read_text(encoding="utf-8"))
         saved = payload["dishes"][0]["tag_weights"]
-        self.assertLessEqual(saved["pref_instant"], 1.0)
-        self.assertGreater(saved["pref_instant"], 0.95)
-        self.assertLess(saved["time_noon"], 0.0)
+        self.assertGreater(saved["time_quick_meal"], 0.95)
+        self.assertGreater(saved["pref_convenient"], 0.7)
+        self.assertGreater(saved["time_busy"], 0.4)
 
 
 if __name__ == "__main__":

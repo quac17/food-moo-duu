@@ -4,32 +4,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from src.core.constants import ALL_TAGS, LAYER2_DATA_DIR
-
-
-# Mapping de migrate tag legacy ve taxonomy chung cua Layer1.
-LEGACY_TAG_ALIASES = {
-    "time_late_night": "time_night",
-    "time_weekday": "time_noon",
-    "time_weekend": "time_snacks",
-    "time_busy": "pref_convenient",
-    "time_relaxed": "mood_normal",
-    "time_quick_meal": "pref_instant",
-    "weather_rainy": "weather_rain",
-    "weather_sunny": "weather_normal",
-    "weather_humid": "weather_normal",
-    "weather_dry": "weather_normal",
-    "weather_windy": "weather_normal",
-    "weather_stormy": "weather_storm",
-    "weather_cloudy": "weather_normal",
-    "weather_mild": "weather_normal",
-    "mood_sad": "mood_lonely",
-    "mood_tired": "mood_exhausted",
-    "mood_energetic": "mood_excited",
-    "mood_adventurous": "mood_excited",
-    "mood_social": "mood_gathering",
-    "mood_comfort_seek": "mood_sluggish",
-}
+from src.core.constants import LAYER2_CONFIG, LAYER2_DATA_DIR
 
 
 class RecommendationEngine:
@@ -44,7 +19,8 @@ class RecommendationEngine:
         self.canonical_file, self.legacy_file = self._resolve_dataset_files()
         self.runtime_dir = self.data_dir / "runtime"
         self.runtime_file = self.runtime_dir / f"{self.active_dataset}_dishes_runtime.json"
-        self.source_file: Path = self.legacy_file
+        self.similarity_tags = self._load_similarity_tags()
+        self.source_file: Path = self.runtime_file
         self.source_kind: str = "legacy"
         self.dishes = self._load_dishes()
 
@@ -86,22 +62,39 @@ class RecommendationEngine:
             legacy = (self.dataset_dir / legacy_rel).resolve()
         return canonical, legacy
 
-    @staticmethod
-    def _normalize_tag_weights(raw_weights: Dict) -> Dict[str, float]:
-        normalized = {tag: 0.0 for tag in ALL_TAGS}
-        for raw_tag, raw_weight in raw_weights.items():
-            target_tag = LEGACY_TAG_ALIASES.get(raw_tag, raw_tag)
-            if target_tag not in normalized:
+    def _load_similarity_tags(self) -> Dict[str, Dict[str, float]]:
+        similarity = LAYER2_CONFIG.get("similarity", {})
+        if not isinstance(similarity, dict):
+            return {}
+        normalized: Dict[str, Dict[str, float]] = {}
+        for tag, mappings in similarity.items():
+            if not isinstance(tag, str) or not isinstance(mappings, dict):
                 continue
-            try:
-                value = float(raw_weight)
-            except (TypeError, ValueError):
-                value = 0.0
-            normalized[target_tag] += value
-
-        for tag, value in normalized.items():
-            normalized[tag] = max(-1.0, min(1.0, value))
+            normalized[tag] = {}
+            for similar_tag, factor in mappings.items():
+                try:
+                    normalized[tag][str(similar_tag)] = float(factor)
+                except (TypeError, ValueError):
+                    continue
         return normalized
+
+    @staticmethod
+    def _coerce_float(value: object, default: float = 0.0) -> float:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+
+    @staticmethod
+    def _add_weight(target: Dict[str, float], tag: str, amount: float) -> None:
+        if amount <= 0.0:
+            return
+        target[tag] = min(1.0, target.get(tag, 0.0) + amount)
+
+    def _get_source_mtime(self, file_path: Path) -> float:
+        if not file_path.exists():
+            return 0.0
+        return file_path.stat().st_mtime
 
     def _canonical_key_to_dish_id(self, key: str) -> str:
         suffix = key.split("_", maxsplit=1)[-1] if "_" in key else key
@@ -147,7 +140,7 @@ class RecommendationEngine:
                     "id": self._canonical_key_to_dish_id(key),
                     "name": value.get("name", key),
                     "is_drink": bool(value.get("is_drink", False)),
-                    "popularity_score": float(value.get("popularity_score", 1.0)),
+                    "popularity_score": self._coerce_float(value.get("popularity_score", 1.0), 1.0),
                     "tag_weights": value.get("tag_weights", {}),
                 }
             )
@@ -167,13 +160,28 @@ class RecommendationEngine:
 
     def _choose_source(self, canonical: List[Dict], legacy: List[Dict]) -> Tuple[List[Dict], Path, str]:
         runtime = self._load_runtime_dishes()
-        if runtime:
+        runtime_fresh = runtime and self._get_source_mtime(self.runtime_file) >= max(
+            self._get_source_mtime(self.canonical_file),
+            self._get_source_mtime(self.legacy_file),
+        )
+        if runtime_fresh:
             return runtime, self.runtime_file, "runtime"
-        if canonical:
+
+        canonical_newer = self._get_source_mtime(self.canonical_file) >= self._get_source_mtime(self.legacy_file)
+        if canonical and canonical_newer:
             return canonical, self.runtime_file, "canonical"
         if legacy:
             return legacy, self.runtime_file, "legacy"
+        if canonical:
+            return canonical, self.runtime_file, "canonical"
         return [], self.legacy_file, "legacy"
+
+    def _normalize_tag_weights(self, raw_weights: Dict) -> Dict[str, float]:
+        normalized: Dict[str, float] = {}
+        for raw_tag, raw_weight in raw_weights.items():
+            value = self._coerce_float(raw_weight, 0.0)
+            normalized[raw_tag] = max(-1.0, min(1.0, normalized.get(raw_tag, 0.0) + value))
+        return normalized
 
     def _load_dishes(self) -> List[Dict]:
         canonical_dishes = self._load_canonical_dishes()
@@ -194,11 +202,30 @@ class RecommendationEngine:
                     "id": str(dish.get("id", "")),
                     "name": str(dish.get("name", "Unknown dish")),
                     "is_drink": bool(dish.get("is_drink", False)),
-                    "popularity_score": float(dish.get("popularity_score", 1.0)),
+                    "popularity_score": self._coerce_float(dish.get("popularity_score", 1.0), 1.0),
                     "tag_weights": self._normalize_tag_weights(tag_weights),
                 }
             )
         return normalized_dishes
+
+    def _expand_context_scores(self, context_scores: Dict[str, float]) -> Dict[str, float]:
+        expanded: Dict[str, float] = {}
+        for tag, score in context_scores.items():
+            base_score = self._coerce_float(score, 0.0)
+            if base_score == 0.0:
+                continue
+
+            self._add_weight(expanded, tag, base_score)
+
+            for similar_tag, factor in self.similarity_tags.get(tag, {}).items():
+                self._add_weight(expanded, similar_tag, base_score * factor)
+        return expanded
+
+    def _expanded_context_for_update(self, context_scores: Dict[str, float]) -> Dict[str, float]:
+        expanded = self._expand_context_scores(context_scores)
+        for tag, score in context_scores.items():
+            self._add_weight(expanded, tag, self._coerce_float(score, 0.0))
+        return expanded
 
     def save(self) -> None:
         payload = {"dishes": self.dishes}
@@ -206,13 +233,38 @@ class RecommendationEngine:
         self.source_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
         self.source_kind = "runtime"
 
+    def apply_context_to_dish(self, dish: Dict, context_scores: Dict[str, float], learning_rate: float, penalty_rate: float) -> None:
+        expanded_context = self._expanded_context_for_update(context_scores)
+        tag_weights = dish.setdefault("tag_weights", {})
+
+        for tag in list(tag_weights.keys()):
+            activation = self._coerce_float(expanded_context.get(tag, 0.0), 0.0)
+            current_weight = self._coerce_float(tag_weights.get(tag, 0.0), 0.0)
+
+            if activation >= 0.25:
+                updated = current_weight + learning_rate * activation
+            else:
+                updated = current_weight - penalty_rate * (0.25 - activation)
+
+            tag_weights[tag] = max(-1.0, min(1.0, updated))
+
+    def apply_negative_feedback_to_dish(self, dish: Dict, context_scores: Dict[str, float], penalty_rate: float) -> None:
+        expanded_context = self._expanded_context_for_update(context_scores)
+        tag_weights = dish.setdefault("tag_weights", {})
+
+        for tag, activation in expanded_context.items():
+            current_weight = self._coerce_float(tag_weights.get(tag, 0.0), 0.0)
+            updated = current_weight - penalty_rate * activation
+            tag_weights[tag] = max(-1.0, min(1.0, updated))
+
     def score_dish(self, dish: Dict, context_scores: Dict[str, float]) -> float:
         # Cong thuc tuyen tinh:
         # score(dish) = sum_t activation(tag_t) * weight(dish, tag_t)
+        expanded_context = self._expand_context_scores(context_scores)
         return float(
             sum(
-                context_scores.get(tag, 0.0) * dish["tag_weights"].get(tag, 0.0)
-                for tag in ALL_TAGS
+                expanded_context.get(tag, 0.0) * weight
+                for tag, weight in dish["tag_weights"].items()
             )
         )
 
@@ -225,7 +277,7 @@ class RecommendationEngine:
                     "id": dish["id"],
                     "name": dish["name"],
                     "score": round(score, 4),
-                    "popularity_score": float(dish.get("popularity_score", 1.0)),
+                    "popularity_score": self._coerce_float(dish.get("popularity_score", 1.0), 1.0),
                 }
             )
         ranked.sort(

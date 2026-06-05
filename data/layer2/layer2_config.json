@@ -1,0 +1,226 @@
+{
+  "schema_version": "layer2_v1",
+  "learning": {
+    "positive": 0.08,
+    "negative": 0.02,
+    "feedback_penalty": 0.02,
+    "active_threshold": 0.25
+  },
+  "similarity": {
+    "time_morning": {
+      "time_weekday": 0.25,
+      "time_busy": 0.2,
+      "pref_convenient": 0.15
+    },
+    "time_noon": {
+      "time_busy": 0.3,
+      "time_weekday": 0.25,
+      "time_quick_meal": 0.3
+    },
+    "time_afternoon": {
+      "time_relaxed": 0.35,
+      "time_weekday": 0.2
+    },
+    "time_evening": {
+      "time_busy": 0.25,
+      "time_weekend": 0.25,
+      "time_snacks": 0.3
+    },
+    "time_night": {
+      "time_late_night": 0.85,
+      "time_weekend": 0.3
+    },
+    "weather_hot": {
+      "weather_sunny": 0.8,
+      "weather_dry": 0.2,
+      "weather_windy": 0.1,
+      "weather_mild": 0.1
+    },
+    "weather_cold": {
+      "weather_mild": 0.35,
+      "weather_cloudy": 0.2
+    },
+    "weather_rain": {
+      "weather_rainy": 0.9,
+      "weather_stormy": 0.4,
+      "weather_cloudy": 0.2
+    },
+    "weather_storm": {
+      "weather_stormy": 0.9,
+      "weather_rainy": 0.35
+    },
+    "weather_normal": {
+      "weather_sunny": 0.45,
+      "weather_mild": 0.35,
+      "weather_cloudy": 0.3
+    },
+    "mood_exhausted": {
+      "mood_tired": 0.85,
+      "mood_sluggish": 0.65,
+      "mood_comfort_seek": 0.35
+    },
+    "mood_sluggish": {
+      "mood_tired": 0.6,
+      "mood_comfort_seek": 0.3
+    },
+    "mood_normal": {
+      "mood_social": 0.2,
+      "mood_gathering": 0.2
+    },
+    "mood_happy": {
+      "mood_energetic": 0.75,
+      "mood_adventurous": 0.4,
+      "mood_social": 0.35
+    },
+    "mood_excited": {
+      "mood_energetic": 0.85,
+      "mood_adventurous": 0.6,
+      "mood_social": 0.4
+    },
+    "mood_starving": {
+      "mood_exhausted": 0.2,
+      "mood_lazy": 0.15
+    },
+    "mood_stressed": {
+      "mood_exhausted": 0.25,
+      "mood_tired": 0.2,
+      "mood_comfort_seek": 0.3
+    },
+    "mood_lonely": {
+      "mood_social": 0.5,
+      "mood_gathering": 0.35
+    },
+    "mood_sick": {
+      "mood_exhausted": 0.25,
+      "mood_tired": 0.2,
+      "mood_sluggish": 0.2
+    },
+    "mood_lazy": {
+      "mood_sluggish": 0.8,
+      "mood_tired": 0.3
+    },
+    "mood_gossip": {
+      "mood_social": 0.75,
+      "mood_gathering": 0.35
+    },
+    "mood_bored_taste": {
+      "mood_social": 0.2,
+      "mood_gathering": 0.2
+    },
+    "mood_watching_movie": {
+      "time_snacks": 0.45,
+      "pref_finger_food": 0.35,
+      "mood_gathering": 0.2
+    },
+    "mood_gathering": {
+      "mood_social": 0.85,
+      "time_weekend": 0.4,
+      "time_snacks": 0.25
+    },
+    "pref_spicy": {
+      "pref_flavorful": 0.35
+    },
+    "pref_sweet": {
+      "pref_fruity": 0.3,
+      "pref_milky": 0.25
+    },
+    "pref_sour": {
+      "pref_fruity": 0.35
+    },
+    "pref_flavorful": {
+      "pref_rich": 0.35,
+      "pref_bbq_hotpot": 0.25
+    },
+    "pref_bland": {
+      "pref_soft": 0.25,
+      "pref_soup": 0.2
+    },
+    "pref_soup": {
+      "pref_warm_drink": 0.2,
+      "pref_soft": 0.25
+    },
+    "pref_dry": {
+      "pref_crunchy": 0.25,
+      "pref_finger_food": 0.2
+    },
+    "pref_cold": {
+      "weather_sunny": 0.2,
+      "weather_normal": 0.15
+    },
+    "pref_crunchy": {
+      "pref_finger_food": 0.45
+    },
+    "pref_soft": {
+      "pref_soup": 0.3
+    },
+    "pref_bbq_hotpot": {
+      "pref_flavorful": 0.35,
+      "mood_gathering": 0.25
+    },
+    "pref_instant": {
+      "time_quick_meal": 0.85,
+      "pref_convenient": 0.65,
+      "time_busy": 0.5
+    },
+    "pref_rice": {
+      "time_noon": 0.2,
+      "pref_convenient": 0.2
+    },
+    "pref_raw": {
+      "weather_normal": 0.2,
+      "mood_excited": 0.2
+    },
+    "pref_rich": {
+      "pref_flavorful": 0.3,
+      "pref_bbq_hotpot": 0.2
+    },
+    "pref_low_fat": {
+      "pref_bland": 0.25,
+      "pref_soup": 0.2
+    },
+    "pref_high_protein": {
+      "pref_rice": 0.2,
+      "pref_convenient": 0.2
+    },
+    "pref_vegetarian": {
+      "pref_bland": 0.2,
+      "pref_soft": 0.15
+    },
+    "pref_convenient": {
+      "time_busy": 0.85,
+      "time_quick_meal": 0.45
+    },
+    "pref_finger_food": {
+      "time_snacks": 0.45,
+      "mood_gathering": 0.25
+    },
+    "pref_caffeine": {
+      "time_busy": 0.25,
+      "time_morning": 0.25
+    },
+    "pref_milky": {
+      "pref_sweet": 0.25,
+      "pref_fruity": 0.15
+    },
+    "pref_fruity": {
+      "pref_sweet": 0.25,
+      "weather_sunny": 0.15
+    },
+    "pref_tea_base": {
+      "pref_cold": 0.2,
+      "pref_herbal": 0.15
+    },
+    "pref_fizzy": {
+      "weather_hot": 0.25,
+      "mood_gathering": 0.25
+    },
+    "pref_warm_drink": {
+      "pref_soup": 0.3,
+      "weather_cold": 0.2
+    },
+    "pref_herbal": {
+      "pref_warm_drink": 0.3,
+      "weather_cold": 0.2
+    }
+  }
+}
