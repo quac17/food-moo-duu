@@ -4,7 +4,7 @@ services:
     build:
       context: ../..
       dockerfile: Dockerfile
-    command: python main.py --non-interactive --top-k 3 --choice ""
+    command: python -m src.layer3_genetic_response.run_layer3 --repeat 2
     environment:
       - PYTHONUNBUFFERED=1
     volumes:

@@ -4,7 +4,7 @@ services:
     build:
       context: ../..
       dockerfile: Dockerfile
-    command: python -m src.layer1_intent_context.run_layer1 --message "Toi muon mon nong cho toi nay" --top-k 8 --threshold 0.2
+    command: python -m src.layer1_intent_context.run_layer1 --all-datasets --message "Toi muon mon nong cho toi nay" --top-k 8 --raw-threshold 0.2 --context-threshold 0.1
     environment:
       - PYTHONUNBUFFERED=1
     volumes:

@@ -1,0 +1,202 @@
+[
+  {
+    "text": "Sáng sớm mình vội đi làm",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_082",
+    "tags_weighted": {
+      "time_morning": 0.914,
+      "pref_instant": 0.914,
+      "pref_convenient": 0.914
+    }
+  },
+  {
+    "text": "Buổi sáng cần bữa no nhanh",
+    "reward_signal": -0.4,
+    "chosen_dish_id": "dish_018",
+    "tags_weighted": {
+      "time_morning": 0.669,
+      "pref_rice": 0.669,
+      "mood_starving": 0.669
+    }
+  },
+  {
+    "text": "Sáng nay dậy muộn cần ăn gấp",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_055",
+    "tags_weighted": {
+      "time_morning": 0.914,
+      "pref_instant": 0.914,
+      "mood_lazy": 0.914
+    }
+  },
+  {
+    "text": "Trưa nay bận họp nên ăn nhanh",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_078",
+    "tags_weighted": {
+      "time_noon": 0.914,
+      "pref_instant": 0.914,
+      "pref_convenient": 0.914
+    }
+  },
+  {
+    "text": "Giờ trưa muốn cơm văn phòng",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_070",
+    "tags_weighted": {
+      "time_noon": 0.914,
+      "pref_rice": 0.914,
+      "pref_flavorful": 0.914
+    }
+  },
+  {
+    "text": "Trưa nóng quá muốn món mát",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_001",
+    "tags_weighted": {
+      "time_noon": 0.914,
+      "weather_hot": 0.914,
+      "pref_cold": 0.914
+    }
+  },
+  {
+    "text": "Chiều nay uể oải cần đồ uống",
+    "reward_signal": -0.4,
+    "chosen_dish_id": "dish_020",
+    "tags_weighted": {
+      "time_afternoon": 0.669,
+      "mood_sluggish": 0.669,
+      "pref_tea_base": 0.669
+    }
+  },
+  {
+    "text": "Buổi chiều muốn bánh ngọt",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_013",
+    "tags_weighted": {
+      "time_afternoon": 0.914,
+      "pref_sweet": 0.914,
+      "pref_milky": 0.914
+    }
+  },
+  {
+    "text": "Chiều mưa thích món nóng",
+    "reward_signal": -0.4,
+    "chosen_dish_id": "dish_094",
+    "tags_weighted": {
+      "time_afternoon": 0.669,
+      "weather_rain": 0.669,
+      "pref_soup": 0.669
+    }
+  },
+  {
+    "text": "Tối nay tụ tập bạn bè",
+    "reward_signal": -0.4,
+    "chosen_dish_id": "dish_038",
+    "tags_weighted": {
+      "time_evening": 0.669,
+      "mood_gathering": 0.669,
+      "pref_finger_food": 0.669
+    }
+  },
+  {
+    "text": "Buổi tối muốn lẩu nướng",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_009",
+    "tags_weighted": {
+      "time_evening": 0.914,
+      "pref_bbq_hotpot": 0.914,
+      "mood_gathering": 0.914
+    }
+  },
+  {
+    "text": "Tối rồi muốn cơm đậm đà",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_011",
+    "tags_weighted": {
+      "time_evening": 0.914,
+      "pref_rice": 0.914,
+      "pref_flavorful": 0.914
+    }
+  },
+  {
+    "text": "Đêm khuya mà vẫn đói",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_047",
+    "tags_weighted": {
+      "time_night": 0.914,
+      "mood_starving": 0.914,
+      "pref_instant": 0.914
+    }
+  },
+  {
+    "text": "Khuya rồi muốn mì gói",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_090",
+    "tags_weighted": {
+      "time_night": 0.914,
+      "pref_instant": 0.914,
+      "mood_lazy": 0.914
+    }
+  },
+  {
+    "text": "Đêm nay tránh caffein",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_069",
+    "tags_weighted": {
+      "time_night": 0.914,
+      "pref_bland": 0.914,
+      "pref_warm_drink": 0.914
+    }
+  },
+  {
+    "text": "Muốn ăn vặt chiều tối",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_082",
+    "tags_weighted": {
+      "time_snacks": 0.914,
+      "time_afternoon": 0.914,
+      "pref_finger_food": 0.914
+    }
+  },
+  {
+    "text": "Giờ ăn vặt thèm bánh tráng",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_099",
+    "tags_weighted": {
+      "time_snacks": 0.914,
+      "pref_crunchy": 0.914,
+      "pref_spicy": 0.914
+    }
+  },
+  {
+    "text": "Ăn vặt xem phim buổi tối",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_052",
+    "tags_weighted": {
+      "time_snacks": 0.914,
+      "mood_watching_movie": 0.914,
+      "time_evening": 0.914
+    }
+  },
+  {
+    "text": "Trời nóng quá muốn món mát",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_041",
+    "tags_weighted": {
+      "weather_hot": 0.914,
+      "pref_cold": 0.914,
+      "pref_bland": 0.914
+    }
+  },
+  {
+    "text": "Nắng gắt thèm đồ lạnh",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_083",
+    "tags_weighted": {
+      "weather_hot": 0.914,
+      "pref_cold": 0.914,
+      "time_noon": 0.914
+    }
+  }
+]

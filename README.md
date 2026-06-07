@@ -1,172 +1,196 @@
 # food-moo-duu
+Là bò, sáng phải rống
+Là người, sống phải ráng
 
-He thong goi y mon an thong minh chay offline bang Python, thiet ke theo kien truc 3 lop:
+He thong goi y mon an offline bang Python theo kien truc 3 layer:
 
-- Layer 1: Intent & Context Tracking (TF-IDF + ML truyen thong + Dialog State Tracking)
-- Layer 2: Adaptive Recommendation Engine (Linear Weight Scoring + Hebbian Online Learning)
-- Layer 3: Genetic Response Generator (Template + Genetic Algorithm + Epsilon-Greedy + Roulette)
+- Layer 1: Intent + Dialog State Tracking
+- Layer 2: Adaptive Recommendation + Hebbian update
+- Layer 3: Genetic Response + Fitness update
 
 ## Project Tree
 
 ```text
 food-moo-duu/
+├── main.py
+├── Makefile
+├── Dockerfile
+├── requirements.txt
+├── README.md
+├── architechture.txt
+├── scripts/
+│   └── generate_layer1_datasets.py
+├── tests/
+│   ├── test_layer2.py
+│   ├── test_layer2_integration.py
+│   └── test_feedback_logging.py
+├── src/
+│   ├── core/
+│   │   ├── constants.py
+│   │   └── pipeline.py
+│   ├── layer1_intent_context/
+│   │   ├── intent_tracker.py
+│   │   ├── dialog_state.py
+│   │   └── run_layer1.py
+│   ├── layer2_adaptive_recommendation/
+│   │   ├── recommendation_engine.py
+│   │   ├── online_learning.py
+│   │   ├── run_layer2.py
+│   │   ├── migrate_to_canonical.py
+│   │   ├── check_schema_drift.py
+│   │   └── reset_runtime.py
+│   └── layer3_genetic_response/
+│       ├── genetic_generator.py
+│       ├── fitness_manager.py
+│       └── run_layer3.py
 ├── data/
 │   ├── common_config.json
 │   ├── layer1/
 │   │   ├── tags.json
 │   │   ├── conflict_pairs.json
 │   │   ├── datasets.json
-│   │   ├── dataset_v001/
-│   │   │   ├── intent_samples.csv
-│   │   │   └── intent_train_data.json
-│   │   └── session_state.json         # runtime artifact
+│   │   ├── dataset_v001/ ... dataset_v005/
+│   │   ├── session_state.json
+│   │   └── tag_exports.jsonl
 │   ├── layer2/
 │   │   ├── datasets.json
+│   │   ├── layer2_config.json
+│   │   ├── dishes_100.json
 │   │   ├── dataset_v001/
 │   │   │   ├── food_weight_matrix.json
 │   │   │   └── dataset_manifest.json
-│   │   ├── food_weight_matrix.json    # legacy root copy
-│   │   └── dishes_100.json            # legacy path
+│   │   └── runtime/
+│   │       ├── dataset_v001_dishes_runtime.json
+│   │       └── feedback_reports.jsonl
 │   └── layer3/
 │       ├── datasets.json
-│       ├── dataset_v001/
-│       │   ├── gene_pool.json
-│       │   └── fitness_history.json
-│       ├── gene_pool.json             # legacy root copy
-│       ├── fitness_history.json       # legacy root copy
-│       ├── language_genes.json
-│       └── chromosome_fitness.json
-├── docker/
-│   ├── layer1/docker-compose.yml
-│   ├── layer2/docker-compose.yml
-│   └── layer3/docker-compose.yml
-├── src/
-│   ├── core/
-│   │   ├── constants.py
-│   │   └── pipeline.py
-│   ├── layer1_intent_context/
-│   │   ├── dialog_state.py
-│   │   ├── intent_tracker.py
-│   │   └── run_layer1.py
-│   ├── layer2_adaptive_recommendation/
-│   │   ├── online_learning.py
-│   │   ├── recommendation_engine.py
-│   │   └── run_layer2.py
-│   └── layer3_genetic_response/
-│       ├── fitness_manager.py
-│       ├── genetic_generator.py
-│       └── run_layer3.py
-├── Dockerfile
-├── Makefile
-├── main.py
-└── requirements.txt
+│       ├── gene_pool.json
+│       ├── fitness_history.json
+│       └── dataset_v001/
+│           ├── gene_pool.json
+│           └── fitness_history.json
+└── docker/
+    ├── layer1/docker-compose.yml
+    ├── layer2/docker-compose.yml
+    └── layer3/docker-compose.yml
 ```
 
-## Quy uoc du lieu epoch
+## Data Convention
 
-- Moi layer quan ly bo input theo version qua thu muc `dataset_v001`, `dataset_v002`, ...
-- File `datasets.json` o root cua tung layer chi ra dataset dang active.
-- Thanh phan co dinh (vi du: `tags.json`, `conflict_pairs.json`, `common_config.json`) dat o root, khong tach theo epoch.
-- Runtime artifact (nhu `session_state.json`) khong xem la input epoch.
-- Layer1 da migrate sang load theo `datasets.json` + thu muc epoch `dataset_v001`.
-- Layer2/Layer3 hien van giu mot so file legacy o root de tuong thich code hien tai.
+- Moi layer co `datasets.json` de khai bao `active_dataset`.
+- Data train/input nam trong thu muc epoch `dataset_v00x`.
+- File runtime (state, feedback log) tach rieng khoi file train.
+- Layer1 hien train/predict tu nhieu dataset (`--all-datasets`) khi can.
 
-## Layer1 chat flow (export tag only)
-
-- Flow rieng de chat va dung o Layer1:
-  1) User chat
-  2) IntentTracker predict tags
-  3) DialogStateTracker update context
-  4) Export tags ra man hinh + ghi `data/layer1/tag_exports.jsonl`
-- Khong goi Layer2/Layer3 trong flow nay.
-
-Lenh nhanh:
-
-```bash
-make layer1-chat
-```
-
-1 luot (khong interactive):
-
-```bash
-make layer1-export
-```
-
-## Kien truc va luong xu ly
+## Runtime Flow
 
 ```mermaid
 flowchart TD
-  userInput1[UserChat1] --> layer1Intent[Layer1IntentTracker]
-  layer1Intent --> dstUpdate[DialogStateUpdate]
-  dstUpdate --> layer2Score[Layer2LinearScoring]
-  layer2Score --> layer3Text[Layer3GeneticResponse]
-  layer3Text --> userInput2[UserChat2QuayXe]
-  userInput2 --> layer1Intent2[Layer1IntentTracker]
-  layer1Intent2 --> dstUpdate2[DialogStateUpdate]
-  dstUpdate2 --> layer2Rescore[Layer2Rescoring]
-  layer2Rescore --> userPick[UserSelectDish]
-  userPick --> hebbianUpdate[HebbianMatrixUpdate]
-  userPick --> fitnessUpdate[GeneticFitnessUpdate]
+  userInput[UserInput] --> layer1Run[Layer1IntentAndDST]
+  layer1Run --> layer2Run[Layer2ScoringAndRecommend]
+  layer2Run --> layer3Run[Layer3GeneticResponse]
+  layer3Run --> userChoice[UserChoice]
+  userChoice --> l2Update[Layer2HebbianUpdate]
+  userChoice --> l3Update[Layer3FitnessUpdate]
 ```
 
-### Layer 1 - Intent & Context Tracking
-- Nhan chat tu user.
-- Dung `TfidfVectorizer + OneVsRest(LogisticRegression)` de du doan 30 tags.
-- `update_context()` ap dung 3 quy luat:
-  - Decay: hao mon diem theo turn.
-  - Accumulation: cong don theo confidence moi.
-  - Conflict Resolution: giam diem tag yeu trong cap doi nghich.
-- Input train theo epoch tai `data/layer1/dataset_v001/`.
-- Luu trang thai DST vao `data/layer1/session_state.json`.
+Ghi chu:
+- Full app flow chay qua `main.py` -> `src/core/pipeline.py`.
+- Layer3 da co adapter schema, ho tro data canonical theo mood va van update fitness runtime.
 
-### Layer 2 - Adaptive Recommendation Engine
-- Tinh diem cho 100 mon an theo cong thuc:
-  - `score(dish) = sum(activation[tag] * weight[dish][tag])`
-- Khi user chon mon:
-  - Tang trong so lien ket tag-kich-hoat (Hebbian positive).
-  - Giam nhe trong so voi tag yeu de tranh drift (forgetting).
-- Input canonical theo epoch tai `data/layer2/dataset_v001/food_weight_matrix.json`.
-- File `data/layer2/dishes_100.json` dang duoc giu de tuong thich code hien tai.
+## Run Commands (Naming moi)
 
-### Layer 3 - Genetic Response Generator
-- Sinh cau theo chromosome `(opening, action, closing)`.
-- Chien luoc sinh:
-  - Epsilon-Greedy de can bang explore/exploit.
-  - Roulette Wheel Selection theo fitness.
-  - Mutation them slang theo xac suat.
-- Implicit feedback:
-  - User chon mon -> tang fitness.
-  - User khong chon/thoat -> giam fitness.
-- Input genes/fitness theo epoch tai `data/layer3/dataset_v001/`.
-- Root layer3 giu them alias/legacy de phuc vu chuyen doi schema.
-
-## Chay local
-
-```bash
-python -m pip install -r requirements.txt
-python main.py
-```
-
-Kich ban demo trong `main.py`:
-1. User chat 1 -> goi y top mon.
-2. User chat 2 (quay xe) -> cap nhat context -> goi y moi.
-3. User nhap ID mon chon -> cap nhat Hebbian + Fitness.
-
-## Lenh nhanh voi Makefile
+### Setup
 
 ```bash
 make setup
-make run
-make train-layer1
-make layer1
-make layer2
-make layer3
 ```
 
-## Docker Compose theo tung layer
+### Full app
 
 ```bash
-docker compose -f docker/layer1/docker-compose.yml up --build
-docker compose -f docker/layer2/docker-compose.yml up --build
-docker compose -f docker/layer3/docker-compose.yml up --build
+make app-run
+make app-demo
+make app-docker
+```
+
+### Layer 1
+
+```bash
+make layer1-train
+make layer1-run
+make layer1-chat
+make layer1-docker
+```
+
+### Layer 2
+
+```bash
+make layer2-run
+make layer2-docker
+make layer2-migrate
+make layer2-check
+make layer2-test
+make layer2-reset-runtime
+```
+
+### Layer 3
+
+```bash
+make layer3-run
+make layer3-docker
+```
+
+## Layer1 chat-only flow
+
+- `run_layer1.py` chi xu ly Layer1 (predict + DST + export tag).
+- Khong goi Layer2/Layer3 trong mode nay.
+- Co the dung `--no-state` de test cau don (raw intent) va `--reset-state` de reset session.
+
+## Layer1 reinforcement data flow (doc lap)
+
+Muc tieu:
+- Thu thap du lieu chon mon tu chatbot de huan luyen tang cuong Layer1.
+- Khong train ngay trong flow chatbot 3 layer.
+
+### 1) Logging runtime (tu chatbot that)
+
+Khi user chon mon trong `main.py`, he thong append 1 event vao:
+- `data/layer1/rl_feedback/selected_dish_events.jsonl`
+
+Schema chinh moi event:
+- `timestamp`, `session_id`, `turn_index`
+- `user_text`
+- `raw_tags`, `context_tags`
+- `chosen_dish_id`, `chosen_dish_name`, `reward_signal`
+- `recommended_candidates`, `export_mode`, `use_state`, `source`
+
+### 2) Batch simulator (gia lap doc lap)
+
+Sinh du lieu RL feedback mo phong:
+
+```bash
+make layer1-rl-generate
+```
+
+Output:
+- `data/layer1/rl_feedback/selected_dish_events_simulated.jsonl`
+
+### 3) Offline reinforcement training flow (doc lap)
+
+Xu ly feedback thanh tap train tang cuong cho Layer1:
+
+```bash
+make layer1-rl-train
+```
+
+Artifacts:
+- `data/layer1/rl_training/reinforcement_rows.json`
+- `data/layer1/rl_training/intent_train_data_rl.json`
+- `data/layer1/rl_training/stats.json`
+
+Kiem tra nhanh so luong events:
+
+```bash
+make layer1-rl-check
 ```

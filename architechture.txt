@@ -1,72 +1,85 @@
 food-moo-duu/
 │
-├── main.py                                  # Entry point workflow end-to-end (2 turn chat + feedback)
-├── README.md
+├── main.py                                   # Full app entrypoint
+├── Makefile                                  # Naming moi: app-*, layer*-run, layer*-docker
 ├── Dockerfile
-├── Makefile
 ├── requirements.txt
+├── README.md
+├── architechture.txt
 │
 ├── src/
 │   ├── core/
 │   │   ├── constants.py
-│   │   └── pipeline.py
+│   │   └── pipeline.py                       # L1 -> L2 -> L3 -> feedback update
 │   │
-│   ├── layer1_intent_context/               # --- LAYER 1: INTENT & CONTEXT TRACKING ---
-│   │   ├── intent_tracker.py
-│   │   ├── dialog_state.py
-│   │   └── run_layer1.py
+│   ├── layer1_intent_context/
+│   │   ├── intent_tracker.py                 # Train/predict TF-IDF + normalize tieng Viet
+│   │   ├── dialog_state.py                   # DST (decay/accumulate/conflict)
+│   │   └── run_layer1.py                     # Layer1-only flow (chat/export)
+│   │   ├── rl_feedback.py                    # Schema + logger cho RL feedback Layer1
+│   │   └── train_reinforcement.py            # Luong huan luyen tang cuong offline
 │   │
-│   ├── layer2_adaptive_recommendation/      # --- LAYER 2: ADAPTIVE RECOMMENDATION ENGINE ---
-│   │   ├── recommendation_engine.py
-│   │   ├── online_learning.py
-│   │   └── run_layer2.py
+│   ├── layer2_adaptive_recommendation/
+│   │   ├── recommendation_engine.py          # Score + runtime source selection
+│   │   ├── online_learning.py                # Hebbian updates
+│   │   ├── run_layer2.py                     # Layer2-only smoke flow
+│   │   ├── migrate_to_canonical.py
+│   │   ├── check_schema_drift.py
+│   │   └── reset_runtime.py
 │   │
-│   └── layer3_genetic_response/             # --- LAYER 3: GENETIC RESPONSE GENERATOR ---
-│       ├── genetic_generator.py
+│   └── layer3_genetic_response/
+│       ├── genetic_generator.py              # Adapter schema canonical -> runtime chromosome
 │       ├── fitness_manager.py
-│       └── run_layer3.py
+│       └── run_layer3.py                     # Layer3-only smoke/demo flow
 │
 ├── data/
-│   ├── common_config.json                   # Hyperparameters chuẩn theo common.txt
-│   │
+│   ├── common_config.json
 │   ├── layer1/
-│   │   ├── tags.json                        # Fixed: tag-space chuẩn common_v1 (id + label + group)
-│   │   ├── conflict_pairs.json              # Fixed: quy tắc xung đột ngữ cảnh
-│   │   ├── datasets.json                    # Danh sách dataset input theo version
-│   │   ├── dataset_v001/                    # Input epoch version 001
-│   │   │   ├── intent_samples.csv
-│   │   │   └── intent_train_data.json
-│   │   └── session_state.json               # Runtime artifact DST
+│   │   ├── tags.json
+│   │   ├── conflict_pairs.json
+│   │   ├── datasets.json                     # active + available datasets
+│   │   ├── dataset_v001/ ... dataset_v005/   # Train corpora theo epoch
+│   │   ├── session_state.json                # Runtime state
+│   │   └── tag_exports.jsonl                 # Runtime export tags
+│   │   ├── rl_feedback/
+│   │   │   ├── selected_dish_events.jsonl
+│   │   │   └── selected_dish_events_simulated.jsonl
+│   │   └── rl_training/
+│   │       ├── reinforcement_rows.json
+│   │       ├── intent_train_data_rl.json
+│   │       └── stats.json
 │   │
 │   ├── layer2/
-│   │   ├── datasets.json                    # Danh sách dataset input theo version
+│   │   ├── datasets.json
+│   │   ├── layer2_config.json
+│   │   ├── dishes_100.json
 │   │   ├── dataset_v001/
-│   │   │   ├── food_weight_matrix.json      # Canonical input schema common_v1
-│   │   │   └── dataset_manifest.json        # Mapping canonical/legacy input
-│   │   ├── food_weight_matrix.json          # Legacy root copy (compat)
-│   │   └── dishes_100.json                  # Legacy matrix dùng bởi code hiện tại
+│   │   │   ├── food_weight_matrix.json
+│   │   │   └── dataset_manifest.json
+│   │   └── runtime/
+│   │       ├── dataset_v001_dishes_runtime.json
+│   │       └── feedback_reports.jsonl
 │   │
 │   └── layer3/
-│       ├── datasets.json                    # Danh sách dataset input theo version
-│       ├── dataset_v001/
-│       │   ├── gene_pool.json               # Input genes cho generator
-│       │   └── fitness_history.json         # Input fitness cho generator
-│       ├── gene_pool.json                   # Legacy root copy (compat)
-│       ├── fitness_history.json             # Legacy root copy (compat)
-│       ├── language_genes.json              # Alias schema -> gene_pool
-│       └── chromosome_fitness.json          # Alias schema -> fitness_history
+│       ├── datasets.json
+│       ├── gene_pool.json
+│       ├── fitness_history.json
+│       └── dataset_v001/
+│           ├── gene_pool.json
+│           └── fitness_history.json
 │
-└── docker/
-    ├── layer1/docker-compose.yml
-    ├── layer2/docker-compose.yml
-    └── layer3/docker-compose.yml
-
-Ghi chú:
-- Bộ chuẩn dữ liệu đang theo common_v1 (tham chiếu từ common.txt).
-- Quy ước epoch input: dataset_v001, dataset_v002, ...
-- Fixed components (tag/conflict/common config) giữ ở root layer, không chia theo epoch.
-- Runtime artifacts (ví dụ session state) tách riêng với input dataset.
-- Layer1 đã migrate loader sang dữ liệu epoch.
-- Layer2/Layer3 vẫn giữ một số file legacy ở root layer để tương thích code hiện tại.
+├── docker/
+│   ├── layer1/docker-compose.yml             # layer1-only entrypoint
+│   ├── layer2/docker-compose.yml             # layer2-only entrypoint
+│   └── layer3/docker-compose.yml             # layer3-only entrypoint (run_layer3.py)
+│
+├── scripts/
+│   ├── generate_layer1_datasets.py
+│   └── generate_layer1_rl_feedback.py
+│
+└── tests/
+    ├── test_layer2.py
+    ├── test_layer2_integration.py
+    └── test_feedback_logging.py
 
 

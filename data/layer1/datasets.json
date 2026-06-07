@@ -1,5 +1,11 @@
 {
   "active_dataset": "dataset_v001",
-  "available_datasets": ["dataset_v001"],
-  "max_dataset_size": 100
+  "available_datasets": [
+    "dataset_v001",
+    "dataset_v002",
+    "dataset_v003",
+    "dataset_v004",
+    "dataset_v005"
+  ],
+  "max_dataset_size": 160
 }

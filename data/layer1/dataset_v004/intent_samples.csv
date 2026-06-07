@@ -1,0 +1,157 @@
+text,tags
+Sáng chủ nhật muốn bữa chay thanh,time_morning|pref_vegetarian|pref_bland
+Buổi sáng lạnh cần đồ uống ấm,time_morning|weather_cold|pref_warm_drink
+Sáng nay thèm bánh mì giòn,time_morning|pref_crunchy|pref_dry
+Trưa rồi mà chưa ăn gì,time_noon|mood_starving|pref_instant
+Buổi trưa mưa muốn món nước,time_noon|weather_rain|pref_soup
+Trưa nay ăn salad chay,time_noon|pref_vegetarian|pref_low_fat
+Chiều rồi thèm đồ chiên giòn,time_afternoon|pref_crunchy|pref_finger_food
+Buổi chiều lạnh uống trà nóng,time_afternoon|weather_cold|pref_warm_drink
+Chiều nay muốn món chay nhẹ,time_afternoon|pref_vegetarian|pref_herbal
+Tối tan ca mệt cần món nóng,time_evening|mood_exhausted|pref_soup
+Buổi tối muốn đồ uống có ga,time_evening|pref_fizzy|mood_happy
+Tối nay nhà đông người nấu nhiều,time_evening|mood_gathering|pref_flavorful
+Đêm rồi ăn nhẹ cho dễ ngủ,time_night|pref_bland|pref_soft
+Buổi đêm mưa muốn cháo,time_night|weather_rain|pref_soup
+Khuya tan ca cần đồ nhanh,time_night|mood_exhausted|pref_instant
+Ăn vặt giữa buổi sáng,time_snacks|time_morning|pref_convenient
+Muốn đồ lai rai giòn,time_snacks|pref_crunchy|pref_finger_food
+Snack đêm khuya tiện lợi,time_snacks|time_night|pref_instant
+Nóng quá chỉ muốn salad,weather_hot|pref_vegetarian|pref_cold
+Thời tiết nóng uống nhiều nước,weather_hot|pref_herbal|pref_cold
+Trời oi bức ăn nhẹ thôi,weather_hot|pref_bland|time_afternoon
+Không khí lạnh thích món béo,weather_cold|pref_rich|pref_soup
+Trời se lạnh buổi sáng,weather_cold|time_morning|pref_warm_drink
+Lạnh mà mệt cần bổ dưỡng,weather_cold|mood_exhausted|pref_high_protein
+Mưa cả ngày buồn miệng,weather_rain|mood_bored_taste|pref_spicy
+Trời mưa tụ bạn lẩu,weather_rain|mood_gathering|pref_bbq_hotpot
+Mưa nhẹ uống trà nóng,weather_rain|pref_tea_base|pref_warm_drink
+Bão lớn không đi được,weather_storm|pref_convenient|pref_instant
+Mưa bão lạnh buốt,weather_storm|weather_cold|pref_warm_drink
+Bão đang hoành hành,weather_storm|weather_rain|pref_soup
+Thời tiết nhẹ nhàng,weather_normal|pref_vegetarian|pref_bland
+Trời đẹp muốn ra ngoài ăn,weather_normal|mood_happy|pref_raw
+Hôm nay trời bình thường,weather_normal|time_noon|pref_rice
+Mệt vì thiếu ngủ sáng nay,mood_exhausted|time_morning|pref_caffeine
+Tan ca mệt muốn no nhanh,mood_exhausted|pref_rice|pref_instant
+Mệt rã rời cần đạm,mood_exhausted|pref_high_protein|pref_soup
+Lờ đờ trưa nay,mood_sluggish|time_noon|pref_caffeine
+Buồn ngủ cần trà nóng,mood_sluggish|pref_tea_base|pref_warm_drink
+Uể oải ăn nhẹ thôi,mood_sluggish|pref_bland|pref_convenient
+Không vui không buồn,mood_normal|pref_bland|pref_rice
+Bình thường muốn đồ healthy,mood_normal|pref_low_fat|pref_high_protein
+Tâm trạng ổn tối nay,mood_normal|time_evening|pref_rice
+Tâm trạng vui sáng nay,mood_happy|time_morning|pref_sweet
+Vui muốn kem và bánh,mood_happy|pref_sweet|pref_milky
+Hôm nay vui thèm hải sản,mood_happy|pref_raw|pref_high_protein
+Hào hứng sáng đi brunch,mood_excited|time_morning|pref_sweet
+Muốn thử món lạ ngay,mood_excited|pref_raw|mood_happy
+Hào hứng chiều cafe,mood_excited|time_afternoon|pref_caffeine
+Chết đói sáng nay,mood_starving|time_morning|pref_instant
+Đói quá muốn mì,mood_starving|pref_instant|mood_lazy
+Đói me tối nay,mood_starving|time_evening|pref_rice
+Stress muốn món đậm đà,mood_stressed|pref_flavorful|pref_spicy
+Deadline gấp ăn nhanh,mood_stressed|pref_instant|time_noon
+Căng thẳng thèm socola,mood_stressed|pref_sweet|pref_rich
+Cô đơn muốn món quen,mood_lonely|pref_rice|mood_normal
+Một mình ăn mì,mood_lonely|pref_instant|time_night
+Cô đơn tối khuya,mood_lonely|time_night|pref_warm_drink
+Đau bụng ăn cháo,mood_sick|pref_soft|pref_bland
+Ốm sốt uống ấm,mood_sick|pref_warm_drink|pref_herbal
+Bệnh không ăn nặng,mood_sick|pref_low_fat|pref_bland
+Lười dậy sáng ăn nhanh,mood_lazy|time_morning|pref_instant
+Lười nấu mưa ở nhà,mood_lazy|weather_rain|pref_instant
+Lười chiên nên gọi ship,mood_lazy|pref_convenient|pref_instant
+Buôn chuyện thèm bánh ngọt,mood_gossip|pref_sweet|pref_milky
+Tám chuyện tối quán,mood_gossip|time_evening|pref_finger_food
+Buôn chuyện uống có ga,mood_gossip|pref_fizzy|mood_gathering
+Nhạt mồm muốn nướng,mood_bored_taste|pref_bbq_hotpot|pref_flavorful
+Chán cơm thèm mì cay,mood_bored_taste|pref_spicy|pref_instant
+Buồn miệng thử trái cây,mood_bored_taste|pref_fruity|pref_sour
+Xem phim cuối tuần,mood_watching_movie|mood_gathering|pref_finger_food
+Coi phim một mình,mood_watching_movie|mood_lonely|pref_finger_food
+Xem phim muốn ngọt,mood_watching_movie|pref_sweet|time_snacks
+Đông người ăn no,mood_gathering|pref_rice|pref_flavorful
+Tụ tập muốn đồ nướng,mood_gathering|pref_bbq_hotpot|pref_spicy
+Họp lớp tối nay,mood_gathering|time_evening|pref_finger_food
+Thèm ớt và tiêu,pref_spicy|pref_flavorful|mood_normal
+Muốn gà cay,pref_spicy|pref_high_protein|pref_flavorful
+Cay vừa chiều nay,pref_spicy|time_afternoon|pref_flavorful
+Thèm bánh flan,pref_sweet|pref_milky|pref_soft
+Muốn sinh tố ngọt,pref_sweet|pref_fruity|pref_milky
+Ngọt sáng nay,pref_sweet|time_morning|pref_milky
+Thèm dưa muối chua,pref_sour|pref_crunchy|pref_bland
+Muốn canh chua,pref_sour|pref_soup|pref_flavorful
+Chua mát trời nóng,pref_sour|weather_hot|pref_cold
+Thích sốt đậm,pref_flavorful|pref_rich|pref_spicy
+Muốn món kho đậm,pref_flavorful|pref_rice|pref_high_protein
+Đậm đà tụ bạn,pref_flavorful|mood_gathering|pref_bbq_hotpot
+Thích canh rau thanh,pref_bland|pref_vegetarian|pref_soup
+Muốn đồ ít gia vị,pref_bland|mood_sick|pref_soft
+Thanh mát sáng nay,pref_bland|time_morning|pref_herbal
+Thèm hủ tiếu nước,pref_soup|pref_rice|pref_flavorful
+Muốn lẩu nước dùng,pref_soup|pref_bbq_hotpot|mood_gathering
+Món nước sáng nay,pref_soup|time_morning|pref_warm_drink
+Thèm mì xào khô,pref_dry|pref_instant|pref_flavorful
+Muốn thịt nướng khô,pref_dry|pref_bbq_hotpot|pref_high_protein
+Đồ khô chiều nay,pref_dry|time_afternoon|pref_crunchy
+Thèm sinh tố lạnh,pref_cold|pref_fruity|pref_milky
+Muốn bún thịt nguội,pref_cold|pref_rice|pref_sour
+Đồ lạnh sáng nóng,pref_cold|weather_hot|time_morning
+Thèm khoai tây chiên,pref_crunchy|pref_rich|mood_watching_movie
+Muốn snack giòn,pref_crunchy|pref_finger_food|time_snacks
+Giòn tan tối nay,pref_crunchy|time_evening|pref_finger_food
+Thèm trứng hấp mềm,pref_soft|pref_high_protein|pref_bland
+Muốn khoai nghiền mềm,pref_soft|pref_rich|pref_bland
+Mềm sáng cho dễ ăn,pref_soft|time_morning|mood_sick
+Thèm thịt nướng,pref_bbq_hotpot|pref_high_protein|pref_flavorful
+Muốn lẩu hải sản,pref_bbq_hotpot|pref_raw|mood_gathering
+Nướng lẩu tụ bạn,pref_bbq_hotpot|mood_gathering|time_evening
+Thèm bánh mì kẹp nhanh,pref_instant|pref_dry|pref_convenient
+Muốn phở gói,pref_instant|pref_soup|pref_convenient
+Ăn liền tối mệt,pref_instant|time_evening|mood_exhausted
+Thèm cơm gà,pref_rice|pref_high_protein|pref_flavorful
+Muốn cơm chay,pref_rice|pref_vegetarian|pref_bland
+Cơm trắng tối nay,pref_rice|time_evening|mood_normal
+Thèm cá sống,pref_raw|pref_high_protein|pref_sour
+Muốn rau sống,pref_raw|pref_vegetarian|pref_bland
+Tươi sống hào hứng,pref_raw|mood_excited|mood_happy
+Thèm sốt kem béo,pref_rich|pref_milky|pref_flavorful
+Muốn bánh bơ,pref_rich|pref_milky|pref_sweet
+Béo ngậy tụ bạn,pref_rich|mood_gathering|pref_bbq_hotpot
+Thèm rau luộc,pref_low_fat|pref_vegetarian|pref_bland
+Muốn cơm gà luộc,pref_low_fat|pref_high_protein|pref_rice
+Ít béo sáng nay,pref_low_fat|time_morning|pref_vegetarian
+Thèm trứng protein cao,pref_high_protein|time_morning|pref_low_fat
+Muốn đậu phụ nhiều đạm,pref_high_protein|pref_vegetarian
+Nhiều đạm tối nay,pref_high_protein|time_evening|pref_flavorful
+Thèm đậu hũ chay,pref_vegetarian|pref_high_protein|pref_bland
+Muốn cơm chay (pref_vegetarian),pref_vegetarian|pref_rice|pref_bland
+Chay chiều nay,pref_vegetarian|time_afternoon|pref_herbal
+Thèm đồ ăn sẵn,pref_convenient|pref_instant|mood_stressed
+Muốn gọi delivery,pref_convenient|pref_instant|mood_lazy
+Tiện lợi tối mệt,pref_convenient|time_evening|mood_exhausted
+Thèm snack cầm tay,pref_finger_food|time_snacks|pref_crunchy
+Muốn pizza slice,pref_finger_food|pref_rich|mood_gathering
+Lai rai buôn chuyện,pref_finger_food|mood_gossip|time_snacks
+Thèm cold brew,pref_caffeine|pref_cold|time_morning
+Muốn trà matcha caffein,pref_caffeine|pref_tea_base|pref_herbal
+Caffein trước họp,pref_caffeine|time_morning|mood_stressed
+Thèm kem sữa,pref_milky|pref_sweet|pref_cold
+Muốn sữa tươi ấm,pref_milky|pref_warm_drink|time_night
+Béo sữa sáng nay,pref_milky|time_morning|pref_sweet
+Thèm dưa hấu mát,pref_fruity|weather_hot|pref_cold
+Muốn salad trái cây,pref_fruity|pref_vegetarian|pref_cold
+Trái cây sáng healthy,pref_fruity|time_morning|pref_low_fat
+Thèm trà gừng,pref_tea_base|pref_herbal|pref_warm_drink
+Muốn trà đá,pref_tea_base|pref_cold|weather_hot
+Cốt trà sáng nhẹ,pref_tea_base|time_morning|pref_bland
+Thèm bia có ga,pref_fizzy|mood_gathering|time_evening
+Muốn soda chanh,pref_fizzy|pref_sour|pref_cold
+Có ga xem phim,pref_fizzy|mood_watching_movie|time_snacks
+Thèm gừng nóng,pref_warm_drink|pref_herbal|mood_sick
+Muốn trà ấm chiều mưa,pref_warm_drink|weather_rain|pref_tea_base
+Uống ấm cô đơn,pref_warm_drink|mood_lonely|pref_tea_base
+Thèm chè thảo mộc,pref_herbal|pref_warm_drink|pref_bland
+Muốn nước cam thảo,pref_herbal|pref_warm_drink|mood_sick
+Thảo mộc sáng thanh,pref_herbal|time_morning|pref_vegetarian

@@ -1,0 +1,30 @@
+{
+  "schema_version": "layer3_train_seed_v1",
+  "generated_from": "layer2_feedback_and_layer1_tags",
+  "fitness_seed": {
+    "mood_stressed_0_1_0": {
+      "text_format": "Biết bạn đang áp lực công việc, mình gợi ý {foods} để bạn dễ chịu hơn. Ăn xong nhớ nghỉ ngơi sớm nha.",
+      "alpha_success": 20,
+      "beta_failure": 4,
+      "fitness_score": 30.2
+    },
+    "mood_stressed_1_0_1": {
+      "text_format": "Hôm nay có vẻ hơi nặng nề với bạn, nạp chút năng lượng với {foods} nhé. Mong bạn sớm lấy lại mood tốt.",
+      "alpha_success": 12,
+      "beta_failure": 5,
+      "fitness_score": 19.6
+    },
+    "mood_sick_0_0_1": {
+      "text_format": "Nghe bạn đang không khỏe, {foods} sẽ nhẹ bụng và ấm hơn. Chúc bạn mau khỏe lại.",
+      "alpha_success": 18,
+      "beta_failure": 2,
+      "fitness_score": 28.4
+    },
+    "mood_gathering_0_0_0": {
+      "text_format": "Có kèo tụ tập thì quá hợp rồi, {foods} rất hợp để chia sẻ cùng bạn bè. Vừa ăn vừa tám là chuẩn.",
+      "alpha_success": 16,
+      "beta_failure": 3,
+      "fitness_score": 24.1
+    }
+  }
+}

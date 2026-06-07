@@ -1,0 +1,1250 @@
+[
+  {
+    "text": "Sáng sớm mình vội đi làm",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Buổi sáng cần bữa no nhanh",
+    "tags": [
+      "time_morning",
+      "pref_rice",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Sáng nay dậy muộn cần ăn gấp",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Trưa nay bận họp nên ăn nhanh",
+    "tags": [
+      "time_noon",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Giờ trưa muốn cơm văn phòng",
+    "tags": [
+      "time_noon",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Trưa nóng quá muốn món mát",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Chiều nay uể oải cần đồ uống",
+    "tags": [
+      "time_afternoon",
+      "mood_sluggish",
+      "pref_tea_base"
+    ]
+  },
+  {
+    "text": "Buổi chiều muốn bánh ngọt",
+    "tags": [
+      "time_afternoon",
+      "pref_sweet",
+      "pref_milky"
+    ]
+  },
+  {
+    "text": "Chiều mưa thích món nóng",
+    "tags": [
+      "time_afternoon",
+      "weather_rain",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Tối nay tụ tập bạn bè",
+    "tags": [
+      "time_evening",
+      "mood_gathering",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Buổi tối muốn lẩu nướng",
+    "tags": [
+      "time_evening",
+      "pref_bbq_hotpot",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Tối rồi muốn cơm đậm đà",
+    "tags": [
+      "time_evening",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Đêm khuya mà vẫn đói",
+    "tags": [
+      "time_night",
+      "mood_starving",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Khuya rồi muốn mì gói",
+    "tags": [
+      "time_night",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Đêm nay tránh caffein",
+    "tags": [
+      "time_night",
+      "pref_bland",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Muốn ăn vặt chiều tối",
+    "tags": [
+      "time_snacks",
+      "time_afternoon",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Giờ ăn vặt thèm bánh tráng",
+    "tags": [
+      "time_snacks",
+      "pref_crunchy",
+      "pref_spicy"
+    ]
+  },
+  {
+    "text": "Ăn vặt xem phim buổi tối",
+    "tags": [
+      "time_snacks",
+      "mood_watching_movie",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Trời nóng quá muốn món mát",
+    "tags": [
+      "weather_hot",
+      "pref_cold",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Nắng gắt thèm đồ lạnh",
+    "tags": [
+      "weather_hot",
+      "pref_cold",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Nóng bức cần trà đá",
+    "tags": [
+      "weather_hot",
+      "pref_tea_base",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Hôm nay lạnh muốn món nước",
+    "tags": [
+      "weather_cold",
+      "pref_soup",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Trời lạnh cần lẩu nóng",
+    "tags": [
+      "weather_cold",
+      "pref_bbq_hotpot",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Lạnh giá muốn cháo ấm",
+    "tags": [
+      "weather_cold",
+      "pref_soft",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Trời mưa muốn món nóng",
+    "tags": [
+      "weather_rain",
+      "pref_soup",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Mưa lất phất thích cháo",
+    "tags": [
+      "weather_rain",
+      "pref_soft",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Mưa nên ở nhà nấu lẩu",
+    "tags": [
+      "weather_rain",
+      "pref_bbq_hotpot",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Bão đang đổ ngoài kia",
+    "tags": [
+      "weather_storm",
+      "weather_rain",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Mưa bão ở nhà nấu mì",
+    "tags": [
+      "weather_storm",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Bão to chỉ dám ăn đồ khô",
+    "tags": [
+      "weather_storm",
+      "pref_dry",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Thời tiết bình thường ăn cơm",
+    "tags": [
+      "weather_normal",
+      "pref_rice",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Trời ổn muốn món quen",
+    "tags": [
+      "weather_normal",
+      "mood_normal",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Hôm nay thời tiết dễ chịu",
+    "tags": [
+      "weather_normal",
+      "time_afternoon",
+      "pref_rice"
+    ]
+  },
+  {
+    "text": "Mình mệt quá cần đồ bổ",
+    "tags": [
+      "mood_exhausted",
+      "pref_high_protein",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Kiệt sức sau làm muốn nóng",
+    "tags": [
+      "mood_exhausted",
+      "pref_soup",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Mệt mỏi uống trà thảo mộc",
+    "tags": [
+      "mood_exhausted",
+      "pref_herbal",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Uể oải cần cà phê",
+    "tags": [
+      "mood_sluggish",
+      "pref_caffeine",
+      "time_morning"
+    ]
+  },
+  {
+    "text": "Lờ đờ muốn trà đặc",
+    "tags": [
+      "mood_sluggish",
+      "pref_tea_base",
+      "pref_caffeine"
+    ]
+  },
+  {
+    "text": "Buồn ngủ chiều nay",
+    "tags": [
+      "mood_sluggish",
+      "time_afternoon",
+      "pref_caffeine"
+    ]
+  },
+  {
+    "text": "Hôm nay bình thường ăn cơm",
+    "tags": [
+      "mood_normal",
+      "pref_rice",
+      "weather_normal"
+    ]
+  },
+  {
+    "text": "Tâm trạng ổn muốn món quen",
+    "tags": [
+      "mood_normal",
+      "pref_flavorful",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Không đặc biệt gì hôm nay",
+    "tags": [
+      "mood_normal",
+      "weather_normal",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Hôm nay vui muốn ăn ngon",
+    "tags": [
+      "mood_happy",
+      "pref_flavorful",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Vui vẻ thèm trà sữa",
+    "tags": [
+      "mood_happy",
+      "pref_milky",
+      "pref_tea_base"
+    ]
+  },
+  {
+    "text": "Tâm trạng tốt muốn thử món lạ",
+    "tags": [
+      "mood_happy",
+      "mood_excited",
+      "pref_raw"
+    ]
+  },
+  {
+    "text": "Hào hứng thử món mới",
+    "tags": [
+      "mood_excited",
+      "pref_raw",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Phấn khích muốn buffet",
+    "tags": [
+      "mood_excited",
+      "pref_rich",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Hào hứng đi ăn tối",
+    "tags": [
+      "mood_excited",
+      "time_evening",
+      "pref_bbq_hotpot"
+    ]
+  },
+  {
+    "text": "Đói cồn cào cần cơm ngay",
+    "tags": [
+      "mood_starving",
+      "pref_rice",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Đói me muốn no nhanh",
+    "tags": [
+      "mood_starving",
+      "pref_instant",
+      "pref_rice"
+    ]
+  },
+  {
+    "text": "Đói quá ăn gì cũng được",
+    "tags": [
+      "mood_starving",
+      "pref_convenient",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Stress deadline muốn cay",
+    "tags": [
+      "mood_stressed",
+      "pref_spicy",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Căng thẳng thèm đồ ngọt",
+    "tags": [
+      "mood_stressed",
+      "pref_sweet",
+      "pref_milky"
+    ]
+  },
+  {
+    "text": "Stress quá muốn chiên giòn",
+    "tags": [
+      "mood_stressed",
+      "pref_crunchy",
+      "pref_rich"
+    ]
+  },
+  {
+    "text": "Cô đơn muốn món ấm",
+    "tags": [
+      "mood_lonely",
+      "pref_warm_drink",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Một mình tối nay",
+    "tags": [
+      "mood_lonely",
+      "time_evening",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Cô đơn thèm cháo nóng",
+    "tags": [
+      "mood_lonely",
+      "pref_soft",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Đang ốm muốn cháo mềm",
+    "tags": [
+      "mood_sick",
+      "pref_soft",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Bệnh và đau họng",
+    "tags": [
+      "mood_sick",
+      "pref_bland",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Ốm yếu ăn nhẹ",
+    "tags": [
+      "mood_sick",
+      "pref_bland",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Lười nấu muốn mì gói",
+    "tags": [
+      "mood_lazy",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Lười biếng gọi đồ ăn",
+    "tags": [
+      "mood_lazy",
+      "pref_convenient",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Không muốn nấu tối nay",
+    "tags": [
+      "mood_lazy",
+      "time_evening",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Buôn chuyện cần đồ lai rai",
+    "tags": [
+      "mood_gossip",
+      "pref_finger_food",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Tám chuyện uống trà sữa",
+    "tags": [
+      "mood_gossip",
+      "pref_milky",
+      "pref_tea_base"
+    ]
+  },
+  {
+    "text": "Buôn chuyện chiều cafe",
+    "tags": [
+      "mood_gossip",
+      "time_afternoon",
+      "pref_caffeine"
+    ]
+  },
+  {
+    "text": "Nhạt mồm muốn đổi vị cay",
+    "tags": [
+      "mood_bored_taste",
+      "pref_spicy",
+      "pref_sour"
+    ]
+  },
+  {
+    "text": "Chán vị cũ thèm lạ",
+    "tags": [
+      "mood_bored_taste",
+      "pref_raw",
+      "mood_excited"
+    ]
+  },
+  {
+    "text": "Buồn miệng muốn chua cay",
+    "tags": [
+      "mood_bored_taste",
+      "pref_sour",
+      "pref_spicy"
+    ]
+  },
+  {
+    "text": "Xem phim cần snack giòn",
+    "tags": [
+      "mood_watching_movie",
+      "pref_crunchy",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Coi phim tối muốn popcorn",
+    "tags": [
+      "mood_watching_movie",
+      "time_evening",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Xem phim thích đồ lai rai",
+    "tags": [
+      "mood_watching_movie",
+      "pref_finger_food",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Tụ tập bạn bè muốn lẩu",
+    "tags": [
+      "mood_gathering",
+      "pref_bbq_hotpot",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Đông người nên nướng",
+    "tags": [
+      "mood_gathering",
+      "pref_bbq_hotpot",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Họp mặt cần lai rai",
+    "tags": [
+      "mood_gathering",
+      "pref_finger_food",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Muốn món cay nồng",
+    "tags": [
+      "pref_spicy",
+      "pref_flavorful",
+      "mood_stressed"
+    ]
+  },
+  {
+    "text": "Thèm lẩu cay",
+    "tags": [
+      "pref_spicy",
+      "pref_bbq_hotpot",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Cay một chút cho đỡ nhạt",
+    "tags": [
+      "pref_spicy",
+      "mood_bored_taste",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Thèm đồ ngọt",
+    "tags": [
+      "pref_sweet",
+      "pref_milky",
+      "mood_happy"
+    ]
+  },
+  {
+    "text": "Muốn bánh và kem",
+    "tags": [
+      "pref_sweet",
+      "pref_milky",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Ngọt nhẹ chiều nay",
+    "tags": [
+      "pref_sweet",
+      "time_afternoon",
+      "mood_happy"
+    ]
+  },
+  {
+    "text": "Thèm vị chua thanh",
+    "tags": [
+      "pref_sour",
+      "pref_bland",
+      "weather_hot"
+    ]
+  },
+  {
+    "text": "Muốn gỏi chua",
+    "tags": [
+      "pref_sour",
+      "pref_raw",
+      "pref_vegetarian"
+    ]
+  },
+  {
+    "text": "Chua nhẹ trưa nay",
+    "tags": [
+      "pref_sour",
+      "time_noon",
+      "weather_hot"
+    ]
+  },
+  {
+    "text": "Muốn món đậm đà",
+    "tags": [
+      "pref_flavorful",
+      "pref_spicy",
+      "pref_rice"
+    ]
+  },
+  {
+    "text": "Thích vị mạnh",
+    "tags": [
+      "pref_flavorful",
+      "pref_spicy",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Đậm đà cho no lâu",
+    "tags": [
+      "pref_flavorful",
+      "pref_rice",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Muốn món thanh đạm",
+    "tags": [
+      "pref_bland",
+      "pref_vegetarian",
+      "mood_sick"
+    ]
+  },
+  {
+    "text": "Thích vị nhẹ",
+    "tags": [
+      "pref_bland",
+      "pref_soup",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Thanh mát trưa nay",
+    "tags": [
+      "pref_bland",
+      "time_noon",
+      "weather_hot"
+    ]
+  },
+  {
+    "text": "Muốn món nước nóng",
+    "tags": [
+      "pref_soup",
+      "pref_warm_drink",
+      "weather_cold"
+    ]
+  },
+  {
+    "text": "Thèm phở nước dùng",
+    "tags": [
+      "pref_soup",
+      "pref_high_protein",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Món nước mưa lạnh",
+    "tags": [
+      "pref_soup",
+      "weather_rain",
+      "weather_cold"
+    ]
+  },
+  {
+    "text": "Muốn đồ khô giòn",
+    "tags": [
+      "pref_dry",
+      "pref_crunchy",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Thèm cơm khô và thịt",
+    "tags": [
+      "pref_dry",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Đồ khô tiện mang",
+    "tags": [
+      "pref_dry",
+      "pref_convenient",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Muốn đồ lạnh mát",
+    "tags": [
+      "pref_cold",
+      "weather_hot",
+      "pref_fruity"
+    ]
+  },
+  {
+    "text": "Thèm đá xay",
+    "tags": [
+      "pref_cold",
+      "pref_sweet",
+      "pref_fruity"
+    ]
+  },
+  {
+    "text": "Đồ lạnh trưa nóng",
+    "tags": [
+      "pref_cold",
+      "weather_hot",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Muốn đồ giòn rụm",
+    "tags": [
+      "pref_crunchy",
+      "pref_finger_food",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Thèm gà rán giòn",
+    "tags": [
+      "pref_crunchy",
+      "pref_high_protein",
+      "pref_rich"
+    ]
+  },
+  {
+    "text": "Giòn tan xem phim",
+    "tags": [
+      "pref_crunchy",
+      "mood_watching_movie",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Muốn món mềm nhuyễn",
+    "tags": [
+      "pref_soft",
+      "pref_soup",
+      "mood_sick"
+    ]
+  },
+  {
+    "text": "Thèm cháo mềm",
+    "tags": [
+      "pref_soft",
+      "pref_soup",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Mềm dễ nuốt khi ốm",
+    "tags": [
+      "pref_soft",
+      "mood_sick",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Muốn nướng lẩu tối nay",
+    "tags": [
+      "pref_bbq_hotpot",
+      "time_evening",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Thèm lẩu bò",
+    "tags": [
+      "pref_bbq_hotpot",
+      "pref_high_protein",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Nướng lẩu cuối tuần",
+    "tags": [
+      "pref_bbq_hotpot",
+      "mood_gathering",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Muốn mì gói ăn liền",
+    "tags": [
+      "pref_instant",
+      "pref_convenient",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Thèm đồ nhanh gọn",
+    "tags": [
+      "pref_instant",
+      "pref_convenient",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Ăn liền trưa bận",
+    "tags": [
+      "pref_instant",
+      "time_noon",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Muốn món cơm no lâu",
+    "tags": [
+      "pref_rice",
+      "pref_flavorful",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Thèm cơm tấm",
+    "tags": [
+      "pref_rice",
+      "pref_high_protein",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Cơm trưa văn phòng",
+    "tags": [
+      "pref_rice",
+      "time_noon",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Muốn hải sản tươi sống",
+    "tags": [
+      "pref_raw",
+      "pref_high_protein",
+      "mood_excited"
+    ]
+  },
+  {
+    "text": "Thèm gỏi sống",
+    "tags": [
+      "pref_raw",
+      "pref_sour",
+      "pref_vegetarian"
+    ]
+  },
+  {
+    "text": "Tươi sống thử món mới",
+    "tags": [
+      "pref_raw",
+      "mood_excited",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Muốn món béo ngậy",
+    "tags": [
+      "pref_rich",
+      "pref_milky",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Thèm phô mai nhiều",
+    "tags": [
+      "pref_rich",
+      "pref_milky",
+      "pref_high_protein"
+    ]
+  },
+  {
+    "text": "Béo ngậy tối nay",
+    "tags": [
+      "pref_rich",
+      "time_evening",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Muốn món ít béo",
+    "tags": [
+      "pref_low_fat",
+      "pref_vegetarian",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Thèm salad healthy",
+    "tags": [
+      "pref_low_fat",
+      "pref_vegetarian",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Ít béo trưa nay",
+    "tags": [
+      "pref_low_fat",
+      "time_noon",
+      "pref_high_protein"
+    ]
+  },
+  {
+    "text": "Muốn món nhiều đạm",
+    "tags": [
+      "pref_high_protein",
+      "pref_low_fat",
+      "mood_exhausted"
+    ]
+  },
+  {
+    "text": "Thèm thịt bò nhiều đạm",
+    "tags": [
+      "pref_high_protein",
+      "pref_flavorful",
+      "pref_rice"
+    ]
+  },
+  {
+    "text": "Nhiều đạm sau gym",
+    "tags": [
+      "pref_high_protein",
+      "mood_exhausted",
+      "pref_rice"
+    ]
+  },
+  {
+    "text": "Muốn món chay thanh",
+    "tags": [
+      "pref_vegetarian",
+      "pref_bland",
+      "pref_herbal"
+    ]
+  },
+  {
+    "text": "Thèm đồ chay nhẹ",
+    "tags": [
+      "pref_vegetarian",
+      "pref_low_fat",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Chay sáng nay",
+    "tags": [
+      "pref_vegetarian",
+      "time_morning",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Muốn món tiện lợi mang đi",
+    "tags": [
+      "pref_convenient",
+      "pref_instant",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "Thèm đồ ăn nhanh gọn",
+    "tags": [
+      "pref_convenient",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Tiện lợi trưa bận",
+    "tags": [
+      "pref_convenient",
+      "time_noon",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Muốn đồ lai rai cầm tay",
+    "tags": [
+      "pref_finger_food",
+      "time_snacks",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Thèm gà rán cầm tay",
+    "tags": [
+      "pref_finger_food",
+      "pref_crunchy",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Lai rai xem phim",
+    "tags": [
+      "pref_finger_food",
+      "mood_watching_movie",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Muốn đồ chứa caffein",
+    "tags": [
+      "pref_caffeine",
+      "time_morning",
+      "mood_sluggish"
+    ]
+  },
+  {
+    "text": "Thèm cà phê đen",
+    "tags": [
+      "pref_caffeine",
+      "time_morning",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Caffein sáng tỉnh táo",
+    "tags": [
+      "pref_caffeine",
+      "time_morning",
+      "mood_sluggish"
+    ]
+  },
+  {
+    "text": "Muốn vị béo sữa",
+    "tags": [
+      "pref_milky",
+      "pref_sweet",
+      "mood_happy"
+    ]
+  },
+  {
+    "text": "Thèm trà sữa",
+    "tags": [
+      "pref_milky",
+      "pref_tea_base",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Béo sữa chiều nay",
+    "tags": [
+      "pref_milky",
+      "time_afternoon",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Muốn hương trái cây",
+    "tags": [
+      "pref_fruity",
+      "pref_cold",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Thèm sinh tố trái cây",
+    "tags": [
+      "pref_fruity",
+      "pref_cold",
+      "pref_milky"
+    ]
+  },
+  {
+    "text": "Trái cây trưa nóng",
+    "tags": [
+      "pref_fruity",
+      "weather_hot",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Muốn đồ cốt trà",
+    "tags": [
+      "pref_tea_base",
+      "pref_warm_drink",
+      "time_afternoon"
+    ]
+  },
+  {
+    "text": "Thèm trà sữa trà xanh",
+    "tags": [
+      "pref_tea_base",
+      "pref_milky",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Cốt trà chiều thư thái",
+    "tags": [
+      "pref_tea_base",
+      "time_afternoon",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Muốn đồ uống có ga",
+    "tags": [
+      "pref_fizzy",
+      "pref_cold",
+      "mood_happy"
+    ]
+  },
+  {
+    "text": "Thèm soda có ga",
+    "tags": [
+      "pref_fizzy",
+      "pref_cold",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Có ga tụ bạn",
+    "tags": [
+      "pref_fizzy",
+      "mood_gathering",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Muốn đồ uống ấm",
+    "tags": [
+      "pref_warm_drink",
+      "weather_cold",
+      "pref_herbal"
+    ]
+  },
+  {
+    "text": "Thèm trà nóng",
+    "tags": [
+      "pref_warm_drink",
+      "pref_tea_base",
+      "weather_cold"
+    ]
+  },
+  {
+    "text": "Uống ấm sáng lạnh",
+    "tags": [
+      "pref_warm_drink",
+      "time_morning",
+      "weather_cold"
+    ]
+  },
+  {
+    "text": "Muốn đồ thảo mộc thanh nhiệt",
+    "tags": [
+      "pref_herbal",
+      "pref_warm_drink",
+      "weather_hot"
+    ]
+  },
+  {
+    "text": "Thèm trà atiso",
+    "tags": [
+      "pref_herbal",
+      "pref_tea_base",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Thảo mộc khi ốm",
+    "tags": [
+      "pref_herbal",
+      "mood_sick",
+      "pref_warm_drink"
+    ]
+  }
+]

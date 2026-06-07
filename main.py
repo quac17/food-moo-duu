@@ -2,10 +2,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 
 from src.core.pipeline import FoodSuggestionPipeline
+from src.layer1_intent_context.rl_feedback import append_layer1_rl_feedback
+
+
+def safe_text(text: str) -> str:
+    encoding = sys.stdout.encoding or "utf-8"
+    return text.encode(encoding, errors="replace").decode(encoding, errors="replace")
 
 
 def print_recommendations(items: list[dict]) -> None:
@@ -51,17 +59,21 @@ def get_feedback_log_file(pipeline: FoodSuggestionPipeline) -> Path:
 
 def run_interactive(top_k: int) -> None:
     pipeline = FoodSuggestionPipeline()
+    session_id = str(uuid4())
+    turn_idx = 0
     print("=== FOOD MOO DUU - OFFLINE SMART RECOMMENDER ===")
     print("Kich ban demo: chat 2 luot -> chon mon -> he thong tu hoc.")
 
     user_turn_1 = input("\nUser chat #1: ").strip()
+    turn_idx += 1
     turn1 = pipeline.process_turn(user_turn_1, top_k=top_k)
-    print(f"Bot: {turn1.response}")
+    print(f"Bot: {safe_text(turn1.response)}")
     print_recommendations(turn1.recommendations)
 
     user_turn_2 = input("\nUser chat #2 (co the quay xe): ").strip()
+    turn_idx += 1
     turn2 = pipeline.process_turn(user_turn_2, top_k=top_k)
-    print(f"Bot: {turn2.response}")
+    print(f"Bot: {safe_text(turn2.response)}")
     print_recommendations(turn2.recommendations)
 
     choice = input(
@@ -72,6 +84,21 @@ def run_interactive(top_k: int) -> None:
         print("Da cap nhat Hebbian matrix va fitness response (success).")
         print_feedback_report(report)
         append_feedback_report_log(report, turn2.context_scores, get_feedback_log_file(pipeline))
+        # RL feedback Layer1: chi log su kien chon mon, khong train realtime trong flow chatbot.
+        append_layer1_rl_feedback(
+            user_text=turn2.user_text,
+            turn_index=turn_idx,
+            raw_scores=turn2.raw_scores,
+            context_scores=turn2.context_scores,
+            chosen_dish_id=report.chosen_dish_id,
+            chosen_dish_name=report.chosen_dish_name,
+            recommended_candidates=turn2.recommendations,
+            reward_signal=1.0,
+            session_id=session_id,
+            export_mode="context",
+            use_state=True,
+            source="chatbot_runtime",
+        )
     else:
         pipeline.apply_abandon_feedback()
         print("Da cap nhat fitness response (failure do khong chon mon).")
@@ -81,16 +108,20 @@ def run_interactive(top_k: int) -> None:
 
 def run_non_interactive(chat1: str, chat2: str, choice: str, top_k: int) -> None:
     pipeline = FoodSuggestionPipeline()
+    session_id = str(uuid4())
+    turn_idx = 0
     print("=== FOOD MOO DUU - NON INTERACTIVE RUN ===")
 
+    turn_idx += 1
     turn1 = pipeline.process_turn(chat1, top_k=top_k)
     print(f"Chat1: {chat1}")
-    print(f"Bot1: {turn1.response}")
+    print(f"Bot1: {safe_text(turn1.response)}")
     print_recommendations(turn1.recommendations)
 
+    turn_idx += 1
     turn2 = pipeline.process_turn(chat2, top_k=top_k)
     print(f"\nChat2: {chat2}")
-    print(f"Bot2: {turn2.response}")
+    print(f"Bot2: {safe_text(turn2.response)}")
     print_recommendations(turn2.recommendations)
 
     if choice:
@@ -98,6 +129,21 @@ def run_non_interactive(chat1: str, chat2: str, choice: str, top_k: int) -> None
         print(f"\nFeedback: chosen={choice} -> update success")
         print_feedback_report(report)
         append_feedback_report_log(report, turn2.context_scores, get_feedback_log_file(pipeline))
+        # RL feedback Layer1: chi ghi file de train offline sau do.
+        append_layer1_rl_feedback(
+            user_text=turn2.user_text,
+            turn_index=turn_idx,
+            raw_scores=turn2.raw_scores,
+            context_scores=turn2.context_scores,
+            chosen_dish_id=report.chosen_dish_id,
+            chosen_dish_name=report.chosen_dish_name,
+            recommended_candidates=turn2.recommendations,
+            reward_signal=1.0,
+            session_id=session_id,
+            export_mode="context",
+            use_state=True,
+            source="chatbot_runtime",
+        )
     else:
         pipeline.apply_abandon_feedback()
         print("\nFeedback: no-choice -> abandon update")

@@ -1,0 +1,41 @@
+{
+  "schema_version": "layer3_gene_extension_v1",
+  "mood_stressed": {
+    "Opening": [
+      { "id": "op_2", "text": "Mình biết hôm nay bạn đang hơi căng thẳng," },
+      { "id": "op_3", "text": "Ngày dài mệt mỏi quá thì mình ưu tiên món dễ chịu nhé," }
+    ],
+    "Action": [
+      { "id": "ac_2", "text": "ưu tiên {foods} để đỡ mệt và dễ tập trung lại." },
+      { "id": "ac_3", "text": "mình chọn {foods} vì hợp mood cần hồi năng lượng." }
+    ],
+    "Closing": [
+      { "id": "cl_2", "text": "Ăn xong nghỉ chút cho nhẹ đầu nha." }
+    ],
+    "Mutation": [" nha bro.", " oke hong.", " thử phát nè!"]
+  },
+  "mood_sick": {
+    "Opening": [
+      { "id": "op_2", "text": "Khi cơ thể đang mệt, mình ưu tiên món ấm nhé," }
+    ],
+    "Action": [
+      { "id": "ac_2", "text": "chọn {foods} để dễ nuốt và đỡ lạnh bụng hơn." }
+    ],
+    "Closing": [
+      { "id": "cl_2", "text": "Nhớ ngủ sớm để hồi phục nhanh hơn." }
+    ],
+    "Mutation": [" nhen.", " nghen bạn.", " ổn áp đó!"]
+  },
+  "mood_gathering": {
+    "Opening": [
+      { "id": "op_2", "text": "Có hội bạn bè thì phải chọn món vui miệng rồi," }
+    ],
+    "Action": [
+      { "id": "ac_2", "text": "{foods} hợp để vừa ăn vừa trò chuyện." }
+    ],
+    "Closing": [
+      { "id": "cl_2", "text": "Chúc buổi ăn thật rôm rả nhé." }
+    ],
+    "Mutation": [" quẩy nhẹ thôi!", " triển liền!", " cháy bàn nha!"]
+  }
+}

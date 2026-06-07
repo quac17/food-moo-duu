@@ -16,6 +16,7 @@ from src.layer3_genetic_response.genetic_generator import GeneticGenerator
 @dataclass
 class TurnResult:
     user_text: str
+    raw_scores: Dict[str, float]
     context_scores: Dict[str, float]
     recommendations: List[Dict]
     response: str
@@ -80,6 +81,7 @@ class FoodSuggestionPipeline:
             self.last_chromosome_key = ""
         return TurnResult(
             user_text=user_text,
+            raw_scores=prediction.tag_scores,
             context_scores=context_scores,
             recommendations=recommendations,
             response=response,

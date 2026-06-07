@@ -1,0 +1,162 @@
+[
+  {
+    "text": "Sáng sớm mình vội đi làm",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Buổi sáng cần bữa no nhanh",
+    "tags": [
+      "time_morning",
+      "pref_rice",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Sáng nay dậy muộn cần ăn gấp",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Trưa nay bận họp nên ăn nhanh",
+    "tags": [
+      "time_noon",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Giờ trưa muốn cơm văn phòng",
+    "tags": [
+      "time_noon",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Trưa nóng quá muốn món mát",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Chiều nay uể oải cần đồ uống",
+    "tags": [
+      "time_afternoon",
+      "mood_sluggish",
+      "pref_tea_base"
+    ]
+  },
+  {
+    "text": "Buổi chiều muốn bánh ngọt",
+    "tags": [
+      "time_afternoon",
+      "pref_sweet",
+      "pref_milky"
+    ]
+  },
+  {
+    "text": "Chiều mưa thích món nóng",
+    "tags": [
+      "time_afternoon",
+      "weather_rain",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Tối nay tụ tập bạn bè",
+    "tags": [
+      "time_evening",
+      "mood_gathering",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Buổi tối muốn lẩu nướng",
+    "tags": [
+      "time_evening",
+      "pref_bbq_hotpot",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Tối rồi muốn cơm đậm đà",
+    "tags": [
+      "time_evening",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Đêm khuya mà vẫn đói",
+    "tags": [
+      "time_night",
+      "mood_starving",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Khuya rồi muốn mì gói",
+    "tags": [
+      "time_night",
+      "pref_instant",
+      "mood_lazy"
+    ]
+  },
+  {
+    "text": "Đêm nay tránh caffein",
+    "tags": [
+      "time_night",
+      "pref_bland",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Muốn ăn vặt chiều tối",
+    "tags": [
+      "time_snacks",
+      "time_afternoon",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Giờ ăn vặt thèm bánh tráng",
+    "tags": [
+      "time_snacks",
+      "pref_crunchy",
+      "pref_spicy"
+    ]
+  },
+  {
+    "text": "Ăn vặt xem phim buổi tối",
+    "tags": [
+      "time_snacks",
+      "mood_watching_movie",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Trời nóng quá muốn món mát",
+    "tags": [
+      "weather_hot",
+      "pref_cold",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Nắng gắt thèm đồ lạnh",
+    "tags": [
+      "weather_hot",
+      "pref_cold",
+      "time_noon"
+    ]
+  }
+]

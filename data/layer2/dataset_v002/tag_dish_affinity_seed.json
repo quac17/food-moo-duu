@@ -1,0 +1,25 @@
+{
+  "schema_version": "layer2_train_seed_v1",
+  "generated_from": "layer1_dataset_v002_tags",
+  "affinity": {
+    "time_morning": {"dish_004": 0.9, "dish_041": 0.82, "dish_048": 0.75},
+    "time_noon": {"dish_024": 0.81, "dish_050": 0.77, "dish_003": 0.71},
+    "time_evening": {"dish_089": 0.88, "dish_071": 0.76, "dish_047": 0.69},
+    "time_night": {"dish_048": 0.79, "dish_090": 0.71, "dish_010": 0.67},
+    "time_snacks": {"dish_065": 0.8, "dish_046": 0.74, "dish_087": 0.72},
+    "weather_hot": {"dish_024": 0.77, "dish_094": 0.7, "dish_077": 0.68},
+    "weather_cold": {"dish_041": 0.83, "dish_073": 0.81, "dish_090": 0.74},
+    "weather_rain": {"dish_073": 0.82, "dish_089": 0.78, "dish_086": 0.7},
+    "mood_stressed": {"dish_010": 0.76, "dish_073": 0.73, "dish_089": 0.71},
+    "mood_sick": {"dish_086": 0.88, "dish_090": 0.84, "dish_041": 0.72},
+    "mood_gathering": {"dish_089": 0.9, "dish_047": 0.76, "dish_065": 0.74},
+    "pref_instant": {"dish_004": 0.87, "dish_048": 0.82, "dish_050": 0.75},
+    "pref_soup": {"dish_090": 0.82, "dish_073": 0.8, "dish_010": 0.78},
+    "pref_warm_drink": {"dish_041": 0.79, "dish_073": 0.76, "dish_086": 0.75},
+    "pref_bbq_hotpot": {"dish_089": 0.92, "dish_071": 0.78, "dish_047": 0.71},
+    "pref_low_fat": {"dish_094": 0.83, "dish_066": 0.7, "dish_079": 0.66},
+    "pref_high_protein": {"dish_041": 0.72, "dish_078": 0.71, "dish_056": 0.68},
+    "pref_spicy": {"dish_071": 0.86, "dish_024": 0.73, "dish_097": 0.7},
+    "pref_finger_food": {"dish_065": 0.8, "dish_046": 0.76, "dish_087": 0.73}
+  }
+}

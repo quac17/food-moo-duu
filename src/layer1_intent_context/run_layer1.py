@@ -32,21 +32,43 @@ def run_one_turn(
     dst: DialogStateTracker,
     text: str,
     top_k: int,
-    threshold: float,
+    raw_threshold: float,
+    context_threshold: float,
     export_file: Path | None,
     turn_index: int,
+    use_state: bool,
+    export_mode: str,
 ) -> None:
     # Flow Layer1-only:
     # 1) Predict intent tags tu text
     # 2) Update DST context
     # 3) Chi export va hien thi tags (khong goi Layer2/Layer3)
     prediction = tracker.predict_tags(text)
-    context_scores = dst.update_context(prediction.tag_scores)
-    top_tags = _extract_top_tags(context_scores, top_k=top_k, threshold=threshold)
+    raw_top_tags = _extract_top_tags(
+        prediction.tag_scores,
+        top_k=top_k,
+        threshold=raw_threshold,
+    )
+
+    # Neu khong dung state, context se la raw de test cau don cho minh bach.
+    if use_state:
+        context_scores = dst.update_context(prediction.tag_scores)
+    else:
+        context_scores = dict(prediction.tag_scores)
+    context_top_tags = _extract_top_tags(
+        context_scores,
+        top_k=top_k,
+        threshold=context_threshold,
+    )
+
+    selected_top_tags = context_top_tags if export_mode == "context" else raw_top_tags
 
     print(f"\n[Turn {turn_index}] User: {text}")
-    print("Exported tags:")
-    for tag, score in top_tags:
+    print("Raw intent tags (tu cau chat hien tai):")
+    for tag, score in raw_top_tags:
+        print(f"- {tag}: {score:.4f}")
+    print("Context tags (sau DST):")
+    for tag, score in context_top_tags:
         print(f"- {tag}: {score:.4f}")
 
     if export_file is not None:
@@ -54,10 +76,14 @@ def run_one_turn(
             "timestamp": datetime.now().isoformat(timespec="seconds"),
             "turn": turn_index,
             "text": text,
-            "tags": [{"tag": tag, "score": round(score, 4)} for tag, score in top_tags],
+            "export_mode": export_mode,
+            "use_state": use_state,
+            "raw_tags": [{"tag": tag, "score": round(score, 4)} for tag, score in raw_top_tags],
+            "context_tags": [{"tag": tag, "score": round(score, 4)} for tag, score in context_top_tags],
+            "tags": [{"tag": tag, "score": round(score, 4)} for tag, score in selected_top_tags],
         }
         _append_export_record(export_file, record)
-        print(f"Da export tags vao: {export_file}")
+        print(f"Da export tags ({export_mode}) vao: {export_file}")
 
 
 def main() -> None:
@@ -66,12 +92,40 @@ def main() -> None:
     )
     parser.add_argument("--chat", action="store_true", help="Bat che do chat nhieu luot")
     parser.add_argument(
+        "--all-datasets",
+        action="store_true",
+        help="Train/predict bang toan bo available_datasets thay vi active_dataset",
+    )
+    parser.add_argument(
         "--message",
         default="Sang nay troi mua, toi muon mon nong nhanh",
         help="Cau chat 1 luot khi khong dung --chat",
     )
     parser.add_argument("--top-k", type=int, default=8)
-    parser.add_argument("--threshold", type=float, default=0.2)
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="Nguong chung cho ca raw/context (giu tuong thich lenh cu)",
+    )
+    parser.add_argument("--raw-threshold", type=float, default=0.2)
+    parser.add_argument("--context-threshold", type=float, default=0.1)
+    parser.add_argument(
+        "--no-state",
+        action="store_true",
+        help="Khong update DST state, chi predict raw intent cho tung cau",
+    )
+    parser.add_argument(
+        "--reset-state",
+        action="store_true",
+        help="Reset session_state truoc khi chay de tranh anh huong context cu",
+    )
+    parser.add_argument(
+        "--export-mode",
+        choices=["context", "raw"],
+        default="context",
+        help="Chon nhom tag de dua vao truong tags trong file export",
+    )
     parser.add_argument(
         "--export-file",
         default=str(LAYER1_DATA_DIR / "tag_exports.jsonl"),
@@ -84,9 +138,24 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    tracker = IntentTracker()
+    tracker = IntentTracker(use_all_datasets=args.all_datasets)
     dst = DialogStateTracker()
     export_file = None if args.no_export else Path(args.export_file)
+
+    # Neu co threshold chung thi uu tien de tranh vo lenh cu.
+    if args.threshold is not None:
+        raw_threshold = args.threshold
+        context_threshold = args.threshold
+    else:
+        raw_threshold = args.raw_threshold
+        context_threshold = args.context_threshold
+
+    if args.reset_state:
+        # Reset state de testcase moi khong bi dom boi context cu.
+        dst.state.tag_scores = {tag: 0.0 for tag in dst.available_tags}
+        dst.state.turn_index = 0
+        dst.save_state()
+        print(f"Da reset session state tai: {dst.state_file}")
 
     if args.chat:
         print("=== LAYER1 CHAT FLOW (EXPORT TAG ONLY) ===")
@@ -102,9 +171,12 @@ def main() -> None:
                 dst=dst,
                 text=text,
                 top_k=args.top_k,
-                threshold=args.threshold,
+                raw_threshold=raw_threshold,
+                context_threshold=context_threshold,
                 export_file=export_file,
                 turn_index=turn,
+                use_state=not args.no_state,
+                export_mode=args.export_mode,
             )
             turn += 1
         return
@@ -114,9 +186,12 @@ def main() -> None:
         dst=dst,
         text=args.message,
         top_k=args.top_k,
-        threshold=args.threshold,
+        raw_threshold=raw_threshold,
+        context_threshold=context_threshold,
         export_file=export_file,
         turn_index=1,
+        use_state=not args.no_state,
+        export_mode=args.export_mode,
     )
 
 

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Layer1SelectedDishEvent",
+  "type": "object",
+  "required": [
+    "event_id",
+    "timestamp",
+    "session_id",
+    "turn_index",
+    "source",
+    "user_text",
+    "raw_tags",
+    "context_tags",
+    "chosen_dish_id",
+    "chosen_dish_name",
+    "reward_signal",
+    "recommended_candidates",
+    "export_mode",
+    "use_state"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "turn_index": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "chatbot_runtime",
+        "simulator_batch"
+      ]
+    },
+    "user_text": {
+      "type": "string"
+    },
+    "raw_tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tag", "score"],
+        "properties": {
+          "tag": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "context_tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tag", "score"],
+        "properties": {
+          "tag": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "chosen_dish_id": {
+      "type": "string"
+    },
+    "chosen_dish_name": {
+      "type": "string"
+    },
+    "reward_signal": {
+      "type": "number"
+    },
+    "recommended_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "score"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "score": { "type": "number" }
+        }
+      }
+    },
+    "export_mode": {
+      "type": "string",
+      "enum": ["raw", "context"]
+    },
+    "use_state": {
+      "type": "boolean"
+    }
+  }
+}

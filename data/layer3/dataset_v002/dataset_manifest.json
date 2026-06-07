@@ -1,0 +1,23 @@
+{
+  "dataset_id": "dataset_v002",
+  "dataset_type": "response_training",
+  "generated_from": {
+    "layer1_sources": [
+      "../../layer1/dataset_v002/intent_train_data.json",
+      "../../layer1/tag_exports.jsonl"
+    ],
+    "layer2_sources": [
+      "../../layer2/dataset_v002/interaction_train_samples.jsonl",
+      "../../layer2/runtime/feedback_reports.jsonl"
+    ]
+  },
+  "files": {
+    "response_pairs": "response_train_pairs.jsonl",
+    "chromosome_fitness_seed": "chromosome_fitness_seed.json",
+    "language_gene_extensions": "language_gene_extensions.json"
+  },
+  "notes": [
+    "Data train Layer3 duoc tong hop tu context tags Layer1 va feedback tu Layer2.",
+    "Muc tieu la warm-start cho fitness truoc khi chat runtime."
+  ]
+}

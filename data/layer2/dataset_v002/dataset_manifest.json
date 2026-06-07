@@ -1,0 +1,19 @@
+{
+  "dataset_id": "dataset_v002",
+  "dataset_type": "train_interactions",
+  "generated_from": {
+    "layer1_sources": [
+      "../../layer1/dataset_v002/intent_train_data.json",
+      "../../layer1/tag_exports.jsonl"
+    ],
+    "layer2_seed": "../dataset_v001/food_weight_matrix.json"
+  },
+  "files": {
+    "interaction_samples": "interaction_train_samples.jsonl",
+    "tag_dish_affinity_seed": "tag_dish_affinity_seed.json"
+  },
+  "notes": [
+    "Bo du lieu train tang cuong cho online learning/Hebbian tuning.",
+    "Mau tuong tac duoc tong hop tu tags Layer1 va lua chon mon gia lap."
+  ]
+}
