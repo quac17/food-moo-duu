@@ -1,0 +1,144 @@
+LAYER1 SAU KHI CAP NHAT SANG DL (vi-SBERT)
+=========================================
+
+1) Muc tieu cap nhat
+--------------------
+- Thay bo phan phan loai intent cu (TF-IDF + Logistic Regression) bang mo hinh DL.
+- Dung encoder vi-SBERT de ma hoa cau tieng Viet.
+- Vua toi uu phan loai multi-label, vua toi uu khong gian embedding de:
+  + cau co tag giong nhau thi gan nhau hon,
+  + cau khac tag thi xa nhau hon.
+
+2) Kien truc Layer1 moi
+-----------------------
+2.1 Encoder:
+- AutoTokenizer + AutoModel load tu checkpoint vi-SBERT
+- Ma hoa moi cau thanh vector sentence embedding (mean pooling theo attention mask)
+
+2.2 Projection + Classification head:
+- Feature block: Linear -> ReLU -> Dropout
+- Projection head: tao vector chuan hoa de tinh do tuong dong cosine
+- Classification head: tao logits cho tat ca tags
+
+2.3 Dau ra:
+- Sigmoid(logits) => score [0,1] cho moi tag
+- Van giu API cu: predict_tags(text) tra ve IntentPrediction(tag_scores)
+
+3) Cong thuc do gan/xa theo yeu cau
+-----------------------------------
+3.1 Similarity target giua 2 cau a, b:
+- overlap_count = so tag trung nhau
+- similarity = overlap_count / max(so_tag_cau_a, so_tag_cau_b)
+
+3.2 Y nghia:
+- Neu 2 cau trung nhieu tag => similarity cao => ep embedding gan nhau.
+- Neu trung it/khong trung => similarity thap => embedding duoc hoc xa hon.
+
+4) Ham mat huan luyen
+---------------------
+4.1 Classification loss:
+- BCEWithLogitsLoss cho bai toan multi-label.
+
+4.2 Metric loss:
+- Tinh ma tran cosine similarity giua embedding trong batch.
+- Tinh ma tran target similarity bang cong thuc overlap o muc (3).
+- Dung MSE giua pred_similarity va target_similarity (bo duong cheo i=i).
+
+4.3 Tong loss:
+- total_loss = cls_loss + alpha_metric_loss * metric_loss
+- alpha_metric_loss duoc cau hinh trong data/layer1/dl_config.json
+
+5) Du lieu train va cau hinh
+----------------------------
+5.1 Nguon du lieu:
+- data/layer1/datasets.json:
+  + active_dataset
+  + available_datasets
+- data/layer1/dataset_v00x/intent_samples.csv:
+  + cot text
+  + cot tags (phan tach boi dau "|")
+- data/layer1/tags.json:
+  + danh sach tag_ids he thong
+
+5.2 Cau hinh DL:
+- data/layer1/dl_config.json:
+  + encoder_model
+  + epochs, batch_size
+  + learning_rate, weight_decay
+  + hidden_dim, projection_dim
+  + alpha_metric_loss
+  + validation_ratio
+  + decision_threshold
+  + random_seed
+
+6) Quy trinh train
+------------------
+Buoc 1:
+- Doc 1 hoac nhieu datasets (tuy all-datasets hay active-dataset).
+
+Buoc 2:
+- Normalize tieng Viet:
+  + lower
+  + doi ky tu d dac biet (đ -> d)
+  + bo dau
+  + chuan hoa khoang trang
+- Ghep "cau goc || cau khong dau" de robust hon.
+
+Buoc 3:
+- Encode thanh sentence embedding.
+
+Buoc 4:
+- Train head multi-label + metric loss.
+- In metric theo epoch:
+  + train loss
+  + val micro-F1
+  + val macro-F1
+
+Buoc 5:
+- Luu artifact model:
+  + data/layer1/model_artifacts/intent_head.pt
+  + data/layer1/model_artifacts/intent_head_meta.json
+
+7) Quy trinh suy luan (infer)
+-----------------------------
+- predict_tags(text):
+  1) normalize text
+  2) encoder -> embedding
+  3) head -> logits -> sigmoid
+  4) map score theo danh sach tags
+
+- Ket qua raw tag score duoc day sang DST nhu flow cu.
+
+8) Ket noi voi DST va RL
+------------------------
+8.1 DST:
+- Khong doi logic DialogStateTracker:
+  + decay
+  + accumulation
+  + conflict resolution
+- Layer1 moi chi thay bo phan tao raw tag score.
+
+8.2 RL feedback:
+- Khong train realtime khi chat.
+- Van log raw_tags/context_tags vao file RL feedback.
+- RL trainer offline xu ly data feedback tach biet.
+
+9) Lenh lien quan
+-----------------
+- Train Layer1 DL (all datasets):
+  make layer1-train
+
+- Train Layer1 DL (chi active dataset):
+  make layer1-train-active
+
+- Chay Layer1 export tags:
+  make layer1-run
+
+- Chat Layer1:
+  make layer1-chat
+
+10) Ghi chu van hanh
+--------------------
+- Lan dau train co the mat them thoi gian de tai model encoder.
+- Neu chua train truoc, predict co the trigger train theo co che lazy fit.
+- Nen train truoc de co artifact on dinh roi moi chay app chinh.

@@ -155,3 +155,13 @@ Uống ấm khi ốm,pref_warm_drink|mood_sick|pref_herbal
 Thích nước rau má,pref_herbal|pref_cold|pref_bland
 Muốn trà gừng mật ong,pref_herbal|pref_warm_drink|mood_sick
 Thảo mộc chiều nay,pref_herbal|time_afternoon|pref_tea_base
+Toi nay ban be den choi khui bia lanh nhe,weather_hot|time_evening|mood_gathering|pref_cold_drink|pref_fizzy
+Minh met nhe cho cola da cho tinh tao,time_afternoon|mood_sluggish|pref_cold_drink|pref_fizzy|pref_sweet
+Giua trua nong buc can ly soda chanh da,time_noon|weather_hot|pref_cold_drink|pref_sour|pref_cold
+O mot minh muon nuoc ngot lanh de xem phim,time_evening|mood_lonely|mood_watching_movie|pref_cold_drink|pref_fizzy
+"Sang nay toi khong doi nhieu muon an nhe",time_morning|pref_bland|pref_soft|mood_normal
+"Trua oi nong can bua mat va de an",time_noon|weather_hot|pref_cold|pref_low_fat
+"Chieu nay can mon gon de mang di",time_afternoon|pref_convenient|pref_instant|mood_sluggish
+"Toi muon bua an day du co com va canh",time_evening|pref_rice|pref_soup|mood_normal
+"Dem nay toi can mon nong va de tieu",time_night|pref_soup|pref_soft|weather_cold
+"Toi di mot minh muon mon am ap",mood_lonely|time_evening|pref_warm_drink|pref_bland

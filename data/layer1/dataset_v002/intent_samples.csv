@@ -155,8 +155,18 @@ Uống ấm sáng lạnh,pref_warm_drink|time_morning|weather_cold
 Muốn đồ thảo mộc thanh nhiệt,pref_herbal|pref_warm_drink|weather_hot
 Thèm trà atiso,pref_herbal|pref_tea_base|pref_bland
 Thảo mộc khi ốm,pref_herbal|mood_sick|pref_warm_drink
+Da bong xong minh khat bia lanh,weather_hot|time_evening|pref_cold_drink|pref_fizzy|mood_gathering
+Dau gio chieu u oai cho lon cola da,time_afternoon|mood_sluggish|pref_cold_drink|pref_fizzy|pref_sweet
+Trua nay nong qua cho minh soda vi chanh,time_noon|weather_hot|pref_cold_drink|pref_sour|pref_cold|mood_normal
+Toi o nha mot minh muon nuoc ngot uop lanh,time_evening|mood_lonely|pref_cold_drink|pref_fizzy|pref_convenient
 Tôi muốn ăn sáng,time_morning|pref_instant|pref_convenient
 Ăn sáng nhanh với bánh mì,time_morning|pref_instant|pref_dry
 Sáng nay ăn xôi cho chắc bụng,time_morning|pref_rice|mood_starving
 Bữa sáng nóng cho ngày lạnh,time_morning|weather_cold|pref_warm_drink
 Buổi sáng cần món nước nhẹ,time_morning|pref_soup|pref_bland
+"Sang som can bua no de di lam",time_morning|pref_rice|mood_starving|pref_convenient
+"Trua nay muon mon rau va it beo",time_noon|pref_vegetarian|pref_low_fat|mood_normal
+"Chieu mat troi minh muon mon giu suc",time_afternoon|pref_high_protein|mood_sluggish|pref_flavorful
+"Toi nay can mon nong de am bung",time_evening|weather_cold|pref_soup|pref_warm_drink
+"Khuya roi chi muon an nhe va mem",time_night|pref_soft|pref_bland|mood_lonely
+"Hom nay tam trang binh thuong an gi cung duoc",weather_normal|mood_normal|pref_convenient

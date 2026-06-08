@@ -1245,5 +1245,99 @@
       "time_morning",
       "pref_vegetarian"
     ]
+  },
+  {
+    "text": "Sau tran bong can bia lanh cho da khat",
+    "tags": [
+      "weather_hot",
+      "time_evening",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "mood_excited"
+    ]
+  },
+  {
+    "text": "Trua nay tam trang binh thuong uong cola da",
+    "tags": [
+      "time_noon",
+      "mood_normal",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Chieu nong lam cho minh soda chanh mat lanh",
+    "tags": [
+      "time_afternoon",
+      "weather_hot",
+      "mood_sluggish",
+      "pref_cold_drink",
+      "pref_sour",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Toi di mot minh nen mua nuoc ngot lanh",
+    "tags": [
+      "time_evening",
+      "mood_lonely",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Sang som toi muon mon nong cho tinh tao",
+    "tags": [
+      "time_morning",
+      "pref_warm_drink",
+      "pref_soup",
+      "mood_sluggish"
+    ]
+  },
+  {
+    "text": "Buoi trua toi can mon no lau",
+    "tags": [
+      "time_noon",
+      "pref_rice",
+      "pref_high_protein",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Chieu nay troi mat toi muon mon thanh",
+    "tags": [
+      "time_afternoon",
+      "weather_normal",
+      "pref_bland",
+      "pref_vegetarian"
+    ]
+  },
+  {
+    "text": "Toi nay ban roi nen can mon nhanh",
+    "tags": [
+      "time_evening",
+      "pref_instant",
+      "pref_convenient",
+      "mood_stressed"
+    ]
+  },
+  {
+    "text": "Dem nay toi khong khoe can mon mem",
+    "tags": [
+      "time_night",
+      "mood_sick",
+      "pref_soft",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Hom nay vui nen muon mon dam da",
+    "tags": [
+      "mood_happy",
+      "pref_flavorful",
+      "time_evening"
+    ]
   }
 ]

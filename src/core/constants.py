@@ -64,6 +64,7 @@ DEFAULT_TAGS = [
     "pref_fruity",
     "pref_tea_base",
     "pref_fizzy",
+    "pref_cold_drink",
     "pref_warm_drink",
     "pref_herbal",
 ]

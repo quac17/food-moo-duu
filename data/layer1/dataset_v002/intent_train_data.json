@@ -1246,5 +1246,139 @@
       "mood_sick",
       "pref_warm_drink"
     ]
+  },
+  {
+    "text": "Da bong xong minh khat bia lanh",
+    "tags": [
+      "weather_hot",
+      "time_evening",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Dau gio chieu u oai cho lon cola da",
+    "tags": [
+      "time_afternoon",
+      "mood_sluggish",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Trua nay nong qua cho minh soda vi chanh",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold_drink",
+      "pref_sour",
+      "pref_cold",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Toi o nha mot minh muon nuoc ngot uop lanh",
+    "tags": [
+      "time_evening",
+      "mood_lonely",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Tôi muốn ăn sáng",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Ăn sáng nhanh với bánh mì",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_dry"
+    ]
+  },
+  {
+    "text": "Sáng nay ăn xôi cho chắc bụng",
+    "tags": [
+      "time_morning",
+      "pref_rice",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Bữa sáng nóng cho ngày lạnh",
+    "tags": [
+      "time_morning",
+      "weather_cold",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Buổi sáng cần món nước nhẹ",
+    "tags": [
+      "time_morning",
+      "pref_soup",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Sang som can bua no de di lam",
+    "tags": [
+      "time_morning",
+      "pref_rice",
+      "mood_starving",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Trua nay muon mon rau va it beo",
+    "tags": [
+      "time_noon",
+      "pref_vegetarian",
+      "pref_low_fat",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Chieu mat troi minh muon mon giu suc",
+    "tags": [
+      "time_afternoon",
+      "pref_high_protein",
+      "mood_sluggish",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Toi nay can mon nong de am bung",
+    "tags": [
+      "time_evening",
+      "weather_cold",
+      "pref_soup",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Khuya roi chi muon an nhe va mem",
+    "tags": [
+      "time_night",
+      "pref_soft",
+      "pref_bland",
+      "mood_lonely"
+    ]
+  },
+  {
+    "text": "Hom nay tam trang binh thuong an gi cung duoc",
+    "tags": [
+      "weather_normal",
+      "mood_normal",
+      "pref_convenient"
+    ]
   }
 ]

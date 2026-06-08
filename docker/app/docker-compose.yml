@@ -1,10 +1,10 @@
 services:
-  layer3-genetic-response:
-    container_name: food-moo-duu-layer3
+  app:
+    container_name: food-moo-duu-app
     build:
       context: ../..
       dockerfile: Dockerfile
-    command: python -m src.layer3_genetic_response.run_layer3 --repeat 2
+    command: python main.py --non-interactive --top-k 5
     environment:
       - PYTHONUNBUFFERED=1
     volumes:

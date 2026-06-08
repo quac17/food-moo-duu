@@ -1245,5 +1245,99 @@
       "time_afternoon",
       "pref_tea_base"
     ]
+  },
+  {
+    "text": "Toi nay ban be den choi khui bia lanh nhe",
+    "tags": [
+      "weather_hot",
+      "time_evening",
+      "mood_gathering",
+      "pref_cold_drink",
+      "pref_fizzy"
+    ]
+  },
+  {
+    "text": "Minh met nhe cho cola da cho tinh tao",
+    "tags": [
+      "time_afternoon",
+      "mood_sluggish",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Giua trua nong buc can ly soda chanh da",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold_drink",
+      "pref_sour",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "O mot minh muon nuoc ngot lanh de xem phim",
+    "tags": [
+      "time_evening",
+      "mood_lonely",
+      "mood_watching_movie",
+      "pref_cold_drink",
+      "pref_fizzy"
+    ]
+  },
+  {
+    "text": "Sang nay toi khong doi nhieu muon an nhe",
+    "tags": [
+      "time_morning",
+      "pref_bland",
+      "pref_soft",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Trua oi nong can bua mat va de an",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold",
+      "pref_low_fat"
+    ]
+  },
+  {
+    "text": "Chieu nay can mon gon de mang di",
+    "tags": [
+      "time_afternoon",
+      "pref_convenient",
+      "pref_instant",
+      "mood_sluggish"
+    ]
+  },
+  {
+    "text": "Toi muon bua an day du co com va canh",
+    "tags": [
+      "time_evening",
+      "pref_rice",
+      "pref_soup",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Dem nay toi can mon nong va de tieu",
+    "tags": [
+      "time_night",
+      "pref_soup",
+      "pref_soft",
+      "weather_cold"
+    ]
+  },
+  {
+    "text": "Toi di mot minh muon mon am ap",
+    "tags": [
+      "mood_lonely",
+      "time_evening",
+      "pref_warm_drink",
+      "pref_bland"
+    ]
   }
 ]

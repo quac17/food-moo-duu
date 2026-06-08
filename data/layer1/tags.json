@@ -51,6 +51,7 @@
     "pref_fruity",
     "pref_tea_base",
     "pref_fizzy",
+    "pref_cold_drink",
     "pref_warm_drink",
     "pref_herbal"
   ],
@@ -105,6 +106,7 @@
     { "id": "pref_fruity", "label_vi": "Hương trái cây", "group": "preference" },
     { "id": "pref_tea_base", "label_vi": "Cốt trà", "group": "preference" },
     { "id": "pref_fizzy", "label_vi": "Có ga", "group": "preference" },
+    { "id": "pref_cold_drink", "label_vi": "Đồ uống lạnh", "group": "drink" },
     { "id": "pref_warm_drink", "label_vi": "Đồ uống ấm", "group": "preference" },
     { "id": "pref_herbal", "label_vi": "Thảo mộc / Thanh nhiệt", "group": "preference" }
   ]

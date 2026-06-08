@@ -112,15 +112,40 @@ make setup
 make app-run
 make app-demo
 make app-docker
+make app-run-docker
+make app-demo-docker
 ```
 
-### Layer 1
+### Layer 1 (DL vi-SBERT)
 
 ```bash
+make layer1-train-active
 make layer1-train
 make layer1-run
 make layer1-chat
 make layer1-docker
+make layer1-train-docker
+make layer1-run-docker
+make layer1-chat-docker
+make layer1-reset-state
+make layer1-reset-state-docker
+```
+
+Ghi chu:
+- `layer1-train-active`: train Layer1 DL voi `active_dataset`.
+- `layer1-train`: train Layer1 DL voi toan bo `available_datasets`.
+- `layer1-run`/`layer1-chat`: suy luan va export raw/context tags qua DST.
+- `layer1-reset-state`/`layer1-reset-state-docker`: reset `session_state.json` ve state sach (tat ca tag = 0, turn_index = 0).
+
+### Layer 1 RL flow (offline)
+
+```bash
+make layer1-rl-generate
+make layer1-rl-train
+make layer1-rl-check
+make layer1-rl-generate-docker
+make layer1-rl-train-docker
+make layer1-rl-check-docker
 ```
 
 ### Layer 2
@@ -132,6 +157,11 @@ make layer2-migrate
 make layer2-check
 make layer2-test
 make layer2-reset-runtime
+make layer2-run-docker
+make layer2-migrate-docker
+make layer2-check-docker
+make layer2-test-docker
+make layer2-reset-runtime-docker
 ```
 
 ### Layer 3
@@ -139,6 +169,7 @@ make layer2-reset-runtime
 ```bash
 make layer3-run
 make layer3-docker
+make layer3-run-docker
 ```
 
 ## Layer1 chat-only flow

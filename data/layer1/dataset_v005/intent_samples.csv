@@ -155,3 +155,13 @@ Uống ấm tối lạnh,pref_warm_drink|time_evening|weather_cold
 Thích trà hoa cúc,pref_herbal|pref_tea_base|pref_warm_drink
 Muốn đồ thanh nhiệt trưa nóng,pref_herbal|weather_hot|pref_cold
 Thảo mộc tối nhẹ,pref_herbal|time_evening|pref_bland
+Toi muon bia lanh uop da de ngoi chill,weather_hot|time_evening|mood_gathering|pref_cold_drink|pref_fizzy
+Hoi u oai buoi chieu cho lon cola da,time_afternoon|mood_sluggish|pref_cold_drink|pref_fizzy|pref_sweet
+Buoi trua oi nong can soda chanh da,time_noon|weather_hot|pref_cold_drink|pref_sour|pref_cold|mood_normal
+Dem o nha mot minh can nuoc ngot uop lanh,time_night|mood_lonely|pref_cold_drink|pref_fizzy|pref_convenient
+"Sang nay toi can bua nhanh nhung van no",time_morning|pref_instant|pref_rice|mood_starving
+"Trua nay toi muon an can bang va it dau",time_noon|pref_low_fat|pref_vegetarian|mood_normal
+"Chieu toi hoi buon mieng muon doi vi",time_afternoon|mood_bored_taste|pref_sour|pref_flavorful
+"Toi nay toi can mon nong vi troi lanh",time_evening|weather_cold|pref_soup|pref_warm_drink
+"Khuya roi toi muon bua nhe de ngu ngon",time_night|pref_soft|pref_bland|mood_lonely
+"Hom nay hoi u oai can mon de tinh tao",mood_sluggish|pref_caffeine|time_afternoon|pref_convenient

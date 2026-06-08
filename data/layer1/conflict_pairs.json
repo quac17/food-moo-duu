@@ -12,6 +12,7 @@
     { "left": "pref_soup", "right": "pref_dry" },
     { "left": "pref_soup", "right": "pref_cold" },
     { "left": "pref_warm_drink", "right": "pref_cold" },
+    { "left": "pref_warm_drink", "right": "pref_cold_drink" },
     { "left": "pref_caffeine", "right": "mood_sick" },
     { "left": "pref_fizzy", "right": "mood_sick" },
     { "left": "pref_caffeine", "right": "time_night" }

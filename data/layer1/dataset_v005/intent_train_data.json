@@ -1243,5 +1243,100 @@
       "time_evening",
       "pref_bland"
     ]
+  },
+  {
+    "text": "Toi muon bia lanh uop da de ngoi chill",
+    "tags": [
+      "weather_hot",
+      "time_evening",
+      "mood_gathering",
+      "pref_cold_drink",
+      "pref_fizzy"
+    ]
+  },
+  {
+    "text": "Hoi u oai buoi chieu cho lon cola da",
+    "tags": [
+      "time_afternoon",
+      "mood_sluggish",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_sweet"
+    ]
+  },
+  {
+    "text": "Buoi trua oi nong can soda chanh da",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold_drink",
+      "pref_sour",
+      "pref_cold",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Dem o nha mot minh can nuoc ngot uop lanh",
+    "tags": [
+      "time_night",
+      "mood_lonely",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_convenient"
+    ]
+  },
+  {
+    "text": "Sang nay toi can bua nhanh nhung van no",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_rice",
+      "mood_starving"
+    ]
+  },
+  {
+    "text": "Trua nay toi muon an can bang va it dau",
+    "tags": [
+      "time_noon",
+      "pref_low_fat",
+      "pref_vegetarian",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Chieu toi hoi buon mieng muon doi vi",
+    "tags": [
+      "time_afternoon",
+      "mood_bored_taste",
+      "pref_sour",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Toi nay toi can mon nong vi troi lanh",
+    "tags": [
+      "time_evening",
+      "weather_cold",
+      "pref_soup",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Khuya roi toi muon bua nhe de ngu ngon",
+    "tags": [
+      "time_night",
+      "pref_soft",
+      "pref_bland",
+      "mood_lonely"
+    ]
+  },
+  {
+    "text": "Hom nay hoi u oai can mon de tinh tao",
+    "tags": [
+      "mood_sluggish",
+      "pref_caffeine",
+      "time_afternoon",
+      "pref_convenient"
+    ]
   }
 ]

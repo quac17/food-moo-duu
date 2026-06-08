@@ -1,7 +1,7 @@
 {
-  "events_total": 20,
-  "rows_total": 20,
-  "train_samples_total": 20,
+  "events_total": 102,
+  "rows_total": 102,
+  "train_samples_total": 102,
   "threshold": 0.18,
   "include_simulated": true
 }

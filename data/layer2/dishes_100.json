@@ -7800,6 +7800,66 @@
         "pref_warm_drink": 0.0,
         "pref_herbal": 0.0
       }
+    },
+    {
+      "id": "dish_101",
+      "name": "Bia tuoi uop lanh",
+      "is_drink": true,
+      "popularity_score": 0.95,
+      "tag_weights": {
+        "time_evening": 0.72,
+        "time_noon": 0.28,
+        "weather_hot": 0.86,
+        "mood_gathering": 0.84,
+        "mood_watching_movie": 0.3,
+        "pref_fizzy": 0.88,
+        "pref_cold": 0.82,
+        "pref_cold_drink": 0.94,
+        "mood_normal": 0.35,
+        "mood_sluggish": 0.41,
+        "pref_finger_food": 0.66,
+        "pref_warm_drink": -0.35
+      }
+    },
+    {
+      "id": "dish_102",
+      "name": "Coca Cola da",
+      "is_drink": true,
+      "popularity_score": 0.93,
+      "tag_weights": {
+        "time_noon": 0.58,
+        "time_evening": 0.64,
+        "weather_hot": 0.83,
+        "mood_happy": 0.62,
+        "mood_watching_movie": 0.74,
+        "pref_sweet": 0.8,
+        "pref_fizzy": 0.91,
+        "pref_cold": 0.87,
+        "pref_cold_drink": 0.95,
+        "mood_normal": 0.44,
+        "mood_lonely": 0.32,
+        "pref_warm_drink": -0.4
+      }
+    },
+    {
+      "id": "dish_103",
+      "name": "Soda chanh",
+      "is_drink": true,
+      "popularity_score": 0.9,
+      "tag_weights": {
+        "time_noon": 0.61,
+        "time_afternoon": 0.67,
+        "weather_hot": 0.89,
+        "mood_normal": 0.48,
+        "pref_sour": 0.79,
+        "pref_fizzy": 0.86,
+        "pref_cold": 0.9,
+        "pref_cold_drink": 0.96,
+        "pref_fruity": 0.52,
+        "mood_sluggish": 0.38,
+        "mood_lonely": 0.24,
+        "pref_warm_drink": -0.42
+      }
     }
   ]
 }

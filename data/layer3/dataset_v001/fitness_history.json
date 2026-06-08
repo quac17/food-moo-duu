@@ -48,6 +48,31 @@
       "chromosome_key": "Biết bạn đang áp lực công việc, | {foods} rất hợp để chia sẻ cùng bạn bè. | Chúc bạn mau khỏe lại.",
       "success": true,
       "fitness": 1.25
+    },
+    {
+      "chromosome_key": "Nghe bạn đang không khỏe, | thử {foods} để cơ thể đỡ mệt nhé. | Ăn xong nhớ nghỉ ngơi sớm nha.",
+      "success": true,
+      "fitness": 1.25
+    },
+    {
+      "chromosome_key": "Nghe bạn đang không khỏe, | nạp chút năng lượng với {foods} nhé. | Chúc bạn mau khỏe lại.",
+      "success": false,
+      "fitness": 0.8
+    },
+    {
+      "chromosome_key": "Hôm nay có vẻ hơi nặng nề với bạn, | thử {foods} để cơ thể đỡ mệt nhé. | Mong bạn sớm lấy lại mood tốt.",
+      "success": true,
+      "fitness": 1.25
+    },
+    {
+      "chromosome_key": "Nghe bạn đang không khỏe, | {foods} sẽ nhẹ bụng và ấm hơn. | Chúc buổi tụ tập thật vui.",
+      "success": false,
+      "fitness": 0.8
+    },
+    {
+      "chromosome_key": "Biết bạn đang áp lực công việc, | {foods} sẽ nhẹ bụng và ấm hơn. | Ăn xong nhớ nghỉ ngơi sớm nha.",
+      "success": true,
+      "fitness": 1.25
     }
   ],
   "runtime_fitness": {
@@ -59,6 +84,11 @@
     "Biết bạn đang áp lực công việc, | nạp chút năng lượng với {foods} nhé. | Chúc bạn mau khỏe lại.": 0.8,
     "Với mood gặp gỡ này, | {foods} rất hợp để chia sẻ cùng bạn bè. | Ăn xong nhớ nghỉ ngơi sớm nha.": 1.25,
     "Với mood gặp gỡ này, | đi nhóm thì nên thử {foods}. | Mong bạn sớm lấy lại mood tốt.": 0.8,
-    "Biết bạn đang áp lực công việc, | {foods} rất hợp để chia sẻ cùng bạn bè. | Chúc bạn mau khỏe lại.": 1.25
+    "Biết bạn đang áp lực công việc, | {foods} rất hợp để chia sẻ cùng bạn bè. | Chúc bạn mau khỏe lại.": 1.25,
+    "Nghe bạn đang không khỏe, | thử {foods} để cơ thể đỡ mệt nhé. | Ăn xong nhớ nghỉ ngơi sớm nha.": 1.25,
+    "Nghe bạn đang không khỏe, | nạp chút năng lượng với {foods} nhé. | Chúc bạn mau khỏe lại.": 0.8,
+    "Hôm nay có vẻ hơi nặng nề với bạn, | thử {foods} để cơ thể đỡ mệt nhé. | Mong bạn sớm lấy lại mood tốt.": 1.25,
+    "Nghe bạn đang không khỏe, | {foods} sẽ nhẹ bụng và ấm hơn. | Chúc buổi tụ tập thật vui.": 0.8,
+    "Biết bạn đang áp lực công việc, | {foods} sẽ nhẹ bụng và ấm hơn. | Ăn xong nhớ nghỉ ngơi sớm nha.": 1.25
   }
 }

@@ -28,6 +28,7 @@ class GeneticGenerator:
         self.epsilon = epsilon
         self.mutation_rate = mutation_rate
         self.raw_pool = json.loads(self.gene_pool_file.read_text(encoding="utf-8"))
+        self.mood_pool_map = self._extract_mood_pools(self.raw_pool)
         self.pool = self._normalize_pool(self.raw_pool)
         self.fitness_payload = json.loads(self.fitness_file.read_text(encoding="utf-8"))
         self.fitness_map = self._normalize_fitness(self.fitness_payload)
@@ -92,6 +93,24 @@ class GeneticGenerator:
             "slang_mutations": mutations,
         }
 
+    def _extract_mood_pools(self, payload: Dict) -> Dict[str, Dict[str, List[str]]]:
+        mood_pools: Dict[str, Dict[str, List[str]]] = {}
+        for key, value in payload.items():
+            if key == "schema_version" or not isinstance(value, dict):
+                continue
+            openings = [str(item.get("text", "")).strip() for item in value.get("Opening", []) if str(item.get("text", "")).strip()]
+            actions = [str(item.get("text", "")).strip() for item in value.get("Action", []) if str(item.get("text", "")).strip()]
+            closings = [str(item.get("text", "")).strip() for item in value.get("Closing", []) if str(item.get("text", "")).strip()]
+            mutations = [str(item).strip() for item in value.get("Mutation", []) if str(item).strip()]
+            if openings and actions and closings:
+                mood_pools[str(key)] = {
+                    "opening": openings,
+                    "action": actions,
+                    "closing": closings,
+                    "slang_mutations": mutations,
+                }
+        return mood_pools
+
     def _normalize_fitness(self, payload: Dict) -> Dict[str, float]:
         if isinstance(payload.get("fitness"), dict):
             return {
@@ -144,10 +163,11 @@ class GeneticGenerator:
             return f"{text} {random.choice(slang_tokens)}"
         return text
 
-    def _build_population(self, size: int = 8) -> List[Chromosome]:
-        openings = self.pool["opening"]
-        actions = self.pool["action"]
-        closings = self.pool["closing"]
+    def _build_population(self, size: int = 8, mood_key: str | None = None) -> List[Chromosome]:
+        source_pool = self.mood_pool_map.get(mood_key, self.pool) if mood_key else self.pool
+        openings = source_pool["opening"]
+        actions = source_pool["action"]
+        closings = source_pool["closing"]
         population: List[Chromosome] = []
         for _ in range(size):
             population.append(
@@ -159,8 +179,18 @@ class GeneticGenerator:
             )
         return population
 
-    def generate(self) -> Dict[str, str]:
-        population = self._build_population()
+    def _resolve_mood_key(self, context_scores: Dict[str, float] | None) -> str | None:
+        if not context_scores:
+            return None
+        candidates = {mood_key: float(context_scores.get(mood_key, 0.0)) for mood_key in self.mood_pool_map}
+        if not candidates:
+            return None
+        mood_key = max(candidates, key=candidates.get)
+        return mood_key if candidates[mood_key] >= 0.2 else None
+
+    def generate(self, context_scores: Dict[str, float] | None = None) -> Dict[str, str]:
+        mood_key = self._resolve_mood_key(context_scores)
+        population = self._build_population(mood_key=mood_key)
         if random.random() < self.epsilon:
             chromosome = random.choice(population)
         else:
@@ -174,7 +204,11 @@ class GeneticGenerator:
                 self._mutate_text(closing),
             ]
         )
-        return {"chromosome_key": self._key(chromosome), "response": sentence.strip()}
+        return {
+            "chromosome_key": self._key(chromosome),
+            "response": sentence.strip(),
+            "mood_key": mood_key or "",
+        }
 
     def update_fitness(self, chromosome_key: str, success: bool) -> None:
         current = float(self.fitness_map.get(chromosome_key, 1.0))

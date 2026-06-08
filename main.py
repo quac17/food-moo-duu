@@ -30,6 +30,17 @@ def print_feedback_report(report: dict | object) -> None:
     print(f"  Delta            : {report.delta}")
 
 
+def resolve_choice_to_dish_id(choice: str, recommendations: list[dict]) -> str:
+    normalized = choice.strip()
+    if not normalized:
+        return ""
+    if normalized.isdigit():
+        idx = int(normalized)
+        if 1 <= idx <= len(recommendations):
+            return str(recommendations[idx - 1].get("id", normalized))
+    return normalized
+
+
 def append_feedback_report_log(report: object, context_scores: dict[str, float], log_file: Path) -> None:
     top_context = sorted(
         context_scores.items(),
@@ -57,87 +68,92 @@ def get_feedback_log_file(pipeline: FoodSuggestionPipeline) -> Path:
     return pipeline.recommendation_engine.runtime_dir / "feedback_reports.jsonl"
 
 
-def run_interactive(top_k: int) -> None:
+def run_interactive(top_k: int, max_turns: int = 5) -> None:
     pipeline = FoodSuggestionPipeline()
     session_id = str(uuid4())
-    turn_idx = 0
     print("=== FOOD MOO DUU - OFFLINE SMART RECOMMENDER ===")
-    print("Kich ban demo: chat 2 luot -> chon mon -> he thong tu hoc.")
+    print(f"Kich ban demo: chat toi da {max_turns} luot -> chon mon -> he thong tu hoc.")
+    print("Sau moi luot: nhap ID/so mon de chon (ket thuc), hoac de trong de chat tiep.")
 
-    user_turn_1 = input("\nUser chat #1: ").strip()
-    turn_idx += 1
-    turn1 = pipeline.process_turn(user_turn_1, top_k=top_k)
-    print(f"Bot: {safe_text(turn1.response)}")
-    print_recommendations(turn1.recommendations)
+    chosen = False
+    for turn_idx in range(1, max_turns + 1):
+        user_turn = input(f"\nUser chat #{turn_idx}/{max_turns}: ").strip()
+        turn = pipeline.process_turn(user_turn, top_k=top_k)
+        print(f"Bot: {safe_text(turn.response)}")
+        print_recommendations(turn.recommendations)
 
-    user_turn_2 = input("\nUser chat #2 (co the quay xe): ").strip()
-    turn_idx += 1
-    turn2 = pipeline.process_turn(user_turn_2, top_k=top_k)
-    print(f"Bot: {safe_text(turn2.response)}")
-    print_recommendations(turn2.recommendations)
+        is_last_turn = turn_idx >= max_turns
+        if is_last_turn:
+            prompt = "\nLuot cuoi - nhap ID/so mon de chon (de trong neu khong chon): "
+        else:
+            prompt = "\nNhap ID/so mon de chon (de trong de chat tiep): "
+        choice_input = input(prompt).strip()
+        choice = resolve_choice_to_dish_id(choice_input, turn.recommendations)
+        if choice:
+            report = pipeline.apply_feedback(chosen_dish_id=choice, context_scores=turn.context_scores)
+            print("Da cap nhat Hebbian matrix va fitness response (success).")
+            print_feedback_report(report)
+            append_feedback_report_log(report, turn.context_scores, get_feedback_log_file(pipeline))
+            # RL feedback Layer1: chi log su kien chon mon, khong train realtime trong flow chatbot.
+            append_layer1_rl_feedback(
+                user_text=turn.user_text,
+                turn_index=turn_idx,
+                raw_scores=turn.raw_scores,
+                context_scores=turn.context_scores,
+                chosen_dish_id=report.chosen_dish_id,
+                chosen_dish_name=report.chosen_dish_name,
+                recommended_candidates=turn.recommendations,
+                reward_signal=1.0,
+                session_id=session_id,
+                export_mode="context",
+                use_state=True,
+                source="chatbot_runtime",
+            )
+            chosen = True
+            break
 
-    choice = input(
-        "\nNhap ID mon ban chon de xac nhan (de trong neu thoat app/khong chon): "
-    ).strip()
-    if choice:
-        report = pipeline.apply_feedback(chosen_dish_id=choice, context_scores=turn2.context_scores)
-        print("Da cap nhat Hebbian matrix va fitness response (success).")
-        print_feedback_report(report)
-        append_feedback_report_log(report, turn2.context_scores, get_feedback_log_file(pipeline))
-        # RL feedback Layer1: chi log su kien chon mon, khong train realtime trong flow chatbot.
-        append_layer1_rl_feedback(
-            user_text=turn2.user_text,
-            turn_index=turn_idx,
-            raw_scores=turn2.raw_scores,
-            context_scores=turn2.context_scores,
-            chosen_dish_id=report.chosen_dish_id,
-            chosen_dish_name=report.chosen_dish_name,
-            recommended_candidates=turn2.recommendations,
-            reward_signal=1.0,
-            session_id=session_id,
-            export_mode="context",
-            use_state=True,
-            source="chatbot_runtime",
-        )
-    else:
+    if not chosen:
         pipeline.apply_abandon_feedback()
         print("Da cap nhat fitness response (failure do khong chon mon).")
 
     print("Hoan tat workflow offline.")
 
 
-def run_non_interactive(chat1: str, chat2: str, choice: str, top_k: int) -> None:
+def run_non_interactive(chats: list[str], choice: str, top_k: int, max_turns: int = 5) -> None:
     pipeline = FoodSuggestionPipeline()
     session_id = str(uuid4())
-    turn_idx = 0
     print("=== FOOD MOO DUU - NON INTERACTIVE RUN ===")
 
-    turn_idx += 1
-    turn1 = pipeline.process_turn(chat1, top_k=top_k)
-    print(f"Chat1: {chat1}")
-    print(f"Bot1: {safe_text(turn1.response)}")
-    print_recommendations(turn1.recommendations)
+    effective_chats = [chat for chat in chats if chat is not None][:max_turns]
+    if not effective_chats:
+        print("Khong co cau chat dau vao.")
+        return
 
-    turn_idx += 1
-    turn2 = pipeline.process_turn(chat2, top_k=top_k)
-    print(f"\nChat2: {chat2}")
-    print(f"Bot2: {safe_text(turn2.response)}")
-    print_recommendations(turn2.recommendations)
+    last_turn = None
+    last_turn_idx = 0
+    for turn_idx, chat in enumerate(effective_chats, start=1):
+        turn = pipeline.process_turn(chat, top_k=top_k)
+        print(f"\nChat{turn_idx}: {chat}")
+        print(f"Bot{turn_idx}: {safe_text(turn.response)}")
+        print_recommendations(turn.recommendations)
+        last_turn = turn
+        last_turn_idx = turn_idx
 
-    if choice:
-        report = pipeline.apply_feedback(chosen_dish_id=choice, context_scores=turn2.context_scores)
+    if choice and last_turn is not None:
+        chosen_dish_id = resolve_choice_to_dish_id(choice, last_turn.recommendations)
+        report = pipeline.apply_feedback(chosen_dish_id=chosen_dish_id, context_scores=last_turn.context_scores)
         print(f"\nFeedback: chosen={choice} -> update success")
         print_feedback_report(report)
-        append_feedback_report_log(report, turn2.context_scores, get_feedback_log_file(pipeline))
+        append_feedback_report_log(report, last_turn.context_scores, get_feedback_log_file(pipeline))
         # RL feedback Layer1: chi ghi file de train offline sau do.
         append_layer1_rl_feedback(
-            user_text=turn2.user_text,
-            turn_index=turn_idx,
-            raw_scores=turn2.raw_scores,
-            context_scores=turn2.context_scores,
+            user_text=last_turn.user_text,
+            turn_index=last_turn_idx,
+            raw_scores=last_turn.raw_scores,
+            context_scores=last_turn.context_scores,
             chosen_dish_id=report.chosen_dish_id,
             chosen_dish_name=report.chosen_dish_name,
-            recommended_candidates=turn2.recommendations,
+            recommended_candidates=last_turn.recommendations,
             reward_signal=1.0,
             session_id=session_id,
             export_mode="context",
@@ -151,24 +167,38 @@ def run_non_interactive(chat1: str, chat2: str, choice: str, top_k: int) -> None
     print("Run hoan tat.")
 
 
+DEFAULT_CHATS = [
+    "Toi nay troi lanh, toi muon mon nuoc nong.",
+    "Quay xe, gio toi muon mon nhanh va tien loi.",
+]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Food Moo Duu CLI")
     parser.add_argument("--non-interactive", action="store_true", help="Chay khong can input tu terminal")
-    parser.add_argument("--chat1", default="Toi nay troi lanh, toi muon mon nuoc nong.")
-    parser.add_argument("--chat2", default="Quay xe, gio toi muon mon nhanh va tien loi.")
+    parser.add_argument(
+        "--chat",
+        action="append",
+        default=None,
+        help="Cau chat (lap lai de them nhieu luot, toi da --max-turns). Dung cho --non-interactive.",
+    )
     parser.add_argument("--choice", default="dish_001")
     parser.add_argument("--top-k", type=int, default=5)
+    parser.add_argument("--max-turns", type=int, default=5, help="So luot chat toi da (mac dinh 5)")
     args = parser.parse_args()
 
+    max_turns = max(1, args.max_turns)
+
     if args.non_interactive:
+        chats = args.chat if args.chat else list(DEFAULT_CHATS)
         run_non_interactive(
-            chat1=args.chat1,
-            chat2=args.chat2,
+            chats=chats,
             choice=args.choice,
             top_k=args.top_k,
+            max_turns=max_turns,
         )
     else:
-        run_interactive(top_k=args.top_k)
+        run_interactive(top_k=args.top_k, max_turns=max_turns)
 
 
 if __name__ == "__main__":

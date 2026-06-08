@@ -155,3 +155,13 @@ Uống ấm cô đơn,pref_warm_drink|mood_lonely|pref_tea_base
 Thèm chè thảo mộc,pref_herbal|pref_warm_drink|pref_bland
 Muốn nước cam thảo,pref_herbal|pref_warm_drink|mood_sick
 Thảo mộc sáng thanh,pref_herbal|time_morning|pref_vegetarian
+Sau tran bong can bia lanh cho da khat,weather_hot|time_evening|pref_cold_drink|pref_fizzy|mood_excited
+Trua nay tam trang binh thuong uong cola da,time_noon|mood_normal|pref_cold_drink|pref_fizzy|pref_sweet
+Chieu nong lam cho minh soda chanh mat lanh,time_afternoon|weather_hot|mood_sluggish|pref_cold_drink|pref_sour|pref_cold
+Toi di mot minh nen mua nuoc ngot lanh,time_evening|mood_lonely|pref_cold_drink|pref_fizzy|pref_convenient
+"Sang som toi muon mon nong cho tinh tao",time_morning|pref_warm_drink|pref_soup|mood_sluggish
+"Buoi trua toi can mon no lau",time_noon|pref_rice|pref_high_protein|mood_starving
+"Chieu nay troi mat toi muon mon thanh",time_afternoon|weather_normal|pref_bland|pref_vegetarian
+"Toi nay ban roi nen can mon nhanh",time_evening|pref_instant|pref_convenient|mood_stressed
+"Dem nay toi khong khoe can mon mem",time_night|mood_sick|pref_soft|pref_bland
+"Hom nay vui nen muon mon dam da",mood_happy|pref_flavorful|time_evening

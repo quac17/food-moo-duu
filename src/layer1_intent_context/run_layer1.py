@@ -11,6 +11,21 @@ from src.layer1_intent_context.dialog_state import DialogStateTracker
 from src.layer1_intent_context.intent_tracker import IntentTracker
 
 
+def _sanitize_text(value: str) -> str:
+    # Loai bo surrogate chars de tranh UnicodeEncodeError khi dump json.
+    return value.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
+
+
+def _sanitize_record(value):
+    if isinstance(value, str):
+        return _sanitize_text(value)
+    if isinstance(value, list):
+        return [_sanitize_record(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _sanitize_record(item) for key, item in value.items()}
+    return value
+
+
 def _extract_top_tags(
     scores: Dict[str, float],
     top_k: int,
@@ -23,8 +38,9 @@ def _extract_top_tags(
 
 def _append_export_record(export_file: Path, record: Dict) -> None:
     export_file.parent.mkdir(parents=True, exist_ok=True)
+    safe_record = _sanitize_record(record)
     with export_file.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        f.write(json.dumps(safe_record, ensure_ascii=False) + "\n")
 
 
 def run_one_turn(
@@ -88,7 +104,7 @@ def run_one_turn(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Layer1 chat flow: chi trich xuat va export tags"
+        description="Layer1 chat flow (DL vi-SBERT): chi trich xuat va export tags"
     )
     parser.add_argument("--chat", action="store_true", help="Bat che do chat nhieu luot")
     parser.add_argument(
@@ -136,9 +152,16 @@ def main() -> None:
         action="store_true",
         help="Khong ghi file export, chi in ra man hinh",
     )
+    parser.add_argument(
+        "--warmup-train",
+        action="store_true",
+        help="Train/warmup model Layer1 truoc khi vao chat flow",
+    )
     args = parser.parse_args()
 
     tracker = IntentTracker(use_all_datasets=args.all_datasets)
+    if args.warmup_train:
+        tracker.fit()
     dst = DialogStateTracker()
     export_file = None if args.no_export else Path(args.export_file)
 

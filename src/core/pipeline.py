@@ -39,6 +39,7 @@ class FoodSuggestionPipeline:
         context_decay = HYPERPARAMS["context_decay"]
         epsilon = HYPERPARAMS["epsilon"]
 
+        # Layer1 da dung DL vi-SBERT + metric learning, API predict_tags giu nguyen.
         self.intent_tracker = IntentTracker()
         self.dst = DialogStateTracker(decay_rate=context_decay)
         self.recommendation_engine = RecommendationEngine()
@@ -64,11 +65,12 @@ class FoodSuggestionPipeline:
         context_scores = self.dst.update_context(prediction.tag_scores)
         recommendations = self.recommendation_engine.recommend(context_scores, top_k=top_k)
         self.last_recommendations = recommendations
+        top_foods = ", ".join(item.get("name", "") for item in recommendations[:2] if item.get("name")) or "mot vai mon phu hop"
         if self.generator is not None:
             try:
-                generated = self.generator.generate()
+                generated = self.generator.generate(context_scores=prediction.tag_scores)
                 self.last_chromosome_key = generated["chromosome_key"]
-                response = generated["response"]
+                response = generated["response"].replace("{foods}", top_foods)
                 chromosome_key = generated["chromosome_key"]
             except Exception:
                 # Fallback neu du lieu Layer3 chua dung schema ma generator mong doi.

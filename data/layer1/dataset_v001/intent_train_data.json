@@ -1,42 +1,349 @@
 [
   {
     "text": "Sáng nay mình cần ăn nhanh để kịp họp",
-    "tags": ["time_morning", "pref_instant", "pref_convenient"]
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_convenient"
+    ]
   },
   {
     "text": "Trưa nóng quá, muốn món mát dễ ăn",
-    "tags": ["time_noon", "weather_hot", "pref_cold", "pref_bland"]
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold",
+      "pref_bland"
+    ]
   },
   {
     "text": "Chiều mưa, muốn ăn gì nóng ấm bụng",
-    "tags": ["time_afternoon", "weather_rain", "pref_soup", "pref_warm_drink"]
+    "tags": [
+      "time_afternoon",
+      "weather_rain",
+      "pref_soup",
+      "pref_warm_drink"
+    ]
   },
   {
     "text": "Tối nay tụ tập bạn bè, muốn món lai rai",
-    "tags": ["time_evening", "mood_gathering", "pref_finger_food", "pref_flavorful"]
+    "tags": [
+      "time_evening",
+      "mood_gathering",
+      "pref_finger_food",
+      "pref_flavorful"
+    ]
   },
   {
-    "text": "Đang bệnh và đau họng, muốn món mềm",
-    "tags": ["mood_sick", "pref_soft", "pref_soup", "pref_herbal"]
+    "text": "Đêm rồi mà vẫn đói cồn cào",
+    "tags": [
+      "time_night",
+      "mood_starving",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Hôm nay lạnh, mình muốn món nước",
+    "tags": [
+      "weather_cold",
+      "pref_soup",
+      "pref_warm_drink",
+      "mood_sluggish"
+    ]
   },
   {
     "text": "Mình đang stress vì deadline",
-    "tags": ["mood_stressed", "pref_flavorful", "pref_sweet"]
+    "tags": [
+      "mood_stressed",
+      "pref_flavorful",
+      "pref_sweet"
+    ]
   },
   {
-    "text": "Mưa to, muốn đồ nóng và mềm",
-    "tags": ["weather_rain", "weather_storm", "pref_soft", "pref_soup"]
-  },
-  {
-    "text": "Lạnh và mệt, muốn đồ bổ dưỡng",
-    "tags": ["weather_cold", "mood_exhausted", "pref_warm_drink", "pref_high_protein"]
-  },
-  {
-    "text": "Tối xem phim cần đồ ăn vặt",
-    "tags": ["time_evening", "time_snacks", "mood_watching_movie", "pref_finger_food"]
+    "text": "Đang bệnh và đau họng, muốn món mềm",
+    "tags": [
+      "mood_sick",
+      "pref_soft",
+      "pref_soup",
+      "pref_herbal"
+    ]
   },
   {
     "text": "Cuối tuần muốn ăn nướng lẩu",
-    "tags": ["mood_gathering", "pref_bbq_hotpot", "time_evening"]
+    "tags": [
+      "mood_gathering",
+      "pref_bbq_hotpot",
+      "time_evening"
+    ]
+  },
+  {
+    "text": "Buồn miệng, muốn đổi vị chua cay",
+    "tags": [
+      "mood_bored_taste",
+      "pref_sour",
+      "pref_spicy"
+    ]
+  },
+  {
+    "text": "Sáng nay uể oải, cần gì đó tỉnh táo",
+    "tags": [
+      "time_morning",
+      "mood_sluggish",
+      "pref_caffeine"
+    ]
+  },
+  {
+    "text": "Trời bình thường, muốn ăn cơm đậm đà",
+    "tags": [
+      "weather_normal",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Tối xem phim cần đồ ăn vặt",
+    "tags": [
+      "time_evening",
+      "time_snacks",
+      "mood_watching_movie",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Mình hơi cô đơn, muốn món ấm áp",
+    "tags": [
+      "mood_lonely",
+      "pref_warm_drink",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Đang vui và muốn thử món lạ",
+    "tags": [
+      "mood_happy",
+      "mood_excited",
+      "pref_raw",
+      "pref_high_protein"
+    ]
+  },
+  {
+    "text": "Đêm rồi nên tránh đồ caffein",
+    "tags": [
+      "time_night",
+      "pref_bland",
+      "pref_warm_drink"
+    ]
+  },
+  {
+    "text": "Mưa to, muốn đồ nóng và mềm",
+    "tags": [
+      "weather_rain",
+      "weather_storm",
+      "pref_soft",
+      "pref_soup"
+    ]
+  },
+  {
+    "text": "Trưa nay bận, cần món tiện lợi",
+    "tags": [
+      "time_noon",
+      "pref_convenient",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Mình muốn món ít béo, giàu đạm",
+    "tags": [
+      "pref_low_fat",
+      "pref_high_protein",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Chiều nay muốn trà trái cây",
+    "tags": [
+      "time_afternoon",
+      "pref_tea_base",
+      "pref_fruity",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Tối nay muốn đồ uống có ga",
+    "tags": [
+      "time_evening",
+      "pref_fizzy",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Sáng muốn món chay thanh đạm",
+    "tags": [
+      "time_morning",
+      "pref_vegetarian",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Đang đói và lười nấu",
+    "tags": [
+      "mood_starving",
+      "mood_lazy",
+      "pref_instant"
+    ]
+  },
+  {
+    "text": "Cần món giòn để nhâm nhi",
+    "tags": [
+      "pref_crunchy",
+      "pref_finger_food",
+      "time_snacks"
+    ]
+  },
+  {
+    "text": "Mình thích vị béo sữa",
+    "tags": [
+      "pref_milky",
+      "pref_sweet",
+      "mood_happy"
+    ]
+  },
+  {
+    "text": "Trời nóng, muốn món chua ngọt nhẹ",
+    "tags": [
+      "weather_hot",
+      "pref_sour",
+      "pref_sweet",
+      "pref_cold"
+    ]
+  },
+  {
+    "text": "Chiều tụ tập buôn chuyện",
+    "tags": [
+      "time_afternoon",
+      "mood_gossip",
+      "mood_gathering",
+      "pref_finger_food"
+    ]
+  },
+  {
+    "text": "Tối muốn món cơm no lâu",
+    "tags": [
+      "time_evening",
+      "pref_rice",
+      "pref_flavorful"
+    ]
+  },
+  {
+    "text": "Mình muốn đồ tươi sống",
+    "tags": [
+      "pref_raw",
+      "mood_excited",
+      "weather_normal"
+    ]
+  },
+  {
+    "text": "Lạnh và mệt, muốn đồ bổ dưỡng",
+    "tags": [
+      "weather_cold",
+      "mood_exhausted",
+      "pref_warm_drink",
+      "pref_high_protein"
+    ]
+  },
+  {
+    "text": "Tran da bong xong minh muon bia that lanh",
+    "tags": [
+      "weather_hot",
+      "time_evening",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "mood_excited"
+    ]
+  },
+  {
+    "text": "Lay cho minh coca cola da it ngot",
+    "tags": [
+      "pref_convenient",
+      "pref_cold_drink",
+      "pref_fizzy",
+      "pref_sweet",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Buoi trua oi nong, cho ly soda chanh",
+    "tags": [
+      "time_noon",
+      "weather_hot",
+      "pref_cold_drink",
+      "pref_sour",
+      "pref_cold",
+      "mood_sluggish"
+    ]
+  },
+  {
+    "text": "Toi xem phim mot minh muon nuoc ngot lanh",
+    "tags": [
+      "time_evening",
+      "mood_watching_movie",
+      "mood_lonely",
+      "pref_cold_drink",
+      "pref_fizzy"
+    ]
+  },
+  {
+    "text": "Sang nay toi muon an xoi nong",
+    "tags": [
+      "time_morning",
+      "pref_rice",
+      "pref_warm_drink",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Buoi trua can bua com can bang",
+    "tags": [
+      "time_noon",
+      "pref_rice",
+      "pref_flavorful",
+      "mood_normal"
+    ]
+  },
+  {
+    "text": "Chieu nay minh hoi met can mon nuoc nhe",
+    "tags": [
+      "time_afternoon",
+      "mood_exhausted",
+      "pref_soup",
+      "pref_bland"
+    ]
+  },
+  {
+    "text": "Toi lanh bung muon mon nong de de tieu",
+    "tags": [
+      "time_evening",
+      "weather_cold",
+      "pref_soup",
+      "pref_soft"
+    ]
+  },
+  {
+    "text": "Dem muon an nhe de de ngu",
+    "tags": [
+      "time_night",
+      "pref_bland",
+      "pref_soft",
+      "mood_lonely"
+    ]
+  },
+  {
+    "text": "Cuoi tuan toi muon an chay thanh dam",
+    "tags": [
+      "time_evening",
+      "pref_vegetarian",
+      "pref_bland",
+      "mood_normal"
+    ]
   }
 ]
