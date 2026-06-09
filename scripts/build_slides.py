@@ -16,6 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT_FILE = ROOT / "docs" / "food_moo_duu_slides.pptx"
 IMG_DIR = ROOT / "docs" / "images"
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from eval_report_utils import load_eval_bundle  # noqa: E402
+
 # Bang mau
 NAVY = RGBColor(0x1F, 0x2D, 0x3D)
 ORANGE = RGBColor(0xE8, 0x6A, 0x17)
@@ -231,6 +234,15 @@ def image_slide(prs, title, image_name, blocks, owner=None, img_height=3400000):
 
 
 def build():
+    run_id, eval_bundle, _ = load_eval_bundle()
+    summary = eval_bundle["summary"]
+    l1_no_rl = eval_bundle["layer1_no_rl"]["summary"]
+    l1_with_rl = eval_bundle["layer1_with_rl"]["summary"]
+    l2_oracle = eval_bundle["layer2_oracle"]["metrics"]
+    l2_behavioral = eval_bundle["layer2_behavioral"]["metrics"]
+    l3 = eval_bundle["layer3"]
+    behavioral_n = int(eval_bundle["layer2_behavioral"].get("samples", 0) or 0)
+
     prs = Presentation()
     prs.slide_width = SLIDE_W
     prs.slide_height = SLIDE_H
@@ -359,7 +371,7 @@ def build():
             ("h", "Ý tưởng: mỗi món = vector trọng số trên ~53 tag; gợi ý = so khớp ngữ cảnh"),
             ("b", "Mở rộng context qua similarity tag (layer2_config.json)"),
             ("b", "Linear scoring: score(món) = SUM activation(tag) * weight(món, tag)"),
-            ("note", "Xếp hạng theo (score, popularity, id) -> Top-K; nguồn: 100 món"),
+            ("note", "Xếp hạng theo (score, popularity, id) -> Top-K; nguồn: 120 món (9 đồ uống)"),
         ],
         owner="Đức Anh",
     )
@@ -472,7 +484,7 @@ def build():
             ("h", "Tập dữ liệu đánh giá"),
             ("b", "L1: validation 20% intent (all datasets) — 142 mẫu"),
             ("b", "L2 Oracle: intent_samples.csv tag lý tưởng — 709 mẫu"),
-            ("b", "L2 Behavioral: RL events (5 runtime + 100 simulated) — 105 events"),
+            ("b", f"L2 Behavioral: RL events — {behavioral_n} events"),
             ("b", "L3: fitness_history (12 runtime + 50 simulated) — 62 lượt"),
             ("b", "DST runtime: decay=0.55, alpha=0.88, beta=0.4 (ưu tiên raw tag)"),
             ("note", "Metric: F1 (L1), Hit@K/MRR/NDCG (L2), success rate/fitness (L3), feedback delta"),
@@ -486,9 +498,9 @@ def build():
         "Kết quả đánh giá tổng hợp",
         "evaluation_metrics.png",
         [
-            ("h", "Run: 20260610_011454 | DST: decay=0.55, alpha=0.88, beta=0.4"),
-            ("b", "L1 Macro F1 = 0.189 | L2 Oracle Hit@5 = 1.0 | L2 Behavioral Hit@5 = 0.048"),
-            ("b", "L3 Success rate = 53.2% (62 lượt) | E2E Hit@5 = 0.048 | Feedback delta = +0.599"),
+            ("h", f"Run: {run_id} | DST: decay=0.55, alpha=0.88, beta=0.4"),
+            ("b", f"L1 Macro F1 = {summary['layer1_with_rl_macro_f1']} | L2 Oracle Hit@5 = {summary['layer2_oracle_hit_at_5']} | L2 Behavioral Hit@5 = {summary['layer2_behavioral_hit_at_5']}"),
+            ("b", f"L3 Success rate = {round(summary['layer3_success_rate']*100, 1)}% ({int(l3.get('total_updates', 0))} lượt) | E2E Hit@5 = {summary['pipeline_e2e_with_rl_hit_at_5']} | Feedback delta = {summary['pipeline_feedback_delta_mean']:+.3f}"),
             ("note", "Oracle cao -> scoring tốt khi tag chuẩn; behavioral thấp -> context runtime khó hơn"),
         ],
         owner="Cả nhóm",
@@ -500,16 +512,16 @@ def build():
         prs,
         "Chi tiết metric từng layer",
         [
-            ("h", "Layer 1 (val 142)"),
-            ("b", "Micro F1 = 0.291, Macro F1 = 0.189, Precision = 0.748, Recall = 0.181"),
-            ("b", "Ablation RL: delta macro F1 = 0 (chưa train ablation thành công)"),
+            ("h", f"Layer 1 (val {int(l1_no_rl['samples'])})"),
+            ("b", f"Micro F1 = {l1_no_rl['micro_f1']}, Macro F1 = {l1_no_rl['macro_f1']}, Precision = {l1_no_rl['micro_precision']}, Recall = {l1_no_rl['micro_recall']}"),
+            ("b", f"Ablation RL: delta macro F1 = {summary['layer1_delta_macro_f1']}"),
             ("h", "Layer 2"),
-            ("b", "Oracle (709): Hit@5 = 1.0, NDCG@5 = 0.971 — upper bound scoring"),
-            ("b", "Behavioral (105): Hit@5 = 0.048, MRR = 0.021, mean rank ~ 5.83"),
+            ("b", f"Oracle (709): Hit@5 = {l2_oracle.get('hit_at_5')}, NDCG@5 = {round(l2_oracle.get('ndcg_at_5', 0), 3)} — upper bound scoring"),
+            ("b", f"Behavioral ({behavioral_n}): Hit@5 = {l2_behavioral.get('hit_at_5')}, MRR = {l2_behavioral.get('mrr')}, mean rank ~ {round(l2_behavioral.get('mean_rank', 0), 2)}"),
             ("h", "Layer 3 & Pipeline"),
-            ("b", "L3: success 53.2% (runtime 58.3%, simulated 52.0%), 34 chromosome, avg fitness 2.57"),
-            ("b", "E2E: tag overlap 0.251; Hebbian feedback delta mean +0.599"),
-            ("note", "DST mới: raw tag mạnh hơn; RL events log cũ chưa phản ánh hết DST mới"),
+            ("b", f"L3: success {round(summary['layer3_success_rate']*100, 1)}% (runtime {round(l3.get('runtime_success_rate', 0)*100, 1)}%, simulated {round(l3.get('simulated_success_rate', 0)*100, 1)}%), {int(l3.get('unique_chromosomes', 0))} chromosome, avg fitness {l3.get('avg_fitness')}"),
+            ("b", f"E2E Hit@5 = {summary['pipeline_e2e_with_rl_hit_at_5']}; Hebbian feedback delta mean {summary['pipeline_feedback_delta_mean']:+.3f}"),
+            ("note", "Menu 120 mon da gan lai tag; runtime matrix da reset sau cap nhat catalog"),
         ],
         owner="Cả nhóm",
     )
@@ -555,9 +567,9 @@ def build():
             ("b", "Đã có pipeline đánh giá định lượng (make eval-run)"),
             ("h", "Kết quả nổi bật"),
             ("b", "DST tinh chỉnh: raw tag mạnh hơn (decay 0.55, alpha 0.88)"),
-            ("b", "L2 Oracle Hit@5 = 1.0 | L3 success rate ~ 53.2% | Hebbian delta +0.599"),
+            ("b", f"L2 Oracle Hit@5 = {summary['layer2_oracle_hit_at_5']} | L3 success rate ~ {round(summary['layer3_success_rate']*100, 1)}% | Menu 120 mon da da dang"),
             ("h", "Hạn chế"),
-            ("b", "Dataset nhỏ; L2 behavioral Hit@5 thấp (0.048); L1 recall thấp (0.18)"),
+            ("b", f"Dataset nhỏ; L2 behavioral Hit@5 thấp ({summary['layer2_behavioral_hit_at_5']}); L1 recall thấp ({round(l1_no_rl['micro_recall'], 2)})"),
             ("b", "L2/L3 eval chủ yếu simulated; chưa có UI"),
             ("h", "Hướng phát triển"),
             ("b", "Thu thập phiên chat thật, mở rộng corpus, UI, ablation RL L1"),

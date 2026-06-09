@@ -1,0 +1,15 @@
+{
+  "layer1_without_rl_macro_f1": 0.189,
+  "layer1_with_rl_macro_f1": 0.189,
+  "layer1_delta_macro_f1": 0.0,
+  "layer1_delta_micro_f1": 0.0,
+  "layer2_oracle_hit_at_5": 1.0,
+  "layer2_oracle_mrr": 0.9492,
+  "layer2_behavioral_hit_at_5": 0.019,
+  "layer2_behavioral_mrr": 0.0071,
+  "layer3_success_rate": 0.5221,
+  "layer3_avg_fitness": 2.5971,
+  "pipeline_e2e_without_rl_hit_at_5": 0.019,
+  "pipeline_e2e_with_rl_hit_at_5": 0.019,
+  "pipeline_feedback_delta_mean": 0.0
+}

@@ -1,0 +1,17 @@
+{
+  "timestamp": "20260610_014807",
+  "use_all_datasets": true,
+  "top_k": 5,
+  "include_simulated": true,
+  "threshold": null,
+  "train_layer1": true,
+  "git_commit": "",
+  "active_dataset": "dataset_v001",
+  "dst_hyperparameters": {
+    "context_decay": 0.55,
+    "context_accumulation_alpha": 0.88,
+    "context_conflict_beta": 0.4
+  },
+  "train_fallback": true,
+  "train_error": "Train Layer1 'no_rl' that bai"
+}

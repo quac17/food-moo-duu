@@ -3,8 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List
 
-from src.core.constants import HYPERPARAMS
-from src.core.constants import LAYER2_CONFIG
+from src.core.constants import HYPERPARAMS, LAYER2_CONFIG
 from src.layer1_intent_context.dialog_state import DialogStateTracker
 from src.layer1_intent_context.intent_tracker import IntentTracker
 from src.layer2_adaptive_recommendation.online_learning import HebbianLearner
@@ -62,6 +61,9 @@ class FoodSuggestionPipeline:
             self.fitness_manager = None
         self.last_chromosome_key = ""
         self.last_recommendations: List[Dict] = []
+
+    def reset_session_state(self) -> None:
+        self.dst.reset_state()
 
     def process_turn(self, user_text: str, top_k: int = 5) -> TurnResult:
         prediction = self.intent_tracker.predict_tags(user_text)

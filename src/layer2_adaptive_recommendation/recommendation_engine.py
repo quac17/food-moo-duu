@@ -187,12 +187,45 @@ class RecommendationEngine:
             normalized[raw_tag] = max(-1.0, min(1.0, normalized.get(raw_tag, 0.0) + value))
         return normalized
 
+    def _blend_runtime_with_canonical(
+        self,
+        runtime_weights: Dict[str, float],
+        canonical_weights: Dict[str, float],
+        runtime_influence: float,
+    ) -> Dict[str, float]:
+        influence = max(0.0, min(1.0, runtime_influence))
+        if influence == 0.0:
+            return dict(canonical_weights)
+        if influence == 1.0:
+            return dict(runtime_weights)
+
+        blended: Dict[str, float] = {}
+        for tag in set(runtime_weights) | set(canonical_weights):
+            runtime_value = self._coerce_float(runtime_weights.get(tag, 0.0), 0.0)
+            canonical_value = self._coerce_float(canonical_weights.get(tag, 0.0), 0.0)
+            mixed = (1.0 - influence) * canonical_value + influence * runtime_value
+            blended[tag] = max(-1.0, min(1.0, mixed))
+        return blended
+
     def _load_dishes(self) -> List[Dict]:
         canonical_dishes = self._load_canonical_dishes()
         legacy_dishes = self._load_legacy_dishes()
         dishes, source_file, source_kind = self._choose_source(canonical_dishes, legacy_dishes)
         self.source_file = source_file
         self.source_kind = source_kind
+
+        canonical_by_id: Dict[str, Dict[str, float]] = {}
+        for dish in canonical_dishes:
+            if not isinstance(dish, dict):
+                continue
+            tag_weights = dish.get("tag_weights", {})
+            if isinstance(tag_weights, dict):
+                canonical_by_id[str(dish.get("id", ""))] = self._normalize_tag_weights(tag_weights)
+
+        runtime_influence = self._coerce_float(
+            LAYER2_CONFIG.get("learning", {}).get("runtime_influence", 0.35),
+            0.35,
+        )
 
         normalized_dishes: List[Dict] = []
         for dish in dishes:
@@ -201,13 +234,21 @@ class RecommendationEngine:
             tag_weights = dish.get("tag_weights", {})
             if not isinstance(tag_weights, dict):
                 tag_weights = {}
+            normalized_weights = self._normalize_tag_weights(tag_weights)
+            dish_id = str(dish.get("id", ""))
+            if source_kind == "runtime" and dish_id in canonical_by_id:
+                normalized_weights = self._blend_runtime_with_canonical(
+                    runtime_weights=normalized_weights,
+                    canonical_weights=canonical_by_id[dish_id],
+                    runtime_influence=runtime_influence,
+                )
             normalized_dishes.append(
                 {
-                    "id": str(dish.get("id", "")),
+                    "id": dish_id,
                     "name": str(dish.get("name", "Unknown dish")),
                     "is_drink": bool(dish.get("is_drink", False)),
                     "popularity_score": self._coerce_float(dish.get("popularity_score", 1.0), 1.0),
-                    "tag_weights": self._normalize_tag_weights(tag_weights),
+                    "tag_weights": normalized_weights,
                 }
             )
         return normalized_dishes

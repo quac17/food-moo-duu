@@ -153,7 +153,7 @@ Slide phân mục mở đầu phần Layer 2.
 2. **Linear Weight Scoring:** `score(món) = Σ_t activation(tag_t) · weight(món, tag_t)`
 3. Sắp xếp theo `(score, popularity, id)` → lấy **Top-K**
 
-**Nguồn dữ liệu:** 100 món (`dishes_100.json` / `food_weight_matrix.json`), runtime tách ở `dataset_v001_dishes_runtime.json`.
+**Nguồn dữ liệu:** 120 món (`dishes_100.json` / `food_weight_matrix.json`, 9 đồ uống), tag gán lại qua `scripts/rebuild_dish_catalog.py`; runtime tách ở `dataset_v001_dishes_runtime.json`.
 
 ---
 
@@ -284,17 +284,17 @@ make eval-train-and-run  # train ablation L1 + đánh giá
 
 > **Hình:** `docs/images/evaluation_metrics.png`
 
-**Bảng tổng hợp nhanh** (run `20260610_011454`):
+**Bảng tổng hợp nhanh** (run `20260610_014807`):
 
 | Thành phần | Chỉ số chính | Kết quả |
 |---|---|---|
 | DST runtime | decay / alpha / beta | **0.55 / 0.88 / 0.4** |
 | L1 Intent | Macro F1 | **0.189** |
-| L2 Oracle | Hit@5 / MRR | **1.0 / 1.0** |
-| L2 Behavioral | Hit@5 / MRR | **0.048 / 0.021** |
-| L3 Genetic | Success rate (62 lượt) | **53.2%** |
-| Pipeline E2E | Hit@5 | **0.048** |
-| Học online L2 | Feedback delta mean | **+0.599** |
+| L2 Oracle | Hit@5 / MRR | **1.0 / 0.949** |
+| L2 Behavioral | Hit@5 / MRR | **0.019 / 0.007** |
+| L3 Genetic | Success rate (113 lượt) | **52.2%** |
+| Pipeline E2E | Hit@5 | **0.019** |
+| Học online L2 | Feedback delta mean | **0.0** (sau reset runtime) |
 
 **Nhận xét:** Oracle L2 cao → scoring tốt khi tag chuẩn; behavioral thấp → context runtime khó hơn nhiều.
 
@@ -304,13 +304,13 @@ make eval-train-and-run  # train ablation L1 + đánh giá
 
 **Layer 1** (val 142): Micro F1 = 0.291, Macro F1 = 0.189, Precision = 0.748, Recall = 0.181. Ablation RL: delta = 0 (chưa train ablation thành công).
 
-**Layer 2 Oracle** (709): Hit@5 = 1.0, NDCG@5 = 0.971 — upper bound scoring.
+**Layer 2 Oracle** (709): Hit@5 = 1.0, NDCG@5 = 0.878 — upper bound scoring (catalog 120 món).
 
-**Layer 2 Behavioral** (105): Hit@5 = 0.048, MRR = 0.021, mean rank ≈ 5.83.
+**Layer 2 Behavioral** (105): Hit@5 = 0.019, MRR = 0.007, mean rank ≈ 5.94.
 
-**Layer 3** (62 lượt): Success rate tổng 53.2% (runtime 58.3%, simulated 52.0%), 34 chromosome unique, avg fitness 2.57.
+**Layer 3** (113 lượt): Success rate tổng 52.2% (runtime 53.9%, simulated 52.0%), 35 chromosome unique, avg fitness 2.60.
 
-**Pipeline E2E:** Tag overlap 0.251; feedback delta +0.599 sau Hebbian update.
+**Pipeline E2E:** Tag overlap 0.248; feedback delta 0.0 sau reset runtime.
 
 **Hạn chế khi báo cáo:** L2/L3 chủ yếu simulated; L3 không có BLEU/ROUGE; behavioral Hit@5 thấp do `context_tags` log cũ (trước tinh chỉnh DST decay=0.55).
 

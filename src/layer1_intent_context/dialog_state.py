@@ -72,6 +72,10 @@ class DialogStateTracker:
         payload = {"tag_scores": self.state.tag_scores, "turn_index": self.state.turn_index}
         self.state_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    def reset_state(self) -> None:
+        self.state = SessionState(tag_scores={tag: 0.0 for tag in self.available_tags}, turn_index=0)
+        self.save_state()
+
     def update_context(self, new_scores: Dict[str, float]) -> Dict[str, float]:
         self.state.turn_index += 1
 

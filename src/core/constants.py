@@ -144,6 +144,7 @@ def load_layer2_config() -> Dict[str, Any]:
             "negative": float(learning.get("negative", defaults["learning"]["negative"])),
             "feedback_penalty": float(learning.get("feedback_penalty", defaults["learning"]["feedback_penalty"])),
             "active_threshold": float(learning.get("active_threshold", defaults["learning"]["active_threshold"])),
+            "runtime_influence": float(learning.get("runtime_influence", 0.35)),
         },
         "similarity": similarity,
     }

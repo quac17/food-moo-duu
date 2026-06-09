@@ -70,6 +70,7 @@ def get_feedback_log_file(pipeline: FoodSuggestionPipeline) -> Path:
 
 def run_interactive(top_k: int, max_turns: int = 5) -> None:
     pipeline = FoodSuggestionPipeline()
+    pipeline.reset_session_state()
     session_id = str(uuid4())
     print("=== FOOD MOO DUU - OFFLINE SMART RECOMMENDER ===")
     print(f"Kich ban demo: chat toi da {max_turns} luot -> chon mon -> he thong tu hoc.")
@@ -121,6 +122,7 @@ def run_interactive(top_k: int, max_turns: int = 5) -> None:
 
 def run_non_interactive(chats: list[str], choice: str, top_k: int, max_turns: int = 5) -> None:
     pipeline = FoodSuggestionPipeline()
+    pipeline.reset_session_state()
     session_id = str(uuid4())
     print("=== FOOD MOO DUU - NON INTERACTIVE RUN ===")
 

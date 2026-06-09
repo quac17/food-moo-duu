@@ -1,0 +1,23 @@
+{
+  "mode": "behavioral_feedback",
+  "source": [
+    "selected_dish_events.jsonl",
+    "selected_dish_events_simulated.jsonl"
+  ],
+  "matrix": "canonical",
+  "samples": 105,
+  "metrics": {
+    "mrr": 0.0071,
+    "mean_rank": 5.9429,
+    "hit_at_3": 0.0095,
+    "precision_at_3": 0.0032,
+    "recall_at_3": 0.0095,
+    "ndcg_at_3": 0.006,
+    "hit_at_5": 0.019,
+    "precision_at_5": 0.0038,
+    "recall_at_5": 0.019,
+    "ndcg_at_5": 0.0101,
+    "samples": 105.0,
+    "avg_chosen_score": 1.2893
+  }
+}

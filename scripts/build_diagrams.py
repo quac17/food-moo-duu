@@ -24,6 +24,9 @@ from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 ROOT = Path(__file__).resolve().parents[1]
 IMG_DIR = ROOT / "docs" / "images"
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from eval_report_utils import load_eval_bundle  # noqa: E402
+
 # Bang mau dong bo voi slide
 NAVY = "#1F2D3D"
 ORANGE = "#E86A17"
@@ -258,11 +261,24 @@ def diagram_layer3():
 
 
 def diagram_evaluation_metrics():
-    """Bang tong hop metric tu run_20260610_011454."""
+    """Bang tong hop metric tu evaluation run moi nhat."""
+    run_id, bundle, _ = load_eval_bundle()
+    summary = bundle["summary"]
+    l1 = bundle["layer1_no_rl"]["summary"]
+    l2_oracle = bundle["layer2_oracle"]["metrics"]
+    l2_behavioral = bundle["layer2_behavioral"]["metrics"]
+    l3 = bundle["layer3"]
+    dst = bundle["manifest"]["dst_hyperparameters"]
+    l3_total = int(l3.get("total_updates", 0) or 0)
+    l3_runtime = int(l3.get("runtime_updates", 0) or 0)
+    l3_success_pct = round(float(summary["layer3_success_rate"]) * 100, 1)
+    l3_runtime_pct = round(float(l3.get("runtime_success_rate", 0.0)) * 100, 1)
+    behavioral_samples = int(bundle["layer2_behavioral"].get("samples", 0) or 0)
+
     fig, axes = plt.subplots(1, 2, figsize=(14, 7.5))
     fig.patch.set_facecolor(WHITE)
     fig.suptitle(
-        "Kết quả đánh giá hiệu quả — Food Moo Duu (run_20260610_011454)",
+        f"Kết quả đánh giá hiệu quả — Food Moo Duu (run_{run_id})",
         fontsize=16, weight="bold", color=NAVY, y=0.98,
     )
 
@@ -274,14 +290,14 @@ def diagram_evaluation_metrics():
     ax.text(50, 94, "Bảng tổng hợp theo layer", ha="center", fontsize=13, weight="bold", color=TEAL)
 
     rows = [
-        ("DST runtime", "decay / alpha / beta", "0.55 / 0.88 / 0.4", TEAL),
-        ("L1 Intent", "Macro F1 (val 142)", "0.189", TEAL),
-        ("L2 Oracle", "Hit@5 / MRR (709 mẫu)", "1.0 / 1.0", GREEN),
-        ("L2 Behavioral", "Hit@5 / MRR (105 events)", "0.048 / 0.021", ORANGE),
-        ("L3 Genetic", "Success rate (62 lượt)", "53.2%", PURPLE),
-        ("L3 Runtime", "Success rate (12 lượt)", "58.3%", PURPLE),
-        ("Pipeline E2E", "Hit@5", "0.048", NAVY),
-        ("Học online L2", "Feedback delta mean", "+0.599", GREEN),
+        ("DST runtime", "decay / alpha / beta", f"{dst['context_decay']} / {dst['context_accumulation_alpha']} / {dst['context_conflict_beta']}", TEAL),
+        ("L1 Intent", f"Macro F1 (val {int(l1['samples'])})", f"{summary['layer1_without_rl_macro_f1']}", TEAL),
+        ("L2 Oracle", "Hit@5 / MRR (709 mẫu)", f"{summary['layer2_oracle_hit_at_5']} / {summary['layer2_oracle_mrr']}", GREEN),
+        ("L2 Behavioral", f"Hit@5 / MRR ({behavioral_samples} events)", f"{summary['layer2_behavioral_hit_at_5']} / {summary['layer2_behavioral_mrr']}", ORANGE),
+        ("L3 Genetic", f"Success rate ({l3_total} lượt)", f"{l3_success_pct}%", PURPLE),
+        ("L3 Runtime", f"Success rate ({l3_runtime} lượt)", f"{l3_runtime_pct}%", PURPLE),
+        ("Pipeline E2E", "Hit@5", f"{summary['pipeline_e2e_with_rl_hit_at_5']}", NAVY),
+        ("Học online L2", "Feedback delta mean", f"{summary['pipeline_feedback_delta_mean']:+.3f}", GREEN),
     ]
     y = 82
     for layer, metric, value, color in rows:
@@ -297,8 +313,16 @@ def diagram_evaluation_metrics():
     # --- Phải: so sánh L2 Oracle vs Behavioral ---
     ax2 = axes[1]
     labels = ["Hit@5", "MRR", "NDCG@5"]
-    oracle_vals = [1.0, 1.0, 0.9708]
-    behavioral_vals = [0.0476, 0.0214, 0.0281]
+    oracle_vals = [
+        float(l2_oracle.get("hit_at_5", 0.0)),
+        float(l2_oracle.get("mrr", 0.0)),
+        float(l2_oracle.get("ndcg_at_5", 0.0)),
+    ]
+    behavioral_vals = [
+        float(l2_behavioral.get("hit_at_5", 0.0)),
+        float(l2_behavioral.get("mrr", 0.0)),
+        float(l2_behavioral.get("ndcg_at_5", 0.0)),
+    ]
     x = [0, 1.2, 2.4]
     w = 0.45
     bars1 = ax2.bar([i - w / 2 for i in x], oracle_vals, width=w, color=GREEN, label="L2 Oracle (709)")
