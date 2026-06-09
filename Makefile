@@ -1,7 +1,7 @@
 PYTHON=python
 LAYER1_RUN_MESSAGE ?= $(shell $(PYTHON) -c "import random; samples=['Sang nay toi muon bua nhe de de tieu','Trua nay toi can bua com can bang va no lau','Chieu nay toi hoi met muon mon nuoc am','Toi nay toi di mot minh muon mon am ap','Troi nong nen toi muon mon mat va it beo','Dem muon toi chi muon an nhe truoc khi ngu']; print(random.choice(samples))")
 
-.PHONY: setup app-run app-demo app-docker app-run-docker app-demo-docker layer1-train layer1-train-active layer1-run layer1-chat layer1-reset-state layer1-docker layer1-train-docker layer1-run-docker layer1-chat-docker layer1-reset-state-docker layer1-rl-generate layer1-rl-train layer1-rl-check layer1-rl-generate-docker layer1-rl-train-docker layer1-rl-check-docker layer2-run layer2-docker layer2-migrate layer2-check layer2-test layer2-reset-runtime layer2-run-docker layer2-migrate-docker layer2-check-docker layer2-test-docker layer2-reset-runtime-docker layer3-run layer3-docker layer3-run-docker
+.PHONY: setup app-run app-demo app-docker app-run-docker app-demo-docker eval-run eval-train-and-run layer1-train layer1-train-active layer1-run layer1-chat layer1-reset-state layer1-docker layer1-train-docker layer1-run-docker layer1-chat-docker layer1-reset-state-docker layer1-rl-generate layer1-rl-train layer1-rl-check layer1-rl-generate-docker layer1-rl-train-docker layer1-rl-check-docker layer2-run layer2-docker layer2-migrate layer2-check layer2-test layer2-reset-runtime layer2-run-docker layer2-migrate-docker layer2-check-docker layer2-test-docker layer2-reset-runtime-docker layer3-simulate layer3-run layer3-docker layer3-run-docker
 
 setup:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -20,6 +20,12 @@ app-run-docker:
 
 app-demo-docker:
 	docker compose -f docker/app/docker-compose.yml run --rm app python main.py --non-interactive --top-k 5
+
+eval-run:
+	$(PYTHON) -m src.evaluation.run_evaluation --all-datasets --top-k 5 --include-simulated --skip-train
+
+eval-train-and-run:
+	$(PYTHON) -m src.evaluation.run_evaluation --all-datasets --top-k 5 --include-simulated
 
 layer1-train:
 	$(PYTHON) -m src.layer1_intent_context.intent_tracker --all-datasets --threshold 0.3
@@ -101,6 +107,9 @@ layer2-reset-runtime:
 
 layer2-reset-runtime-docker:
 	docker compose -f docker/layer2/docker-compose.yml run --rm layer2-adaptive-recommendation python -m src.layer2_adaptive_recommendation.reset_runtime
+
+layer3-simulate:
+	$(PYTHON) scripts/generate_layer3_simulated_fitness.py --fitness-samples 50 --pair-samples 40
 
 layer3-run:
 	$(PYTHON) -m src.layer3_genetic_response.run_layer3 --repeat 2

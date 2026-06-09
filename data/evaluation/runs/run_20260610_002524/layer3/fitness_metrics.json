@@ -1,0 +1,33 @@
+{
+  "source_file": "D:\\Ths\\NLP\\Final Project\\food-moo-duu\\data\\layer3\\dataset_v001\\fitness_history.json",
+  "total_updates": 11,
+  "success_rate": 0.5455,
+  "failure_rate": 0.4545,
+  "unique_chromosomes": 14,
+  "avg_fitness": 4.6714,
+  "max_fitness": 25.4,
+  "min_fitness": 0.8,
+  "avg_fitness_gain_per_success": 0.25,
+  "top_chromosomes": [
+    {
+      "chromosome_key": "mood_stressed_0_1_0",
+      "fitness": 25.4
+    },
+    {
+      "chromosome_key": "mood_sick_0_0_1",
+      "fitness": 18.7
+    },
+    {
+      "chromosome_key": "mood_stressed_1_0_1",
+      "fitness": 9.8
+    },
+    {
+      "chromosome_key": "Nghe bạn đang không khỏe, | thử {foods} để cơ thể đỡ mệt nhé. | Nhớ uống đủ nước nhé.",
+      "fitness": 1.25
+    },
+    {
+      "chromosome_key": "Với mood gặp gỡ này, | {foods} rất hợp để chia sẻ cùng bạn bè. | Ăn xong nhớ nghỉ ngơi sớm nha.",
+      "fitness": 1.25
+    }
+  ]
+}

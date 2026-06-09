@@ -1,0 +1,12 @@
+{
+  "timestamp": "20260610_002613",
+  "use_all_datasets": true,
+  "top_k": 5,
+  "include_simulated": true,
+  "threshold": null,
+  "train_layer1": true,
+  "git_commit": "",
+  "active_dataset": "dataset_v001",
+  "train_fallback": true,
+  "train_error": "Train Layer1 'no_rl' that bai"
+}

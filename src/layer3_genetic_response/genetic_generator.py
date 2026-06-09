@@ -210,7 +210,7 @@ class GeneticGenerator:
             "mood_key": mood_key or "",
         }
 
-    def update_fitness(self, chromosome_key: str, success: bool) -> None:
+    def update_fitness(self, chromosome_key: str, success: bool, source: str = "runtime") -> None:
         current = float(self.fitness_map.get(chromosome_key, 1.0))
 
         # Ham fitness toi gian theo phan hoi ngam:
@@ -227,6 +227,7 @@ class GeneticGenerator:
                 "chromosome_key": chromosome_key,
                 "success": success,
                 "fitness": self.fitness_map[chromosome_key],
+                "source": source,
             }
         )
         # Luu runtime_fitness rieng de khong pha vo schema canonical ban dau.

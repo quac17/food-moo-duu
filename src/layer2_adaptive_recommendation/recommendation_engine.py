@@ -10,8 +10,9 @@ from src.core.constants import LAYER2_CONFIG, LAYER2_DATA_DIR
 class RecommendationEngine:
     """Tinh diem goi y mon an bang Linear Weight Scoring."""
 
-    def __init__(self, data_dir: Path | None = None) -> None:
+    def __init__(self, data_dir: Path | None = None, prefer_canonical: bool = False) -> None:
         self.data_dir = data_dir or LAYER2_DATA_DIR
+        self.prefer_canonical = prefer_canonical
         self.dataset_meta_file = self.data_dir / "datasets.json"
         self.active_dataset = self._resolve_active_dataset()
         self.dataset_dir = self.data_dir / self.active_dataset
@@ -159,6 +160,9 @@ class RecommendationEngine:
         return dishes if isinstance(dishes, list) else []
 
     def _choose_source(self, canonical: List[Dict], legacy: List[Dict]) -> Tuple[List[Dict], Path, str]:
+        if self.prefer_canonical and canonical:
+            return canonical, self.canonical_file, "canonical"
+
         runtime = self._load_runtime_dishes()
         runtime_fresh = runtime and self._get_source_mtime(self.runtime_file) >= max(
             self._get_source_mtime(self.canonical_file),

@@ -456,22 +456,78 @@ def build():
         owner="Hoàng",
     )
 
-    # Slide 18 - DevOps
+    # ===== PHAN MUC DANH GIA =====
+    section_slide(prs, "Đánh giá hiệu quả", "Cả nhóm")
+
+    # Slide 19 - Pipeline danh gia
+    content_slide(
+        prs,
+        "Pipeline đánh giá & phương pháp",
+        [
+            ("h", "Package: src/evaluation/ (metrics, layer1/2/3_eval, pipeline_eval)"),
+            ("b", "make layer3-simulate — bổ sung data giả lập L3"),
+            ("b", "make eval-run — đánh giá toàn bộ (skip train L1)"),
+            ("b", "make eval-train-and-run — train ablation L1 + đánh giá"),
+            ("h", "Tập dữ liệu đánh giá"),
+            ("b", "L1: validation 20% intent (all datasets) — 142 mẫu"),
+            ("b", "L2 Oracle: intent_samples.csv tag lý tưởng — 709 mẫu"),
+            ("b", "L2 Behavioral: RL events (4 runtime + 100 simulated) — 104 events"),
+            ("b", "L3: fitness_history (11 runtime + 50 simulated) — 61 lượt"),
+            ("note", "Metric: F1 (L1), Hit@K/MRR/NDCG (L2), success rate/fitness (L3), feedback delta"),
+        ],
+        owner="Hoàng",
+    )
+
+    # Slide 20 - Ket qua tong hop (HINH)
+    image_slide(
+        prs,
+        "Kết quả đánh giá tổng hợp",
+        "evaluation_metrics.png",
+        [
+            ("h", "Run: 20260610_004458 | Chi tiết: docs/evaluation_metrics.md"),
+            ("b", "L1 Macro F1 = 0.189 | L2 Oracle Hit@5 = 1.0 | L2 Behavioral Hit@5 = 0.039"),
+            ("b", "L3 Success rate = 52.5% (61 lượt) | E2E Hit@5 = 0.039 | Feedback delta = +0.647"),
+            ("note", "Oracle cao -> scoring tốt khi tag chuẩn; behavioral thấp -> context runtime khó hơn"),
+        ],
+        owner="Cả nhóm",
+        img_height=3600000,
+    )
+
+    # Slide 21 - Chi tiet metric tung layer
+    content_slide(
+        prs,
+        "Chi tiết metric từng layer",
+        [
+            ("h", "Layer 1 (val 142)"),
+            ("b", "Micro F1 = 0.291, Macro F1 = 0.189, Precision = 0.748, Recall = 0.181"),
+            ("b", "Ablation RL: delta macro F1 = 0 (chưa train ablation thành công)"),
+            ("h", "Layer 2"),
+            ("b", "Oracle (709): Hit@5 = 1.0, NDCG@5 = 0.971 — upper bound scoring"),
+            ("b", "Behavioral (104): Hit@5 = 0.039, MRR = 0.017, mean rank ~ 5.87"),
+            ("h", "Layer 3 & Pipeline"),
+            ("b", "L3: success 52.5% (runtime 54.6%, simulated 52.0%), 33 chromosome, avg fitness 2.61"),
+            ("b", "E2E: tag overlap 0.251; Hebbian feedback delta mean +0.647"),
+            ("note", "Hạn chế: L2/L3 chủ yếu simulated; L3 không có BLEU/ROUGE"),
+        ],
+        owner="Cả nhóm",
+    )
+
+    # Slide 22 - DevOps
     content_slide(
         prs,
         "Triển khai & DevOps",
         [
             ("h", "Makefile - một lệnh cho mỗi tác vụ"),
-            ("b", "make setup | app-run | app-demo | layer{1,2,3}-*"),
+            ("b", "make setup | app-run | app-demo | eval-run | layer{1,2,3}-*"),
             ("h", "Docker"),
             ("b", "docker/layer1|2|3/docker-compose.yml + docker/app/ (full app)"),
             ("h", "Testing"),
-            ("b", "test_layer2.py, test_layer2_integration.py, test_feedback_logging.py"),
+            ("b", "test_layer2.py, test_layer2_integration.py, test_feedback_logging.py, test_metrics.py"),
         ],
         owner="Đức Anh",
     )
 
-    # Slide 19 - Demo
+    # Slide 23 - Demo
     content_slide(
         prs,
         "Demo minh họa",
@@ -487,17 +543,21 @@ def build():
         owner="Minh",
     )
 
-    # Slide 20 - Danh gia, han che & ket luan
+    # Slide 24 - Han che & ket luan
     content_slide(
         prs,
-        "Đánh giá, Hạn chế & Kết luận",
+        "Hạn chế & Kết luận",
         [
             ("h", "Ưu điểm"),
-            ("b", "Modular, offline, kết hợp DL multi-label + DST + Hebbian + GA + RL offline"),
+            ("b", "Modular, offline, DL multi-label + DST + Hebbian + GA + RL offline"),
+            ("b", "Đã có pipeline đánh giá định lượng (make eval-run)"),
+            ("h", "Kết quả nổi bật"),
+            ("b", "L2 Oracle Hit@5 = 1.0 | L3 success rate ~ 52.5% | Hebbian delta +0.647"),
             ("h", "Hạn chế"),
-            ("b", "Dataset nhỏ (~160 mẫu/epoch, 100 món); L3 template cố định; chưa có UI"),
+            ("b", "Dataset nhỏ; L2 behavioral Hit@5 thấp (0.039); L1 recall thấp (0.18)"),
+            ("b", "L2/L3 eval chủ yếu simulated; chưa có UI"),
             ("h", "Hướng phát triển"),
-            ("b", "Mở rộng corpus, UI chat, đánh giá định lượng, RL train định kỳ"),
+            ("b", "Thu thập phiên chat thật, mở rộng corpus, UI, ablation RL L1"),
             ("note", "Food Moo Duu: pipeline NLP end-to-end tự học từ lựa chọn người dùng. Cảm ơn - Q&A"),
         ],
         owner="Cả nhóm",
@@ -505,7 +565,7 @@ def build():
 
     OUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     prs.save(OUT_FILE)
-    print(f"Đã tạo slide: {OUT_FILE}  ({len(prs.slides.__iter__.__self__._sldIdLst)} slides)")
+    print(f"Đã tạo slide: {OUT_FILE}  ({len(prs.slides)} slides)")
 
 
 if __name__ == "__main__":

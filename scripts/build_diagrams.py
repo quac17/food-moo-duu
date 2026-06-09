@@ -5,6 +5,7 @@ Cac hinh:
   - layer1_logic.png        : Logic Layer 1 (Encoder -> heads + DST)
   - layer2_logic.png        : Logic Layer 2 (Linear scoring + Hebbian update)
   - layer3_logic.png        : Logic Layer 3 (Genetic Algorithm loop)
+  - evaluation_metrics.png  : Bang tong hop metric danh gia hieu qua
 """
 from __future__ import annotations
 
@@ -256,12 +257,84 @@ def diagram_layer3():
     save(fig, "layer3_logic.png")
 
 
+def diagram_evaluation_metrics():
+    """Bang tong hop metric tu run_20260610_004458."""
+    fig, axes = plt.subplots(1, 2, figsize=(14, 7.5))
+    fig.patch.set_facecolor(WHITE)
+    fig.suptitle(
+        "Kết quả đánh giá hiệu quả — Food Moo Duu (run_20260610_004458)",
+        fontsize=16, weight="bold", color=NAVY, y=0.98,
+    )
+
+    # --- Trái: bảng metric tổng hợp ---
+    ax = axes[0]
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+    ax.text(50, 94, "Bảng tổng hợp theo layer", ha="center", fontsize=13, weight="bold", color=TEAL)
+
+    rows = [
+        ("L1 Intent", "Macro F1 (val 142)", "0.189", TEAL),
+        ("L1 Ablation", "Delta macro F1 (RL)", "0.0", GREY),
+        ("L2 Oracle", "Hit@5 / MRR (709 mẫu)", "1.0 / 1.0", GREEN),
+        ("L2 Behavioral", "Hit@5 / MRR (104 events)", "0.039 / 0.017", ORANGE),
+        ("L3 Genetic", "Success rate (61 lượt)", "52.5%", PURPLE),
+        ("L3 Runtime", "Success rate (11 lượt)", "54.6%", PURPLE),
+        ("Pipeline E2E", "Hit@5", "0.039", NAVY),
+        ("Học online L2", "Feedback delta mean", "+0.647", GREEN),
+    ]
+    y = 82
+    for layer, metric, value, color in rows:
+        box(ax, 4, y - 2, 22, 8, layer, color, fs=8)
+        ax.text(29, y + 2, metric, fontsize=9, color=NAVY, va="center")
+        ax.text(88, y + 2, value, fontsize=10, color=NAVY, weight="bold", ha="right", va="center")
+        ax.plot([4, 96], [y - 3, y - 3], color=LIGHT, linewidth=1.5, zorder=1)
+        y -= 10
+
+    ax.text(50, 4, "Lệnh: make eval-run | Chi tiết: docs/evaluation_metrics.md",
+            ha="center", fontsize=9, color=GREY, style="italic")
+
+    # --- Phải: so sánh L2 Oracle vs Behavioral ---
+    ax2 = axes[1]
+    labels = ["Hit@5", "MRR", "NDCG@5"]
+    oracle_vals = [1.0, 1.0, 0.9708]
+    behavioral_vals = [0.0385, 0.0168, 0.0223]
+    x = [0, 1.2, 2.4]
+    w = 0.45
+    bars1 = ax2.bar([i - w / 2 for i in x], oracle_vals, width=w, color=GREEN, label="L2 Oracle (709)")
+    bars2 = ax2.bar([i + w / 2 for i in x], behavioral_vals, width=w, color=ORANGE, label="L2 Behavioral (104)")
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(labels, fontsize=11)
+    ax2.set_ylim(0, 1.15)
+    ax2.set_ylabel("Giá trị metric", fontsize=11)
+    ax2.set_title("So sánh L2: Oracle vs Behavioral", fontsize=13, weight="bold", color=NAVY, pad=12)
+    ax2.legend(loc="upper right", fontsize=9)
+    ax2.grid(axis="y", linestyle="--", alpha=0.35)
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["right"].set_visible(False)
+
+    for bars in (bars1, bars2):
+        for bar in bars:
+            h = bar.get_height()
+            if h >= 0.05:
+                ax2.text(bar.get_x() + bar.get_width() / 2, h + 0.03,
+                         f"{h:.3f}", ha="center", va="bottom", fontsize=8, color=NAVY)
+
+    ax2.text(0.5, -0.18,
+             "Oracle = tag CSV lý tưởng | Behavioral = context runtime + RL feedback",
+             transform=ax2.transAxes, ha="center", fontsize=9, color=GREY, style="italic")
+
+    fig.tight_layout(rect=[0, 0.02, 1, 0.95])
+    save(fig, "evaluation_metrics.png")
+
+
 def build():
     print("Sinh hình minh họa:")
     diagram_architecture()
     diagram_layer1()
     diagram_layer2()
     diagram_layer3()
+    diagram_evaluation_metrics()
     print("Hoàn tất.")
 
 

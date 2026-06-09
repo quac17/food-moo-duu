@@ -14,6 +14,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import f1_score
+
+from src.evaluation.metrics import multilabel_metrics, per_tag_metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 from torch.utils.data import DataLoader, Dataset
@@ -93,7 +95,12 @@ class IntentTracker:
     PAD_TOKEN = "<pad>"
     UNK_TOKEN = "<unk>"
 
-    def __init__(self, data_dir: Path | None = None, use_all_datasets: bool = False) -> None:
+    def __init__(
+        self,
+        data_dir: Path | None = None,
+        use_all_datasets: bool = False,
+        include_rl_samples: bool | None = None,
+    ) -> None:
         self.data_dir = data_dir or LAYER1_DATA_DIR
         self.use_all_datasets = use_all_datasets
         self.dataset_meta_file = self.data_dir / "datasets.json"
@@ -104,8 +111,11 @@ class IntentTracker:
         self.tags = self._load_tags()
         self.mlb = MultiLabelBinarizer(classes=self.tags)
         self.dl_config = self._load_dl_config()
+        if include_rl_samples is not None:
+            self.dl_config.include_rl_samples = bool(include_rl_samples)
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self._artifact_suffix = ""
         self.artifact_dir = self.data_dir / "model_artifacts_dl"
         self.model_file = self.artifact_dir / "intent_model.pt"
         self.meta_file = self.artifact_dir / "intent_model_meta.json"
@@ -214,7 +224,7 @@ class IntentTracker:
                 matrix[i, j] = self._overlap_similarity(labels_np[i], labels_np[j])
         return torch.tensor(matrix, dtype=torch.float32, device=labels.device)
 
-    def _collect_train_records(self) -> List[dict]:
+    def _collect_base_records(self) -> List[dict]:
         training_files = self._resolve_training_files()
         frames = [pd.read_csv(file_path) for file_path in training_files]
         frame = pd.concat(frames, ignore_index=True)
@@ -224,18 +234,35 @@ class IntentTracker:
             tags = [tag.strip() for tag in str(row.get("tags", "")).split("|") if tag.strip()]
             if text and tags:
                 records.append({"text": text, "tags": tags})
-
-        if self.dl_config.include_rl_samples:
-            rl_file = self.data_dir / "rl_training" / "intent_train_data_rl.json"
-            if rl_file.exists():
-                payload = json.loads(rl_file.read_text(encoding="utf-8"))
-                if isinstance(payload, list):
-                    for item in payload:
-                        text = str(item.get("text", "")).strip()
-                        tags = item.get("tags", [])
-                        if text and isinstance(tags, list) and tags:
-                            records.append({"text": text, "tags": [str(tag) for tag in tags]})
         return records
+
+    def _collect_rl_records(self) -> List[dict]:
+        rl_file = self.data_dir / "rl_training" / "intent_train_data_rl.json"
+        if not rl_file.exists():
+            return []
+        payload = json.loads(rl_file.read_text(encoding="utf-8"))
+        if not isinstance(payload, list):
+            return []
+        records: List[dict] = []
+        for item in payload:
+            text = str(item.get("text", "")).strip()
+            tags = item.get("tags", [])
+            if text and isinstance(tags, list) and tags:
+                records.append({"text": text, "tags": [str(tag) for tag in tags]})
+        return records
+
+    def _collect_train_records(self) -> List[dict]:
+        records = self._collect_base_records()
+        if self.dl_config.include_rl_samples:
+            records.extend(self._collect_rl_records())
+        return records
+
+    def _artifact_paths(self) -> tuple[Path, Path, Path]:
+        suffix = f"_{self._artifact_suffix}" if self._artifact_suffix else ""
+        model_file = self.artifact_dir / f"intent_model{suffix}.pt"
+        meta_file = self.artifact_dir / f"intent_model_meta{suffix}.json"
+        vocab_file = self.artifact_dir / f"vocab{suffix}.json"
+        return model_file, meta_file, vocab_file
 
     def _create_model(self) -> None:
         self.model = Layer1DLModel(
@@ -249,9 +276,10 @@ class IntentTracker:
     def _save_artifacts(self) -> None:
         if self.model is None:
             return
+        model_file, meta_file, vocab_file = self._artifact_paths()
         self.artifact_dir.mkdir(parents=True, exist_ok=True)
-        torch.save(self.model.state_dict(), self.model_file)
-        self.vocab_file.write_text(json.dumps(self.vocab, ensure_ascii=False, indent=2), encoding="utf-8")
+        torch.save(self.model.state_dict(), model_file)
+        vocab_file.write_text(json.dumps(self.vocab, ensure_ascii=False, indent=2), encoding="utf-8")
         meta = {
             "tags": self.tags,
             "decision_threshold": self.dl_config.decision_threshold,
@@ -259,8 +287,14 @@ class IntentTracker:
             "embedding_dim": self.dl_config.embedding_dim,
             "hidden_dim": self.dl_config.hidden_dim,
             "projection_dim": self.dl_config.projection_dim,
+            "include_rl_samples": self.dl_config.include_rl_samples,
+            "artifact_suffix": self._artifact_suffix,
         }
-        self.meta_file.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        meta_file.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        if not self._artifact_suffix:
+            torch.save(self.model.state_dict(), self.model_file)
+            self.vocab_file.write_text(json.dumps(self.vocab, ensure_ascii=False, indent=2), encoding="utf-8")
+            self.meta_file.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def _load_artifacts_if_ready(self) -> None:
         if not self.model_file.exists() or not self.meta_file.exists() or not self.vocab_file.exists():
@@ -276,35 +310,103 @@ class IntentTracker:
         self.model.eval()
         self.is_fitted = True
 
-    def _evaluate_f1(self, x_ids: np.ndarray, x_mask: np.ndarray, y_true: np.ndarray) -> tuple[float, float]:
+    def _predict_binary(self, x_ids: np.ndarray, x_mask: np.ndarray) -> np.ndarray:
         if self.model is None or len(x_ids) == 0:
-            return 0.0, 0.0
+            return np.empty((0, len(self.tags)), dtype=np.int32)
         with torch.no_grad():
             ids = torch.tensor(x_ids, dtype=torch.long, device=self.device)
             mask = torch.tensor(x_mask, dtype=torch.float32, device=self.device)
             _, logits = self.model(ids, mask)
             probs = torch.sigmoid(logits).detach().cpu().numpy()
-        y_pred = (probs >= self.dl_config.decision_threshold).astype(np.int32)
+        return (probs >= self.dl_config.decision_threshold).astype(np.int32)
+
+    def _evaluate_f1(self, x_ids: np.ndarray, x_mask: np.ndarray, y_true: np.ndarray) -> tuple[float, float]:
+        if self.model is None or len(x_ids) == 0:
+            return 0.0, 0.0
+        y_pred = self._predict_binary(x_ids, x_mask)
         micro = float(f1_score(y_true, y_pred, average="micro", zero_division=0))
         macro = float(f1_score(y_true, y_pred, average="macro", zero_division=0))
         return micro, macro
 
-    def fit(self) -> None:
-        torch.manual_seed(self.dl_config.random_seed)
-        np.random.seed(self.dl_config.random_seed)
-
-        records = self._collect_train_records()
-        if not records:
-            raise ValueError("Khong co du lieu train Layer1.")
-
-        texts = np.array([self._build_feature_text(item["text"]) for item in records], dtype=object)
-        labels = self.mlb.fit_transform([item["tags"] for item in records]).astype(np.float32)
-        train_texts, val_texts, train_y, val_y = train_test_split(
-            texts,
-            labels,
+    def evaluate_validation_split(self) -> Dict[str, object]:
+        base_records = self._collect_base_records()
+        if not base_records:
+            raise ValueError("Khong co du lieu validation Layer1.")
+        self.mlb.fit([item["tags"] for item in base_records])
+        raw_texts = [item["text"] for item in base_records]
+        tag_lists = [item["tags"] for item in base_records]
+        indices = np.arange(len(base_records))
+        _, val_idx = train_test_split(
+            indices,
             test_size=self.dl_config.validation_ratio,
             random_state=self.dl_config.random_seed,
         )
+        val_raw_texts = [raw_texts[int(i)] for i in val_idx]
+        val_tag_lists = [tag_lists[int(i)] for i in val_idx]
+        return self.evaluate(val_raw_texts, val_tag_lists)
+
+    def evaluate(self, texts: List[str], tag_lists: List[List[str]]) -> Dict[str, object]:
+        if self.model is None:
+            raise RuntimeError("Model chua duoc train de evaluate.")
+        feature_texts = [self._build_feature_text(text) for text in texts]
+        input_ids, mask = self._texts_to_tensors(feature_texts)
+        y_true = self.mlb.transform(tag_lists).astype(np.int32)
+        y_pred = self._predict_binary(input_ids, mask)
+        summary = multilabel_metrics(y_true, y_pred)
+        summary["samples"] = len(texts)
+        summary["threshold"] = self.dl_config.decision_threshold
+        return {
+            "summary": summary,
+            "per_tag": per_tag_metrics(y_true, y_pred, self.tags),
+        }
+
+    def load_artifacts(self, suffix: str = "") -> None:
+        self._artifact_suffix = suffix
+        model_file, meta_file, vocab_file = self._artifact_paths()
+        if not model_file.exists() or not meta_file.exists() or not vocab_file.exists():
+            raise FileNotFoundError(f"Khong tim thay artifact suffix='{suffix}'")
+        meta = json.loads(meta_file.read_text(encoding="utf-8"))
+        if meta.get("tags") != self.tags:
+            raise ValueError("Tag schema khong khop artifact.")
+        self.vocab = json.loads(vocab_file.read_text(encoding="utf-8"))
+        self._create_model()
+        if self.model is None:
+            raise RuntimeError("Khong khoi tao duoc model Layer1 DL")
+        self.model.load_state_dict(torch.load(model_file, map_location=self.device))
+        self.model.eval()
+        self.is_fitted = True
+
+    def fit(self, artifact_suffix: str = "") -> Dict[str, object]:
+        self._artifact_suffix = artifact_suffix
+        torch.manual_seed(self.dl_config.random_seed)
+        np.random.seed(self.dl_config.random_seed)
+
+        base_records = self._collect_base_records()
+        if not base_records:
+            raise ValueError("Khong co du lieu train Layer1.")
+
+        raw_texts = [item["text"] for item in base_records]
+        base_texts = np.array([self._build_feature_text(text) for text in raw_texts], dtype=object)
+        base_labels = self.mlb.fit_transform([item["tags"] for item in base_records]).astype(np.float32)
+        indices = np.arange(len(base_records))
+        train_idx, val_idx = train_test_split(
+            indices,
+            test_size=self.dl_config.validation_ratio,
+            random_state=self.dl_config.random_seed,
+        )
+        train_texts = base_texts[train_idx]
+        val_texts = base_texts[val_idx]
+        train_y = base_labels[train_idx]
+        val_y = base_labels[val_idx]
+        val_raw_texts = [raw_texts[int(i)] for i in val_idx]
+
+        if self.dl_config.include_rl_samples:
+            rl_records = self._collect_rl_records()
+            if rl_records:
+                rl_texts = [self._build_feature_text(item["text"]) for item in rl_records]
+                rl_labels = self.mlb.transform([item["tags"] for item in rl_records]).astype(np.float32)
+                train_texts = np.concatenate([train_texts, np.array(rl_texts, dtype=object)])
+                train_y = np.vstack([train_y, rl_labels])
 
         self._build_vocab(train_texts.tolist())
         train_ids, train_mask = self._texts_to_tensors(train_texts.tolist())
@@ -367,6 +469,11 @@ class IntentTracker:
         self.model.eval()
         self.is_fitted = True
         self._save_artifacts()
+        val_tag_lists = [
+            [self.tags[idx] for idx, value in enumerate(row) if value > 0.5]
+            for row in val_y
+        ]
+        return self.evaluate(val_raw_texts, val_tag_lists)
 
     def predict_tags(self, text: str) -> IntentPrediction:
         if not self.is_fitted or self.model is None:

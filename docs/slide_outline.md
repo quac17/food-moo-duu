@@ -1,7 +1,7 @@
 # Khung Slide Báo Cáo — Food Moo Duu
 
 > Hệ thống gợi ý món ăn thông minh offline theo kiến trúc 3 layer (NLP tiếng Việt).
-> Khung ~20 slide, soạn dựa trên cấu trúc code, README và luồng runtime thực tế của repo.
+> Khung ~24 slide, soạn dựa trên cấu trúc code, README, pipeline đánh giá và luồng runtime thực tế của repo.
 
 **Phân công nhóm:**
 - **Trần Việt Hoàng** — Layer 1 (Tag Define) + Kiến trúc tổng thể
@@ -13,6 +13,7 @@
 - `layer1_logic.png` — logic Layer 1 (Encoder → heads + DST)
 - `layer2_logic.png` — logic Layer 2 (Linear scoring + Hebbian)
 - `layer3_logic.png` — logic Layer 3 (Genetic Algorithm)
+- `evaluation_metrics.png` — bảng tổng hợp metric đánh giá hiệu quả
 
 ---
 
@@ -241,15 +242,84 @@ Slide phân mục mở đầu phần Layer 3.
 
 ---
 
-## Slide 18 — Triển khai & DevOps *(Đức Anh)*
+# === PHÂN MỤC: ĐÁNH GIÁ HIỆU QUẢ — Cả nhóm ===
 
-- **Makefile:** `make setup`, `app-run`, `app-demo`, `layer{1,2,3}-*`
-- **Docker:** compose riêng từng layer + `docker/app/`
-- **Testing:** `test_layer2.py`, `test_layer2_integration.py`, `test_feedback_logging.py`
+## Slide 18 — [Section] Đánh giá hiệu quả *(Cả nhóm)*
+
+Slide phân mục mở đầu phần đánh giá định lượng.
 
 ---
 
-## Slide 19 — Demo minh họa *(Minh)*
+## Slide 19 — Pipeline đánh giá & phương pháp *(Hoàng)*
+
+**Package:** `src/evaluation/` — `metrics.py`, `layer1_eval.py`, `layer2_eval.py`, `layer3_eval.py`, `pipeline_eval.py`
+
+**Lệnh chạy:**
+```bash
+make layer3-simulate   # bổ sung data giả lập L3
+make eval-run          # đánh giá toàn bộ (skip train L1)
+make eval-train-and-run  # train ablation L1 + đánh giá
+```
+
+**Tập dữ liệu đánh giá:**
+| Layer | Nguồn | Số mẫu |
+|---|---|---|
+| L1 | Validation 20% intent (all datasets) | 142 |
+| L2 Oracle | `intent_samples.csv` tag lý tưởng | 709 |
+| L2 Behavioral | RL events (4 runtime + 100 simulated) | 104 |
+| L3 | `fitness_history.json` (11 runtime + 50 simulated) | 61 |
+| Pipeline E2E | RL events → L2 recommend vs món chọn | 104 |
+
+**Metric chính:** F1 (L1), Hit@K / MRR / NDCG (L2), success rate / fitness (L3), feedback delta (L2 online).
+
+---
+
+## Slide 20 — Kết quả tổng hợp (hình minh họa) *(Cả nhóm)*
+
+> **Hình:** `docs/images/evaluation_metrics.png`
+
+**Bảng tổng hợp nhanh** (run `20260610_004458`):
+
+| Thành phần | Chỉ số chính | Kết quả |
+|---|---|---|
+| L1 Intent | Macro F1 | **0.189** |
+| L2 Oracle | Hit@5 / MRR | **1.0 / 1.0** |
+| L2 Behavioral | Hit@5 / MRR | **0.039 / 0.017** |
+| L3 Genetic | Success rate (61 lượt) | **52.5%** |
+| Pipeline E2E | Hit@5 | **0.039** |
+| Học online L2 | Feedback delta mean | **+0.647** |
+
+**Nhận xét:** Oracle L2 cao → scoring tốt khi tag chuẩn; behavioral thấp → context runtime khó hơn nhiều.
+
+---
+
+## Slide 21 — Chi tiết metric từng layer *(Cả nhóm)*
+
+**Layer 1** (val 142): Micro F1 = 0.291, Macro F1 = 0.189, Precision = 0.748, Recall = 0.181. Ablation RL: delta = 0 (chưa train ablation thành công).
+
+**Layer 2 Oracle** (709): Hit@5 = 1.0, NDCG@5 = 0.971 — upper bound scoring.
+
+**Layer 2 Behavioral** (104): Hit@5 = 0.039, MRR = 0.017, mean rank ≈ 5.87.
+
+**Layer 3** (61 lượt): Success rate tổng 52.5% (runtime 54.6%, simulated 52.0%), 33 chromosome unique, avg fitness 2.61.
+
+**Pipeline E2E:** Tag overlap 0.251; feedback delta +0.647 sau Hebbian update.
+
+**Hạn chế khi báo cáo:** L2/L3 chủ yếu simulated; L3 không có BLEU/ROUGE; behavioral Hit@5 thấp do context DST ≠ tag train.
+
+Chi tiết: `docs/evaluation_metrics.md`
+
+---
+
+## Slide 22 — Triển khai & DevOps *(Đức Anh)*
+
+- **Makefile:** `make setup`, `app-run`, `app-demo`, `eval-run`, `layer{1,2,3}-*`
+- **Docker:** compose riêng từng layer + `docker/app/`
+- **Testing:** `test_layer2.py`, `test_layer2_integration.py`, `test_feedback_logging.py`, `test_metrics.py`
+
+---
+
+## Slide 23 — Demo minh họa *(Hoàng)*
 
 ```bash
 make app-demo
@@ -263,13 +333,15 @@ make app-demo
 
 ---
 
-## Slide 20 — Đánh giá, hạn chế & Kết luận *(Cả nhóm)*
+## Slide 24 — Hạn chế & Kết luận *(Cả nhóm)*
 
-**Ưu điểm:** modular, offline, kết hợp nhiều kỹ thuật NLP (DL multi-label, DST, Hebbian, GA), có RL offline.
+**Ưu điểm:** modular, offline, kết hợp DL multi-label + DST + Hebbian + GA + RL offline; **đã có pipeline đánh giá định lượng** (`make eval-run`).
 
-**Hạn chế:** dataset nhỏ (~160 mẫu/epoch, 100 món); Layer 3 dùng template cố định; chưa có UI; chưa báo cáo metric tập trung.
+**Kết quả nổi bật:** L2 Oracle Hit@5 = 1.0 (scoring tốt); L3 success rate ≈ 52%; Hebbian feedback delta +0.647.
 
-**Hướng phát triển:** mở rộng corpus, UI chat, đánh giá định lượng, tích hợp RL train định kỳ.
+**Hạn chế:** dataset nhỏ; L2 behavioral Hit@5 thấp (0.039); L1 recall thấp (0.18); L3/L2 eval chủ yếu simulated; chưa có UI.
+
+**Hướng phát triển:** thu thập phiên chat thật, mở rộng corpus, UI chat, ablation RL L1 trên môi trường train ổn định.
 
 **Kết luận:** Food Moo Duu là pipeline NLP end-to-end cho domain ẩm thực tiếng Việt, tự học từ lựa chọn người dùng mà không cần label thủ công. — *Cảm ơn & Q&A*
 
@@ -282,3 +354,4 @@ make app-demo
 3. Cấu trúc JSON event RL feedback (schema trong README).
 4. Cách dựng lại hình minh họa: `python scripts/build_diagrams.py`.
 5. Cách dựng lại slide: `python scripts/build_slides.py`.
+6. Chi tiết metric: `docs/evaluation_metrics.md` | run mới nhất: `data/evaluation/runs/run_20260610_004458/`.
