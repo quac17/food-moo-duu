@@ -106,13 +106,15 @@ Slide phân mục mở đầu phần Layer 1.
 
 **Vai trò:** tích lũy ngữ cảnh qua nhiều lượt, xử lý người dùng "đổi ý".
 
-**3 quy luật cập nhật state** (`DialogStateTracker.update_context`):
-1. **Decay:** `score *= 0.92` mỗi lượt — thông tin cũ hao mòn dần
-2. **Accumulation:** `score += 0.65 · confidence` — cộng dồn tín hiệu intent mới
-3. **Conflict resolution:** với cặp tag đối nghịch, giảm bên yếu theo gap (`β=0.35`)
+**3 quy luật cập nhật state** (`DialogStateTracker.update_context`, đọc từ `common_config.json`):
+1. **Decay:** `score *= 0.55` mỗi lượt — session state phai nhanh, ưu tiên ngữ cảnh lượt hiện tại
+2. **Accumulation:** `score += 0.88 · confidence` — raw tag mạnh hơn, cộng gần đầy đủ điểm intent mới
+3. **Conflict resolution:** với cặp tag đối nghịch, giảm bên yếu theo gap (`β=0.4`)
    - VD conflict pairs: `weather_hot ↔ weather_cold`, `pref_spicy ↔ pref_bland`, `pref_warm_drink ↔ pref_cold_drink`
 
-**Output:** `context_scores` (đã clamp [0,1]) → đầu vào cho Layer 2 & Layer 3. State lưu ở `session_state.json`.
+**Raw vs Context:** Raw = chỉ câu hiện tại (IntentTracker); Context = sau DST, dùng cho **Layer 2 gợi ý** và **export tag** mặc định.
+
+**Output:** `context_scores` (clamp [0,1]) → Layer 2 & Hebbian feedback. State lưu ở `session_state.json` — nên `make layer1-reset-state` khi test phiên mới.
 
 ---
 
@@ -270,7 +272,11 @@ make eval-train-and-run  # train ablation L1 + đánh giá
 | L3 | `fitness_history.json` (11 runtime + 50 simulated) | 61 |
 | Pipeline E2E | RL events → L2 recommend vs món chọn | 104 |
 
+**DST runtime** (ghi trong manifest): decay=0.55, alpha=0.88, beta=0.4 — ưu tiên raw tag, session yếu hơn.
+
 **Metric chính:** F1 (L1), Hit@K / MRR / NDCG (L2), success rate / fitness (L3), feedback delta (L2 online).
+
+**Lưu ý:** RL events đã log dùng `context_tags` cũ; metric behavioral phản ánh data lịch sử. Phiên chat mới sau chỉnh DST sẽ có context khác.
 
 ---
 
@@ -278,16 +284,17 @@ make eval-train-and-run  # train ablation L1 + đánh giá
 
 > **Hình:** `docs/images/evaluation_metrics.png`
 
-**Bảng tổng hợp nhanh** (run `20260610_004458`):
+**Bảng tổng hợp nhanh** (run `20260610_011454`):
 
 | Thành phần | Chỉ số chính | Kết quả |
 |---|---|---|
+| DST runtime | decay / alpha / beta | **0.55 / 0.88 / 0.4** |
 | L1 Intent | Macro F1 | **0.189** |
 | L2 Oracle | Hit@5 / MRR | **1.0 / 1.0** |
-| L2 Behavioral | Hit@5 / MRR | **0.039 / 0.017** |
-| L3 Genetic | Success rate (61 lượt) | **52.5%** |
-| Pipeline E2E | Hit@5 | **0.039** |
-| Học online L2 | Feedback delta mean | **+0.647** |
+| L2 Behavioral | Hit@5 / MRR | **0.048 / 0.021** |
+| L3 Genetic | Success rate (62 lượt) | **53.2%** |
+| Pipeline E2E | Hit@5 | **0.048** |
+| Học online L2 | Feedback delta mean | **+0.599** |
 
 **Nhận xét:** Oracle L2 cao → scoring tốt khi tag chuẩn; behavioral thấp → context runtime khó hơn nhiều.
 
@@ -299,13 +306,13 @@ make eval-train-and-run  # train ablation L1 + đánh giá
 
 **Layer 2 Oracle** (709): Hit@5 = 1.0, NDCG@5 = 0.971 — upper bound scoring.
 
-**Layer 2 Behavioral** (104): Hit@5 = 0.039, MRR = 0.017, mean rank ≈ 5.87.
+**Layer 2 Behavioral** (105): Hit@5 = 0.048, MRR = 0.021, mean rank ≈ 5.83.
 
-**Layer 3** (61 lượt): Success rate tổng 52.5% (runtime 54.6%, simulated 52.0%), 33 chromosome unique, avg fitness 2.61.
+**Layer 3** (62 lượt): Success rate tổng 53.2% (runtime 58.3%, simulated 52.0%), 34 chromosome unique, avg fitness 2.57.
 
-**Pipeline E2E:** Tag overlap 0.251; feedback delta +0.647 sau Hebbian update.
+**Pipeline E2E:** Tag overlap 0.251; feedback delta +0.599 sau Hebbian update.
 
-**Hạn chế khi báo cáo:** L2/L3 chủ yếu simulated; L3 không có BLEU/ROUGE; behavioral Hit@5 thấp do context DST ≠ tag train.
+**Hạn chế khi báo cáo:** L2/L3 chủ yếu simulated; L3 không có BLEU/ROUGE; behavioral Hit@5 thấp do `context_tags` log cũ (trước tinh chỉnh DST decay=0.55).
 
 Chi tiết: `docs/evaluation_metrics.md`
 
@@ -354,4 +361,5 @@ make app-demo
 3. Cấu trúc JSON event RL feedback (schema trong README).
 4. Cách dựng lại hình minh họa: `python scripts/build_diagrams.py`.
 5. Cách dựng lại slide: `python scripts/build_slides.py`.
-6. Chi tiết metric: `docs/evaluation_metrics.md` | run mới nhất: `data/evaluation/runs/run_20260610_004458/`.
+6. Chi tiết metric: `docs/evaluation_metrics.md` | run mới nhất: `data/evaluation/runs/run_20260610_011454/`.
+7. DST config: `data/common_config.json` (decay=0.55, alpha=0.88, beta=0.4).

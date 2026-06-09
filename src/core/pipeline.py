@@ -36,12 +36,15 @@ class FoodSuggestionPipeline:
     def __init__(self) -> None:
         learning_rate = LAYER2_CONFIG["learning"]["positive"]
         punishment_rate = abs(LAYER2_CONFIG["learning"]["negative"])
-        context_decay = HYPERPARAMS["context_decay"]
         epsilon = HYPERPARAMS["epsilon"]
 
         # Layer1 da dung DL vi-SBERT + metric learning, API predict_tags giu nguyen.
         self.intent_tracker = IntentTracker()
-        self.dst = DialogStateTracker(decay_rate=context_decay)
+        self.dst = DialogStateTracker(
+            decay_rate=HYPERPARAMS["context_decay"],
+            accumulation_alpha=HYPERPARAMS["context_accumulation_alpha"],
+            conflict_beta=HYPERPARAMS["context_conflict_beta"],
+        )
         self.recommendation_engine = RecommendationEngine()
         self.hebbian = HebbianLearner(
             self.recommendation_engine,

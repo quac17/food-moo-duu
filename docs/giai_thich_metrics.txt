@@ -1,0 +1,258 @@
+================================================================================
+  GIAI THICH Y NGHIA CAC METRIC — FOOD MOO DUU
+  (Tai lieu bo tro cho docs/evaluation_metrics.md va slide bao cao)
+================================================================================
+
+Muc dich:
+  File nay giai thich tung chi so (metric) xuat hien trong bao cao danh gia,
+  cach doc so lieu, va han che khi trinh bay truoc hoi dong.
+
+Tham chieu so lieu moi nhat: data/evaluation/runs/run_20260610_011454/
+Ma nguon tinh metric: src/evaluation/
+
+
+================================================================================
+PHAN 1 — KHAI NIEM CHUNG
+================================================================================
+
+1.1. Raw intent tags vs Context tags
+------------------------------------
+- Raw intent tags: diem tag do IntentTracker (Layer 1) du doan CHI TU cau chat
+  hien tai. Phan anh y dinh truc tiep cua mot luot noi.
+
+- Context tags (sau DST): diem tag sau Dialog State Tracker — cong don nhieu
+  luot, co decay, xu ly xung dot tag. Day la dau vao chinh cho Layer 2 (goi y
+  mon) va export tag mac dinh.
+
+- Trong bao cao: metric L1 do tren raw predict; metric L2 behavioral/E2E do
+  tren context_tags da log trong RL events.
+
+
+1.2. Oracle vs Behavioral (Layer 2)
+-----------------------------------
+- Oracle: danh gia thuat toan scoring khi context tag DA CHUAN (lay tu CSV
+  train). Day la "upper bound" — do chat luong scoring, KHONG do loi nhan dien
+  intent hay DST runtime.
+
+- Behavioral: danh gia tren feedback thuc te / gia lap — context tu chatbot,
+  relevant = mon user da chon. Phan anh hieu qua he thong khi chay that.
+
+
+1.3. Runtime vs Simulated
+-------------------------
+- Runtime: du lieu tu phien chat / fitness update that.
+- Simulated: du lieu sinh bang script (RL events, fitness L3). Tang so mau nhung
+  can bao cao tach nguon, khong gop mot so duy nhat.
+
+
+================================================================================
+PHAN 2 — METRIC LAYER 1 (INTENT RECOGNITION — MULTI-LABEL)
+================================================================================
+
+Bai toan: moi cau co the gan NHIEU tag cung luc (~53 tag: thoi gian, thoi tiet,
+tam trang, khu v vi...).
+
+Micro F1
+  - Tinh F1 tren TAT CA cap (cau, tag) roi gop lai.
+  - Tag pho bien anh huong nhieu hon tag hiem.
+  - Cao = mo hinh gan tag tot o muc tong the; khong phan biet tag hiem.
+
+Macro F1
+  - Tinh F1 rieng tung tag, roi lay trung binh.
+  - Moi tag duoc trong so nhu nhau.
+  - Thap hon micro F1 => mot so tag hiem hoc kem.
+
+Micro Precision
+  - Trong cac tag mo hinh DU DOAN la dung, ty le nao that su dung.
+  - Cao (~0.75): mo hinh thận trong — it gan tag nhung khi gan thi thuong dung.
+
+Micro Recall
+  - Trong cac tag THAT SU co trong cau, ty le nao duoc mo hinh tim ra.
+  - Thap (~0.18): mo hinh bo sot nhieu tag — "ngai" gan tag.
+
+Hamming Loss
+  - Ty le nhan du doan SAI tren tong so nhan (cau x tag).
+  - Cang thap cang tot. Khong phan biet loai sai (thieu hay thua tag).
+
+Subset Accuracy (Exact Match)
+  - Ty le cau ma bo tag du doan KHOP HOAN TOAN bo tag that.
+  - Multi-label rat kho => gia tri thap (~0.7%) la binh thuong.
+
+Delta macro/micro F1 (Ablation RL)
+  - Chenh lech F1 giua mo hinh train KHONG co RL offline va CO RL offline.
+  - Delta = 0: RL chua cai thien hoac chua train ablation thanh cong.
+
+Luu y: Cac metric L1 KHONG phu thuoc tham so DST (decay/alpha/beta).
+
+
+================================================================================
+PHAN 3 — METRIC LAYER 2 (RECOMMENDATION — XEP HANG MON AN)
+================================================================================
+
+Dau vao: context_scores (tap tag + diem). Dau ra: danh sach mon xep hang Top-K.
+Relevant: tap mon "dung" — oracle = top-3 mon theo diem ly tuong; behavioral =
+mon user da chon (chosen_dish_id).
+
+Hit@K (Hit Rate @ K)
+  - Ty le mau ma it nhat MOT mon relevant nam trong Top-K goi y.
+  - Vi du Hit@5 = 0.048 => 4.8% so lan user chon mon nam trong top 5.
+  - De hieu nhat khi bao cao cho nguoi khong chuyen metric.
+
+Precision@K
+  - Trong K mon goi y, ty le bao nhieu la relevant.
+  - Hit@5 thap + Precision@5 thap => ca danh sach goi y deu kem.
+
+Recall@K
+  - Trong tap relevant, ty le bao nhieu duoc "tim thay" trong Top-K.
+  - Voi behavioral (1 mon relevant): Recall@K = Hit@K.
+
+NDCG@K (Normalized Discounted Cumulative Gain)
+  - Do chat luong thu tu xep hang: mon relevant cang cao trong list cang tot.
+  - Gia tri [0, 1]; 1 = thu tu hoan hao. Nhay hon Hit@K voi vi tri trong list.
+
+MRR (Mean Reciprocal Rank)
+  - Trung binh 1/vi_tri cua mon relevant dau tien trong list.
+  - MRR = 1.0: relevant luon o hang 1. MRR = 0.02: relevant thuong o cuoi
+    hoac ngoai top.
+
+Mean Rank
+  - Vi tri trung binh cua mon relevant trong list xep hang.
+  - Cao (gan K hoac lon hon K) => mon user chon thuong khong nam top.
+
+Avg score mon chon (avg_chosen_score)
+  - Diem scoring trung binh cua mon user da chon theo ma tran canonical.
+  - Cao khong dong nghia Hit@K cao — user co the chon mon ngoai top nhung van
+    co diem scoring kha.
+
+Oracle Hit@5 = 1.0 vs Behavioral Hit@5 ~ 0.05
+  - Khoang cach lon cho thay: scoring tot KHI tag chuan, nhung context runtime
+    (L1 + DST) khac xa tag train CSV.
+
+
+================================================================================
+PHAN 4 — METRIC LAYER 3 (GENETIC RESPONSE)
+================================================================================
+
+Layer 3 khong co ground-truth cau tra loi "dung". Danh gia qua implicit
+feedback: user chon mon (success) hay bo qua/thoat (failure).
+
+Success rate
+  - Ty le lan cap nhat fitness ma user CHON mon.
+  - Cao (~53%) => hon mot nua lan cau thoai GA duoc coi la "tich cuc".
+
+Failure rate
+  - Ty le lan user khong chon mon. Success + Failure = 100%.
+
+Total updates
+  - Tong so lan ghi fitness vao fitness_history.json.
+  - So mau nho => success rate dao dong manh (them/bot vai lan la doi so ro).
+
+Runtime vs Simulated success rate
+  - Tach nguon du lieu: runtime = chat that; simulated = sinh tu gene pool.
+  - Nen uu tien bao cao runtime khi co du mau.
+
+Unique chromosomes
+  - So bo cau thoai (chromosome) khac nhau da duoc cap nhat fitness.
+  - Cao = da thu nhieu mau cau tra loi.
+
+Avg / Max / Min fitness
+  - Diem "suc khoe" trung binh / cao nhat / thap nhat cua cac chromosome.
+  - Fitness cao => cau thoai do thuong duoc roulette chon nhieu hon o cac luot
+    sau.
+
+Avg fitness gain per success
+  - Muc tang fitness trung binh moi lan success (+0.25 theo thiet ke hien tai).
+
+
+================================================================================
+PHAN 5 — METRIC PIPELINE TONG THE (END-TO-END)
+================================================================================
+
+E2E Hit@5 / MRR
+  - Giong L2 behavioral nhung chay qua toan pipeline: context_tags tu RL event
+    => recommend => so voi mon user chon.
+  - Do hieu qua THUC TE cua he thong khi ket hop L1 context + L2 scoring.
+
+Tag overlap ratio (tag_overlap_ratio_mean)
+  - Do muc trung lap giua tag mo hinh du doan (tu user_text qua L1) va tag
+    trong RL event (reference).
+  - Cong thuc: |predicted ∩ reference| / |reference|
+  - Thap (~0.25) => tag predict va tag log trong event it khop — co the do DST,
+    threshold, hoac du lieu cu.
+
+Avg score mon chon (pipeline)
+  - Tuong tu L2 behavioral: diem scoring trung binh mon duoc chon trong luong
+    E2E.
+
+Feedback delta mean (Hebbian — hoc online Layer 2)
+  - Trung binh (score_after - score_before) cua mon duoc chon sau khi cap nhat
+    Hebbian.
+  - Duong (+0.599) => ma tran runtime dang "hoc" theo huong tang diem mon user
+    thich.
+  - Doc lap voi Hit@K — do kha nang cap nhat trong, khong do do chinh xac top-K.
+
+
+================================================================================
+PHAN 6 — THAM SO DST (KHONG PHAI METRIC, NHUNG XUAT HIEN TRONG BAO CAO)
+================================================================================
+
+context_decay (0.55)
+  - Moi luot chat, diem tag cu trong session nhan 0.55.
+  - Thap hon 0.92 cu => session state phai nhanh, it bi "dinh" tag cu.
+
+context_accumulation_alpha (0.88)
+  - He so cong raw tag moi vao context: score += 0.88 * confidence.
+  - Cao hon 0.65 cu => luot chat hien tai anh huong manh hon lich su.
+
+context_conflict_beta (0.4)
+  - Khi hai tag doi nghich cung manh, giam tag yeu hon theo khoang cach.
+  - Giup xu ly truong hop user "quay xe" doi y.
+
+Cau hinh: data/common_config.json
+
+
+================================================================================
+PHAN 7 — CACH DOC BANG TONG HOP TRONG BAO CAO
+================================================================================
+
+| Thanh phan          | Doc nhanh                                    |
+|---------------------|----------------------------------------------|
+| L1 Macro F1         | Chat luong nhan dien tag (tag hiem quan trong)|
+| L2 Oracle Hit@5     | Scoring tot khi tag ly tuong                 |
+| L2 Behavioral Hit@5 | Goi y trung mon user chon (thuc te)          |
+| L3 Success rate     | Cau thoai GA giup user chon mon              |
+| Pipeline E2E Hit@5  | Hieu qua tong the goi y mon                   |
+| Feedback delta      | L2 co dang hoc tu feedback khong             |
+
+Quy tac doc nhanh:
+  - Oracle cao + Behavioral thap => van de o context runtime (L1/DST), khong
+    phai thuat toan scoring thuan.
+  - L1 recall thap => mo hinh bo sot tag, anh huong xuong L2.
+  - L3 success ~50% => chua co metric NLG chuan; chi do implicit feedback.
+
+
+================================================================================
+PHAN 8 — HAN CHE CAN NE KHI BAO CAO
+================================================================================
+
+1. Dataset nho (142 val L1, 105 RL events, 62 fitness updates).
+2. Behavioral/E2E chu yeu simulated; context_tags co the tu DST cu.
+3. L3 khong co BLEU/ROUGE — khong do chat luong van ban cau tra loi.
+4. Ablation RL L1 can train PyTorch on dinh de co delta F1 co y nghia.
+5. Metric la snapshot tai thoi diem chay make eval-run — can ghi run ID.
+
+
+================================================================================
+PHAN 9 — LENH LIEN QUAN
+================================================================================
+
+make eval-run              — Danh gia toan bo, xuat run_YYYYMMDD_HHMMSS/
+make eval-train-and-run    — Train ablation L1 + danh gia
+make layer3-simulate       — Bo sung du lieu gia lap L3
+make layer1-reset-state    — Reset session DST truoc khi test chat moi
+
+Chi tiet so lieu: docs/evaluation_metrics.md
+
+================================================================================
+  Het tai lieu — Food Moo Duu NLP Final Project
+================================================================================

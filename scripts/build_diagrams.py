@@ -160,11 +160,11 @@ def diagram_layer1():
     ax.text(58, 50, "raw_scores", fontsize=9, color=GREY)
 
     box(ax, 6, 12, 27, 12,
-        "1. Decay\nscore *= 0.92\n(hao mòn theo lượt)", GREEN, fs=9)
+        "1. Decay\nscore *= 0.55\n(session yếu dần)", GREEN, fs=9)
     box(ax, 37, 12, 27, 12,
-        "2. Accumulation\nscore += 0.65 * conf\n(cộng dồn tín hiệu mới)", TEAL, fs=9)
+        "2. Accumulation\nscore += 0.88 * conf\n(raw tag mạnh hơn)", TEAL, fs=9)
     box(ax, 68, 12, 27, 12,
-        "3. Conflict resolution\ngiảm tag yếu theo gap\n(vd: hot vs cold)", ORANGE, fs=9)
+        "3. Conflict resolution\nbeta=0.4 theo gap\n(vd: hot vs cold)", ORANGE, fs=9)
 
     arrow(ax, 33, 33, 19, 24, color=NAVY)
     arrow(ax, 50, 30, 50, 24, color=NAVY)
@@ -258,11 +258,11 @@ def diagram_layer3():
 
 
 def diagram_evaluation_metrics():
-    """Bang tong hop metric tu run_20260610_004458."""
+    """Bang tong hop metric tu run_20260610_011454."""
     fig, axes = plt.subplots(1, 2, figsize=(14, 7.5))
     fig.patch.set_facecolor(WHITE)
     fig.suptitle(
-        "Kết quả đánh giá hiệu quả — Food Moo Duu (run_20260610_004458)",
+        "Kết quả đánh giá hiệu quả — Food Moo Duu (run_20260610_011454)",
         fontsize=16, weight="bold", color=NAVY, y=0.98,
     )
 
@@ -274,14 +274,14 @@ def diagram_evaluation_metrics():
     ax.text(50, 94, "Bảng tổng hợp theo layer", ha="center", fontsize=13, weight="bold", color=TEAL)
 
     rows = [
+        ("DST runtime", "decay / alpha / beta", "0.55 / 0.88 / 0.4", TEAL),
         ("L1 Intent", "Macro F1 (val 142)", "0.189", TEAL),
-        ("L1 Ablation", "Delta macro F1 (RL)", "0.0", GREY),
         ("L2 Oracle", "Hit@5 / MRR (709 mẫu)", "1.0 / 1.0", GREEN),
-        ("L2 Behavioral", "Hit@5 / MRR (104 events)", "0.039 / 0.017", ORANGE),
-        ("L3 Genetic", "Success rate (61 lượt)", "52.5%", PURPLE),
-        ("L3 Runtime", "Success rate (11 lượt)", "54.6%", PURPLE),
-        ("Pipeline E2E", "Hit@5", "0.039", NAVY),
-        ("Học online L2", "Feedback delta mean", "+0.647", GREEN),
+        ("L2 Behavioral", "Hit@5 / MRR (105 events)", "0.048 / 0.021", ORANGE),
+        ("L3 Genetic", "Success rate (62 lượt)", "53.2%", PURPLE),
+        ("L3 Runtime", "Success rate (12 lượt)", "58.3%", PURPLE),
+        ("Pipeline E2E", "Hit@5", "0.048", NAVY),
+        ("Học online L2", "Feedback delta mean", "+0.599", GREEN),
     ]
     y = 82
     for layer, metric, value, color in rows:
@@ -298,11 +298,11 @@ def diagram_evaluation_metrics():
     ax2 = axes[1]
     labels = ["Hit@5", "MRR", "NDCG@5"]
     oracle_vals = [1.0, 1.0, 0.9708]
-    behavioral_vals = [0.0385, 0.0168, 0.0223]
+    behavioral_vals = [0.0476, 0.0214, 0.0281]
     x = [0, 1.2, 2.4]
     w = 0.45
     bars1 = ax2.bar([i - w / 2 for i in x], oracle_vals, width=w, color=GREEN, label="L2 Oracle (709)")
-    bars2 = ax2.bar([i + w / 2 for i in x], behavioral_vals, width=w, color=ORANGE, label="L2 Behavioral (104)")
+    bars2 = ax2.bar([i + w / 2 for i in x], behavioral_vals, width=w, color=ORANGE, label="L2 Behavioral (105)")
     ax2.set_xticks(x)
     ax2.set_xticklabels(labels, fontsize=11)
     ax2.set_ylim(0, 1.15)

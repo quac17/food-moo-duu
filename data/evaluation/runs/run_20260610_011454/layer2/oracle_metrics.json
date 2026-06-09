@@ -1,0 +1,20 @@
+{
+  "mode": "oracle_tags",
+  "source": "intent_samples.csv",
+  "matrix": "canonical",
+  "samples": 709,
+  "relevant_top_n": 3,
+  "metrics": {
+    "mrr": 1.0,
+    "mean_rank": 1.0,
+    "hit_at_3": 1.0,
+    "precision_at_3": 0.9093,
+    "recall_at_3": 0.9093,
+    "ndcg_at_3": 0.9325,
+    "hit_at_5": 1.0,
+    "precision_at_5": 0.5839,
+    "recall_at_5": 0.9732,
+    "ndcg_at_5": 0.9708,
+    "samples": 709.0
+  }
+}

@@ -3,7 +3,9 @@
   "hyperparameters": {
     "learning_rate": 0.1,
     "punishment_rate": -0.02,
-    "context_decay": 0.6,
+    "context_decay": 0.55,
+    "context_accumulation_alpha": 0.88,
+    "context_conflict_beta": 0.4,
     "epsilon": 0.2,
     "fitness_decay": 0.95
   }

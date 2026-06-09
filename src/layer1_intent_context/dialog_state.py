@@ -21,9 +21,9 @@ class SessionState:
 class DialogStateTracker:
     def __init__(
         self,
-        decay_rate: float = 0.92,
-        accumulation_alpha: float = 0.65,
-        conflict_beta: float = 0.35,
+        decay_rate: float = 0.55,
+        accumulation_alpha: float = 0.88,
+        conflict_beta: float = 0.4,
         data_dir: Path | None = None,
     ) -> None:
         self.decay_rate = decay_rate

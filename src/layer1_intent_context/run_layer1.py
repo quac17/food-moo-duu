@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from src.core.constants import LAYER1_DATA_DIR
+from src.core.constants import HYPERPARAMS, LAYER1_DATA_DIR
 from src.layer1_intent_context.dialog_state import DialogStateTracker
 from src.layer1_intent_context.intent_tracker import IntentTracker
 
@@ -162,7 +162,11 @@ def main() -> None:
     tracker = IntentTracker(use_all_datasets=args.all_datasets)
     if args.warmup_train:
         tracker.fit()
-    dst = DialogStateTracker()
+    dst = DialogStateTracker(
+        decay_rate=HYPERPARAMS["context_decay"],
+        accumulation_alpha=HYPERPARAMS["context_accumulation_alpha"],
+        conflict_beta=HYPERPARAMS["context_conflict_beta"],
+    )
     export_file = None if args.no_export else Path(args.export_file)
 
     # Neu co threshold chung thi uu tien de tranh vo lenh cu.

@@ -82,6 +82,20 @@ food-moo-duu/
 - File runtime (state, feedback log) tach rieng khoi file train.
 - Layer1 hien train/predict tu nhieu dataset (`--all-datasets`) khi can.
 
+### DST hyperparameters (`data/common_config.json`)
+
+Dialog State Tracker doc 3 tham so sau (uu tien raw tag, giam anh huong session cu):
+
+| Tham so | Gia tri | Y nghia |
+|---|---:|---|
+| `context_decay` | 0.55 | Moi luot, diem tag cu nhan 0.55 (session phai nhanh) |
+| `context_accumulation_alpha` | 0.88 | Raw intent luot hien tai cong manh vao context |
+| `context_conflict_beta` | 0.4 | Giam tag doi nghich khi user doi y |
+
+- **Raw intent tags**: chi tu cau chat hien tai (`IntentTracker.predict_tags`).
+- **Context tags**: sau DST, dung cho Layer2 recommend, Hebbian feedback, export tag mac dinh.
+- Reset state sach: `make layer1-reset-state` truoc khi test chat moi.
+
 ## Runtime Flow
 
 ```mermaid
@@ -167,10 +181,22 @@ make layer2-reset-runtime-docker
 ### Layer 3
 
 ```bash
+make layer3-simulate
 make layer3-run
 make layer3-docker
 make layer3-run-docker
 ```
+
+### Evaluation
+
+```bash
+make eval-run
+make eval-train-and-run
+```
+
+- Output: `data/evaluation/runs/run_YYYYMMDD_HHMMSS/`
+- Tai lieu metric: `docs/evaluation_metrics.md`
+- Manifest ghi `dst_hyperparameters` (decay/alpha/beta) tai thoi diem chay
 
 ## Layer1 chat-only flow
 

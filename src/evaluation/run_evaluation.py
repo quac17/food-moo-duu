@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict
 
-from src.core.constants import LAYER1_DATA_DIR
+from src.core.constants import HYPERPARAMS, LAYER1_DATA_DIR
 from src.evaluation.layer1_eval import (
     bootstrap_ablation_artifacts,
     compare_ablation,
@@ -145,6 +145,11 @@ def run_evaluation(
         "active_dataset": json.loads((LAYER1_DATA_DIR / "datasets.json").read_text(encoding="utf-8")).get(
             "active_dataset", "dataset_v001"
         ),
+        "dst_hyperparameters": {
+            "context_decay": HYPERPARAMS["context_decay"],
+            "context_accumulation_alpha": HYPERPARAMS["context_accumulation_alpha"],
+            "context_conflict_beta": HYPERPARAMS["context_conflict_beta"],
+        },
     }
     train_fallback = False
     if train_layer1:

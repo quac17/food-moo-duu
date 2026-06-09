@@ -95,7 +95,9 @@ def load_hyperparameters() -> Dict[str, float]:
     defaults = {
         "learning_rate": 0.08,
         "punishment_rate": -0.02,
-        "context_decay": 0.92,
+        "context_decay": 0.55,
+        "context_accumulation_alpha": 0.88,
+        "context_conflict_beta": 0.4,
         "epsilon": 0.2,
         "fitness_decay": 0.95,
     }
@@ -103,6 +105,12 @@ def load_hyperparameters() -> Dict[str, float]:
         "learning_rate": float(hyper.get("learning_rate", defaults["learning_rate"])),
         "punishment_rate": float(hyper.get("punishment_rate", defaults["punishment_rate"])),
         "context_decay": float(hyper.get("context_decay", defaults["context_decay"])),
+        "context_accumulation_alpha": float(
+            hyper.get("context_accumulation_alpha", defaults["context_accumulation_alpha"])
+        ),
+        "context_conflict_beta": float(
+            hyper.get("context_conflict_beta", defaults["context_conflict_beta"])
+        ),
         "epsilon": float(hyper.get("epsilon", defaults["epsilon"])),
         "fitness_decay": float(hyper.get("fitness_decay", defaults["fitness_decay"])),
     }

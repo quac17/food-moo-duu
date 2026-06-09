@@ -1,0 +1,29 @@
+{
+  "without_rl": {
+    "micro_f1": 0.2909,
+    "macro_f1": 0.189,
+    "micro_precision": 0.7477,
+    "micro_recall": 0.1806,
+    "hamming_loss": 0.0518,
+    "subset_accuracy": 0.007,
+    "samples": 142,
+    "threshold": 0.3
+  },
+  "with_rl": {
+    "micro_f1": 0.2909,
+    "macro_f1": 0.189,
+    "micro_precision": 0.7477,
+    "micro_recall": 0.1806,
+    "hamming_loss": 0.0518,
+    "subset_accuracy": 0.007,
+    "samples": 142,
+    "threshold": 0.3
+  },
+  "delta": {
+    "micro_f1": 0.0,
+    "macro_f1": 0.0,
+    "micro_precision": 0.0,
+    "micro_recall": 0.0,
+    "subset_accuracy": 0.0
+  }
+}
