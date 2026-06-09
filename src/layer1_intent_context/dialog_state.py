@@ -22,11 +22,13 @@ class DialogStateTracker:
     def __init__(
         self,
         decay_rate: float = 0.55,
+        time_decay_rate: float = 0.8,
         accumulation_alpha: float = 0.88,
         conflict_beta: float = 0.4,
         data_dir: Path | None = None,
     ) -> None:
         self.decay_rate = decay_rate
+        self.time_decay_rate = time_decay_rate
         self.accumulation_alpha = accumulation_alpha
         self.conflict_beta = conflict_beta
         self.data_dir = data_dir or LAYER1_DATA_DIR
@@ -76,12 +78,18 @@ class DialogStateTracker:
         self.state = SessionState(tag_scores={tag: 0.0 for tag in self.available_tags}, turn_index=0)
         self.save_state()
 
+    def _decay_rate_for_tag(self, tag: str) -> float:
+        if tag.startswith("time_"):
+            return self.time_decay_rate
+        return self.decay_rate
+
     def update_context(self, new_scores: Dict[str, float]) -> Dict[str, float]:
         self.state.turn_index += 1
 
         for tag, old_score in self.state.tag_scores.items():
             # Quy luat 1 - Decay: diem cu se hao mon theo tung luot hoi thoai.
-            decayed = old_score * self.decay_rate
+            # Tag time_* phai cham hon (time_decay_rate), tag khac dung decay_rate mac dinh.
+            decayed = old_score * self._decay_rate_for_tag(tag)
             self.state.tag_scores[tag] = max(0.0, min(1.0, decayed))
 
         for tag, incoming in new_scores.items():

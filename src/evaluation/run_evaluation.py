@@ -147,6 +147,7 @@ def run_evaluation(
         ),
         "dst_hyperparameters": {
             "context_decay": HYPERPARAMS["context_decay"],
+            "context_decay_time": HYPERPARAMS["context_decay_time"],
             "context_accumulation_alpha": HYPERPARAMS["context_accumulation_alpha"],
             "context_conflict_beta": HYPERPARAMS["context_conflict_beta"],
         },

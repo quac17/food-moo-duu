@@ -41,6 +41,7 @@ class FoodSuggestionPipeline:
         self.intent_tracker = IntentTracker()
         self.dst = DialogStateTracker(
             decay_rate=HYPERPARAMS["context_decay"],
+            time_decay_rate=HYPERPARAMS["context_decay_time"],
             accumulation_alpha=HYPERPARAMS["context_accumulation_alpha"],
             conflict_beta=HYPERPARAMS["context_conflict_beta"],
         )
