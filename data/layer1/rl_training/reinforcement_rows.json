@@ -42,6 +42,137 @@
     }
   },
   {
+    "text": "toi di mot minh thoi",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_031",
+    "tags_weighted": {
+      "time_evening": 0.5898,
+      "pref_finger_food": 0.5192,
+      "pref_fizzy": 0.4408,
+      "mood_watching_movie": 0.3892,
+      "time_afternoon": 0.3486,
+      "time_snacks": 0.2877,
+      "pref_instant": 0.2816,
+      "time_noon": 0.2253,
+      "pref_crunchy": 0.2693,
+      "pref_convenient": 0.2162,
+      "pref_warm_drink": 0.2608,
+      "mood_gathering": 0.2478,
+      "pref_sweet": 0.0964,
+      "pref_rice": 0.0939
+    }
+  },
+  {
+    "text": "Them mon trang mieng ngot nhe",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_101",
+    "tags_weighted": {
+      "time_evening": 0.3673,
+      "pref_sweet": 0.3186,
+      "pref_bland": 0.3161,
+      "time_afternoon": 0.2775,
+      "pref_warm_drink": 0.2827,
+      "pref_soup": 0.2788,
+      "pref_milky": 0.2656,
+      "mood_gathering": 0.2067,
+      "pref_vegetarian": 0.2233,
+      "weather_hot": 0.2265,
+      "time_noon": 0.2243,
+      "pref_instant": 0.1698,
+      "pref_cold": 0.1034,
+      "time_morning": 0.0967
+    }
+  },
+  {
+    "text": "không uống bia đâu",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_048",
+    "tags_weighted": {
+      "time_afternoon": 0.361,
+      "time_morning": 0.2806,
+      "pref_convenient": 0.2419,
+      "pref_instant": 0.2078,
+      "pref_rice": 0.2048,
+      "pref_bland": 0.2078,
+      "time_noon": 0.203,
+      "pref_tea_base": 0.2218,
+      "pref_warm_drink": 0.2021,
+      "mood_sluggish": 0.1931,
+      "pref_bbq_hotpot": 0.2002,
+      "pref_vegetarian": 0.1518,
+      "pref_cold": 0.0883,
+      "weather_hot": 0.0801,
+      "mood_gathering": 0.0762,
+      "pref_milky": 0.0725
+    }
+  },
+  {
+    "text": "nhậu đê",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_015",
+    "tags_weighted": {
+      "time_afternoon": 0.7884,
+      "mood_gathering": 0.2737,
+      "pref_bbq_hotpot": 0.3069,
+      "mood_sluggish": 0.3087,
+      "pref_cold": 0.2888,
+      "pref_sweet": 0.2726,
+      "pref_milky": 0.2742,
+      "time_evening": 0.2378,
+      "pref_tea_base": 0.28,
+      "pref_finger_food": 0.2155,
+      "time_snacks": 0.202,
+      "weather_hot": 0.1929,
+      "pref_warm_drink": 0.0991,
+      "pref_bland": 0.093,
+      "pref_soup": 0.0918,
+      "weather_cold": 0.0838,
+      "time_noon": 0.0792
+    }
+  },
+  {
+    "text": "sáng nay ăn gì",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_028",
+    "tags_weighted": {
+      "time_morning": 0.5731,
+      "pref_instant": 0.3406,
+      "pref_convenient": 0.2795,
+      "pref_bland": 0.2227,
+      "time_afternoon": 0.2178,
+      "pref_rice": 0.2157,
+      "pref_sweet": 0.1556,
+      "pref_flavorful": 0.1533,
+      "time_noon": 0.1814,
+      "pref_soup": 0.1444,
+      "pref_vegetarian": 0.1617,
+      "pref_milky": 0.1384,
+      "mood_starving": 0.0698
+    }
+  },
+  {
+    "text": "gà",
+    "reward_signal": 1.0,
+    "chosen_dish_id": "dish_041",
+    "tags_weighted": {
+      "pref_instant": 0.3736,
+      "pref_convenient": 0.3228,
+      "time_morning": 0.2274,
+      "pref_bland": 0.2142,
+      "pref_soup": 0.2112,
+      "pref_rice": 0.1975,
+      "pref_warm_drink": 0.1713,
+      "pref_flavorful": 0.1682,
+      "pref_cold": 0.2069,
+      "time_afternoon": 0.1846,
+      "pref_fizzy": 0.1885,
+      "mood_starving": 0.1797,
+      "pref_tea_base": 0.0847,
+      "pref_herbal": 0.0759,
+      "time_night": 0.0739
+    }
+  },
+  {
     "text": "Sáng sớm mình vội đi làm",
     "reward_signal": 1.0,
     "chosen_dish_id": "dish_082",

@@ -58,5 +58,7 @@
   "max_length": 48,
   "embedding_dim": 192,
   "hidden_dim": 256,
-  "projection_dim": 128
+  "projection_dim": 128,
+  "include_rl_samples": true,
+  "artifact_suffix": ""
 }

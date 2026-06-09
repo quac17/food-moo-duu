@@ -34,6 +34,98 @@
     ]
   },
   {
+    "text": "toi di mot minh thoi",
+    "tags": [
+      "time_evening",
+      "pref_finger_food",
+      "pref_fizzy",
+      "mood_watching_movie",
+      "time_afternoon",
+      "time_snacks",
+      "pref_instant",
+      "time_noon",
+      "pref_crunchy",
+      "pref_convenient",
+      "pref_warm_drink",
+      "mood_gathering"
+    ]
+  },
+  {
+    "text": "Them mon trang mieng ngot nhe",
+    "tags": [
+      "time_evening",
+      "pref_sweet",
+      "pref_bland",
+      "time_afternoon",
+      "pref_warm_drink",
+      "pref_soup",
+      "pref_milky",
+      "mood_gathering",
+      "pref_vegetarian",
+      "weather_hot",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "không uống bia đâu",
+    "tags": [
+      "time_afternoon",
+      "time_morning",
+      "pref_convenient",
+      "pref_instant",
+      "pref_rice",
+      "pref_bland",
+      "time_noon",
+      "pref_tea_base",
+      "pref_warm_drink",
+      "mood_sluggish",
+      "pref_bbq_hotpot"
+    ]
+  },
+  {
+    "text": "nhậu đê",
+    "tags": [
+      "time_afternoon",
+      "mood_gathering",
+      "pref_bbq_hotpot",
+      "mood_sluggish",
+      "pref_cold",
+      "pref_sweet",
+      "pref_milky",
+      "time_evening",
+      "pref_tea_base",
+      "pref_finger_food",
+      "time_snacks",
+      "weather_hot"
+    ]
+  },
+  {
+    "text": "sáng nay ăn gì",
+    "tags": [
+      "time_morning",
+      "pref_instant",
+      "pref_convenient",
+      "pref_bland",
+      "time_afternoon",
+      "pref_rice",
+      "time_noon"
+    ]
+  },
+  {
+    "text": "gà",
+    "tags": [
+      "pref_instant",
+      "pref_convenient",
+      "time_morning",
+      "pref_bland",
+      "pref_soup",
+      "pref_rice",
+      "pref_cold",
+      "time_afternoon",
+      "pref_fizzy"
+    ]
+  },
+  {
     "text": "Sáng sớm mình vội đi làm",
     "tags": [
       "time_morning",
